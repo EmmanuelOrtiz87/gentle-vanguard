@@ -13,7 +13,7 @@ type: pattern
 
 **Where**: src/security/dependency-security-enforcer.ts, y cualquier script que use execSync con pipes.
 
-**Learned**: 
+**Learned**:
 - Usar try/catch anidado: try { execSync(cmd) } catch (e) { result = e.stdout?.toString() || e.message }
 - NO modificar el comando con || true, || cmd /c exit 0, ni otras variantes.
 - El error de execSync contiene stdout, stderr, status — aprovecharlos.

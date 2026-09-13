@@ -11,7 +11,7 @@ type: architecture
 
 **Why**: Sesiones previas no tenían validación al cierre — no se detectaban cross-references rotos, archivos temporales huérfanos, errores/warnings pendientes, ni deuda técnica. El cierre era incompleto.
 
-**Where**: 
+**Where**:
 - `src/temp-file-registry.ts` — Sistema de registro de archivos temporales con ciclo de vida (temporary → authorized-pending → permanent) y CLI completo
 - `src/session-close-validator.ts` — Validador profundo 3 modos (quick/deep/full) con SCORE 0-100, cross-refs con comment-stripping, temp files, error/warning scan, unused files, completitud, deuda técnica
 - `src/session-close-orchestrator.ts` — Expandido a 7 fases: PRE-CLOSE → PRE-VALIDATE → PERSIST → BACKUP → AUDIT → CLEANUP → VERIFY. Incluye phasePreValidate(), temp cleanup, process killer (CodeGraph MCP, Dashboard WS, Timeout Daemon), y soporte --validate
@@ -19,7 +19,7 @@ type: architecture
 - `rules/SESSION-CLOSE-NORMATIVA.md` — Protocolo formal de 6 fases
 - `rules/RECOVERY-NORMATIVA.md` — Puntos de restauración y referencias al flujo de cierre
 
-**Learned**: 
+**Learned**:
 - Los "broken imports" (54 iniciales) eran JSDoc comments, no código real → solution: comment-stripping antes de escanear
 - En Windows, paths usan backslash → usar `Math.max(lastIndexOf('/'), lastIndexOf('\\'))`
 - ESM convention: imports usan `.js` pero fuente es `.ts` → mapear `.js`→`.ts`

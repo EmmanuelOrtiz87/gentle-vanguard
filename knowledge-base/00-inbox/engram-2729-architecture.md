@@ -9,7 +9,7 @@ type: architecture
 
 **What**: Completado análisis exhaustivo de la presentación HTML y diseño de estrategia de marketing y monetización.
 
-**Where**: 
+**Where**:
 - docs/presentations/index.html (y todas las páginas HTML)
 - docs/presentations/assets/css/gv.css
 - docs/presentations/assets/js/gv.js

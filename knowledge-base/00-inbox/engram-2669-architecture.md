@@ -11,12 +11,12 @@ type: architecture
 
 **Why**: Resolver problemas con modelos Bedrock y falta de fallback
 
-**Where**: 
+**Where**:
 - opencode.json (21 agentes ahora con opencode/deepseek-v4-flash-free)
 - src/model-broker.ts (370 líneas - sistema profesional)
 - config/model-health-registry.json (fallback chains)
 
-**Learned**: 
+**Learned**:
 - Bedrock no soporta `reasoning_effort` → agregar `drop_params: true`
 - Kimi-k2-5 tenía problemas → switch a nativo opencode/deepseek-v4-flash-free
 - Fallback automático crítico para resilience

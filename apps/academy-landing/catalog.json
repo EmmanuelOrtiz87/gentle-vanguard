@@ -32,190 +32,140 @@
         "title": "Agentes de IA en tu día a día",
         "level": "de 0 a 100",
         "hours": 9,
-        "categories": [
-          "ia-aplicada",
-          "negocios-productividad"
-        ]
+        "categories": ["ia-aplicada", "negocios-productividad"]
       },
       {
         "id": "alfabetizacion-digital",
         "title": "Alfabetización Digital — De 0 a 100",
         "level": "de 0 a 100",
         "hours": 14,
-        "categories": [
-          "negocios-productividad",
-          "infraestructura-redes-ciberseguridad"
-        ]
+        "categories": ["negocios-productividad", "infraestructura-redes-ciberseguridad"]
       },
       {
         "id": "gemini",
         "title": "Gemini: IA gratis con tu cuenta de Google",
         "level": "de 0 a 100",
         "hours": 14,
-        "categories": [
-          "ia-aplicada",
-          "negocios-productividad"
-        ]
+        "categories": ["ia-aplicada", "negocios-productividad"]
       },
       {
         "id": "gentle-vanguard",
         "title": "Gentle-Vanguard",
         "level": "intermedio",
         "hours": 12,
-        "categories": [
-          "software-programacion",
-          "ia-aplicada"
-        ]
+        "categories": ["software-programacion", "ia-aplicada"]
       },
       {
         "id": "git-github",
         "title": "Git y GitHub — Control de Versiones Profesional",
         "level": "de 0 a 100",
         "hours": 14,
-        "categories": [
-          "software-programacion"
-        ]
+        "categories": ["software-programacion"]
       },
       {
         "id": "ia-avanzado",
         "title": "IA — Nivel 3 (Avanzado e Investigación)",
         "level": "avanzado",
         "hours": 32,
-        "categories": [
-          "software-programacion",
-          "ia-aplicada"
-        ]
+        "categories": ["software-programacion", "ia-aplicada"]
       },
       {
         "id": "ia-fundamentos",
         "title": "IA — De 0 a 100 (Nivel 1)",
         "level": "de 0 a 100",
         "hours": 16,
-        "categories": [
-          "ia-aplicada"
-        ]
+        "categories": ["ia-aplicada"]
       },
       {
         "id": "ia-intermedio",
         "title": "IA — Nivel 2 (Ingeniería y Producción)",
         "level": "intermedio",
         "hours": 28,
-        "categories": [
-          "software-programacion",
-          "ia-aplicada"
-        ]
+        "categories": ["software-programacion", "ia-aplicada"]
       },
       {
         "id": "linux-intro",
         "title": "Introducción a Linux",
         "level": "inicial",
         "hours": 12,
-        "categories": [
-          "infraestructura-redes-ciberseguridad",
-          "software-programacion"
-        ]
+        "categories": ["infraestructura-redes-ciberseguridad", "software-programacion"]
       },
       {
         "id": "marketing-ia",
         "title": "Marketing con IA",
         "level": "de 0 a 100",
         "hours": 9,
-        "categories": [
-          "negocios-productividad",
-          "ia-aplicada"
-        ]
+        "categories": ["negocios-productividad", "ia-aplicada"]
       },
       {
         "id": "patrones-diseno",
         "title": "Patrones de Diseño y Arquitectura — Código que Escala",
         "level": "intermedio",
         "hours": 16,
-        "categories": [
-          "software-programacion"
-        ]
+        "categories": ["software-programacion"]
       },
       {
         "id": "pl-sql",
         "title": "PL/SQL — Programación en Oracle",
         "level": "intermedio",
         "hours": 14,
-        "categories": [
-          "software-programacion"
-        ]
+        "categories": ["software-programacion"]
       },
       {
         "id": "poo-ia",
         "title": "Programación Orientada a Objetos con IA",
         "level": "intermedio",
         "hours": 16,
-        "categories": [
-          "software-programacion",
-          "ia-aplicada"
-        ]
+        "categories": ["software-programacion", "ia-aplicada"]
       },
       {
         "id": "python-avanzado",
         "title": "Python Avanzado — Arquitectura, Concurrencia y Producción",
         "level": "avanzado",
         "hours": 18,
-        "categories": [
-          "software-programacion"
-        ]
+        "categories": ["software-programacion"]
       },
       {
         "id": "python-inicial",
         "title": "Python Inicial — Tu Primer Lenguaje de Programación",
         "level": "inicial",
         "hours": 14,
-        "categories": [
-          "software-programacion"
-        ]
+        "categories": ["software-programacion"]
       },
       {
         "id": "python-intermedio",
         "title": "Python Intermedio — Código Profesional y Reutilizable",
         "level": "intermedio",
         "hours": 16,
-        "categories": [
-          "software-programacion"
-        ]
+        "categories": ["software-programacion"]
       },
       {
         "id": "sql",
         "title": "SQL — Domina las Bases de Datos Relacionales",
         "level": "de 0 a 100",
         "hours": 16,
-        "categories": [
-          "software-programacion"
-        ]
+        "categories": ["software-programacion"]
       },
       {
         "id": "web-avanzado",
         "title": "Páginas Web Avanzado — Arquitectura, Rendimiento y Seguridad",
         "level": "avanzado",
         "hours": 18,
-        "categories": [
-          "software-programacion",
-          "infraestructura-redes-ciberseguridad"
-        ]
+        "categories": ["software-programacion", "infraestructura-redes-ciberseguridad"]
       },
       {
         "id": "web-inicial",
         "title": "Páginas Web Inicial — HTML, CSS y tus Primeras Páginas",
         "level": "inicial",
         "hours": 14,
-        "categories": [
-          "software-programacion"
-        ]
+        "categories": ["software-programacion"]
       },
       {
         "id": "web-intermedio",
         "title": "Páginas Web Intermedio — Interfaces Responsivas e Interactivas",
         "level": "intermedio",
         "hours": 16,
-        "categories": [
-          "software-programacion"
-        ]
+        "categories": ["software-programacion"]
       }
     ],
     "ebooks": [

@@ -11,7 +11,7 @@ type: architecture
 
 **Why**: El otro modelo reportó problemas con subagentes y opencode. Se identificó que se crearon scripts compensatorios (2,668+ líneas en 7+ archivos) que duplican la funcionalidad de subagentes vía child_process en vez de usar el task tool nativo.
 
-**Where**: 
+**Where**:
 - opencode.json — routing fields con sintaxis PowerShell (@{...}) inválida como JSON
 - config/auto-delegation.json — 2,495 líneas, ~400 skills mapeados, 15+ agentes que no existen en opencode.json
 - src/team-orchestrator.ts (556 líneas) — Swarm Leader-Worker que reemplaza subagentes

@@ -9,7 +9,7 @@ type: architecture
 
 **What**: Built the auto-reassignment + adaptive step-scaling layer for the orchestrator.
 **Why**: Subagents were configured with `steps: 6` (only 6 tool calls), so they exhausted their budget during exploration and never completed edits. User asked for automatic step scaling instead of manual discovery.
-**Where**: 
+**Where**:
 - `src/adaptive-steps.ts` — estimates required steps from task complexity (proactive `--estimate`/`--auto`) and bumps limit on exhaustion (reactive `--resume <agent> --task_id <id>`). Caps at 80. Rounding fixed (was producing fractional steps).
 - `src/recommend-agent.ts` — bridge that queries the adaptive routing table and returns best agent (override → domain entry → static fallback). Cold start returns static map.
 - `src/adaptive-router.ts` (existing) — builds routing table from execution history.

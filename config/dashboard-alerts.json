@@ -253,6 +253,26 @@
       "enabled": true,
       "direction": "below",
       "description": "Pocos hits de enrutamiento — reglas infrautilizadas"
+    },
+    "academy_new_leads": {
+      "label": "New Academy Leads",
+      "metric": "academy.leads24h",
+      "threshold": 1,
+      "severity": "info",
+      "unit": "leads",
+      "enabled": true,
+      "direction": "above",
+      "description": "Se capturaron leads nuevos en la landing de Academy (últimas 24h)"
+    },
+    "academy_exports_activity": {
+      "label": "Academy Exports Activity",
+      "metric": "academy.exports24h",
+      "threshold": 1,
+      "severity": "info",
+      "unit": "exports",
+      "enabled": true,
+      "direction": "above",
+      "description": "Se exportaron productos de Academy en las últimas 24h"
     }
   }
 }

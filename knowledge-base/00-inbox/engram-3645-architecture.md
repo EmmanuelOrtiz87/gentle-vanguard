@@ -13,7 +13,7 @@ type: architecture
 
 **Where**: `src/security/output-encoding.ts` (new), `src/security/owasp/owasp-agentic-top10.ts` (LLM05 → full), `tests/unit/output-encoding.test.ts` (new, 8 tests), `tests/unit/owasp-agentic-top10.test.ts` (updated 75→80), `tests/unit/agent-governance-integration.test.ts` (updated strict OWASP now passes → allow).
 
-**Learned**: 
+**Learned**:
 - The `edit` tool can report success but NOT persist to disk (cache artifact). Always verify edits with `read` after applying, especially when a subsequent `tsc`/test run shows the old content.
 - `output-encoding.ts` is fail-closed, deterministic, no LLM. SQL escaping doubles single quotes (`''`), shell wraps in single quotes, HTML/attr entity-encodes, URL-encodes, JSON-escapes.
 - Watchtower now reports `owasp coverage: PASS - coverage=80% (strict threshold 80%)`, PASS: 122 | WARN: 2 | FAIL: 0.

@@ -13,7 +13,7 @@ type: architecture
 
 **Where**: scripts/sdd-pipeline/sdd-pipeline.ps1, artifacts stored at .sdd/<feature>/
 
-**Learned**: 
+**Learned**:
 - $PSScriptRoot already resolves to script directory, so going up 3 Parents goes one level above repo root
 - All 9 phases passed in both dry-run and real execution modes
 

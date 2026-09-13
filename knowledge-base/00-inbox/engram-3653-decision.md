@@ -8,9 +8,11 @@ type: decision
 # GV Analytics v3.0 - Mejoras Completadas
 
 ## Goal
+
 Resolver todos los problemas pendientes de GV Analytics: agent-delegator, visualización de análisis de código, múltiples URLs, y traducciones.
 
 ## Instructions
+
 - Crear wrapper para agent-delegator en src/agent-delegator.ts
 - Implementar componente CodeAnalysisPanel en IntelligenceComponents.tsx
 - Agregar traducciones para análisis de código en i18n.tsx
@@ -19,6 +21,7 @@ Resolver todos los problemas pendientes de GV Analytics: agent-delegator, visual
 - Compilar y validar
 
 ## Discoveries
+
 - El agent-delegator estaba en src/orchestration/ pero documentación esperaba src/
 - Se usó wrapper con re-export para mantener compatibilidad
 - Backend ya extrae commits, file stats, etc. de PRs de Bitbucket
@@ -26,6 +29,7 @@ Resolver todos los problemas pendientes de GV Analytics: agent-delegator, visual
 - Componentes React funcionan con datos pasados desde report.codeAnalysis
 
 ## Accomplished
+
 - ✅ Wrapper src/agent-delegator.ts creado (re-exporta desde orchestration)
 - ✅ npx tsx src/agent-delegator.ts --list funciona correctamente
 - ✅ Componente CodeAnalysisPanel creado con:
@@ -41,12 +45,14 @@ Resolver todos los problemas pendientes de GV Analytics: agent-delegator, visual
 - ✅ Componente muestra datos reales del backend (cuando report.codeAnalysis existe)
 
 ## Next Steps
+
 - Probar con PR real de Bitbucket para validar flujo end-to-end
 - Agregar gráficas con recharts si se desea
 - Documentar funcionalidad en README
 - Considerar cache de análisis de código en backend
 
 ## Relevant Files
+
 - src/agent-delegator.ts (nuevo wrapper)
 - src/orchestration/agent-delegator.ts (implementación real)
 - apps/gv-analytics/src/IntelligenceComponents.tsx (CodeAnalysisPanel)
@@ -56,6 +62,7 @@ Resolver todos los problemas pendientes de GV Analytics: agent-delegator, visual
 - apps/gv-analytics/src/types.ts (CodeAnalysis type)
 
 ## Key Learnings
+
 - Wrapper files solucionan problemas de compatibilidad sin mover archivos
 - Componentes React con TypeScript necesitan cast explícito (asRecord) para datos API
 - La arquitectura de análisis ya estaba completa, solo faltaba la visualización

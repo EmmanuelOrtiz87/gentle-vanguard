@@ -13,7 +13,7 @@ type: architecture
 
 **Where**: README.md, README-PUBLIC.md, gentle-vanguard-presentation.html, scripts/utilities/normative-audit-pipeline.ps1, .lefthook.yml, scripts/utilities/DEPLOYMENT/sync-to-public.ps1, docs/MANIFESTO.md (moved), docs/SECURITY.md (moved), etc.
 
-**Learned**: 
+**Learned**:
 - La normativa NORMATIVAS-CODIGO.md §4.3 prohíbe Write-Host y Select-String pero ~300+ scripts los usan → el enforcement debe ser gradual o la normativa debe relajarse para scripts de utilería
 - auto-norm-enforcer estaba silenciado con Out-Null → violaciones nunca reportadas al usuario
 - El sync-to-public.ps1 copiaba docs/README.md (419 líneas de datos internos) al repo público

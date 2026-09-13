@@ -11,7 +11,7 @@ type: bugfix
 
 **Why**: Every deployment triggered error notifications from CI workflows that had broken actions, missing scripts, false positive secret scans, and formatting issues.
 
-**Where**: 
+**Where**:
 - `.github/workflows/cross-platform-tests.yml` (both repos)
 - `.github/workflows/ps-lint.yml` (private)
 - `.github/workflows/format-check.yml` (public)

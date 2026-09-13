@@ -12,11 +12,13 @@ type: decision
 ## ✅ PROCEDIMIENTO:
 
 ### Auto-Activación Implementada:
+
 1. **Creado**: `src/core/session-cache-auto.ts` con auto-initialization
 2. **Modificado**: `src/session-autostart.ts` para importar cache automáticamente
 3. **Resultado**: Al ejecutar `npx tsx src/session-autostart.ts`, el cache se activa solo
 
 ### Buenas Prácticas Aplicadas:
+
 - ✅ Auto-execution (no requiere import manual)
 - ✅ Singleton pattern (evita duplicados)
 - ✅ Lazy initialization (solo cuando se necesita)
@@ -24,6 +26,7 @@ type: decision
 - ✅ Global registration (disponible en cualquier lugar)
 
 ### Verificación Exitosa:
+
 ```
 npx tsx src/session-autostart.ts
 [SESSION-CACHE] Session cache initialized successfully
@@ -34,6 +37,7 @@ npx tsx src/session-autostart.ts
 ```
 
 ### Token Budget Status:
+
 ```
 Session: session-20260813T0433
 Daily: 20M / 5M tokens (401% - HARD LIMIT alcanzado)
@@ -41,6 +45,7 @@ Presupuesto diario agotado - usar horas off-peak o compactar
 ```
 
 ## 🎉 CONCLUSIÓN:
+
 El cache hook system ahora se **AUTO-ACTIVA** al iniciar cualquier sesión.
 **NO REQUIERE IMPORTACIÓN MANUAL** - está integrado nativamente en el pipeline de session-autostart.
 

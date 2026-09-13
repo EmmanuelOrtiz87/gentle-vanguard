@@ -11,7 +11,7 @@ type: decision
 
 **Why**: Model fallback implementation resolved the critical issue where subagents failed with "Free usage exceeded" errors. GGA system now provides automatic provider switching with inheritance from orchestrator.
 
-**Where**: 
+**Where**:
 - src/gga.ts - Core system (commited)
 - src/orchestrator-task-wrapper.ts - task() replacement (committed)
 - docs/gga-system.md - Documentation (committed)
@@ -26,7 +26,7 @@ type: decision
 - Use shell:true for Windows spawn with npx commands
 - Avoid duplicate exports in TypeScript to prevent declaration conflicts
 
-**Status**: 
+**Status**:
 - ✅ Implementation: 100% complete
 - ✅ TypeScript: No errors
 - ✅ Tests: Created comprehensive test suite
@@ -35,6 +35,7 @@ type: decision
 - ✅ Committed to develop branch
 
 **Commands**:
+
 ```bash
 npm run gga:status      # Working correctly
 npm run gga:reset       # Working correctly

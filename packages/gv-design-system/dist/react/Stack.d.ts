@@ -6,14 +6,14 @@ export type StackJustify = 'start' | 'center' | 'end' | 'between' | 'around' | '
 export type StackWrap = 'wrap' | 'nowrap' | 'wrap-reverse';
 export type StackGap = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 8 | 10 | 12 | 16 | 20 | 24;
 export interface StackProps extends HTMLAttributes<HTMLDivElement> {
-    direction?: StackDirection;
-    align?: StackAlign;
-    justify?: StackJustify;
-    wrap?: StackWrap;
-    gap?: StackGap;
-    inline?: boolean;
-    as?: 'div' | 'section' | 'article' | 'header' | 'footer' | 'nav' | 'main' | 'aside';
-    children: ReactNode;
+  direction?: StackDirection;
+  align?: StackAlign;
+  justify?: StackJustify;
+  wrap?: StackWrap;
+  gap?: StackGap;
+  inline?: boolean;
+  as?: 'div' | 'section' | 'article' | 'header' | 'footer' | 'nav' | 'main' | 'aside';
+  children: ReactNode;
 }
 /**
  * Stack — Gentle-Vanguard v2 flex layout primitive.
@@ -29,5 +29,7 @@ export interface StackProps extends HTMLAttributes<HTMLDivElement> {
  *     <Body />
  *   </Stack>
  */
-export declare const Stack: import("react").ForwardRefExoticComponent<StackProps & import("react").RefAttributes<HTMLDivElement>>;
+export declare const Stack: import('react').ForwardRefExoticComponent<
+  StackProps & import('react').RefAttributes<HTMLDivElement>
+>;
 //# sourceMappingURL=Stack.d.ts.map

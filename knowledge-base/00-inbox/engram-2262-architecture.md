@@ -11,7 +11,7 @@ type: architecture
 
 **Why**: A new user needs ONE command to verify and install everything the stack needs. But this should NOT run every session — only on first install. Ongoing health is monitored by watchtower.
 
-**Where**: 
+**Where**:
 - `src/dependency-validator.ts` — 25 checks in 4 categories (CORE/STACK/OPTIONAL/PLATFORM)
 - `src/stack-verify.ts` — 4-layer orchestrator (deps → platform → services → integrity)
 - `src/stack-setup.ts` — one-command first-time install (6 steps)

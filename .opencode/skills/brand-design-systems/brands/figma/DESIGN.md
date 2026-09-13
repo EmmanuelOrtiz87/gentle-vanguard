@@ -292,11 +292,13 @@ This is a system built on contrast: the monochrome chrome makes the color blocks
 > Source pages: figma.com (home), /design/, /figjam/brainstorming-tool/, /pricing/, /contact/.
 
 ### Brand & Accent
+
 - **Black** ({colors.primary}): The system primary. Every primary CTA, every headline, every body line, the marquee strip, the inverse canvas of dark sections.
 - **White** ({colors.on-primary}): Inverse text on black surfaces; also the canvas color used as the foreground of secondary pill buttons (`{components.button-secondary}`).
 - **Magenta Promo** ({colors.accent-magenta}): A single saturated CTA pink reserved for promotional inline buttons — appears, for example, on the lilac "Save your spot" Release Notes banner. Use scarcely; it is not a section color.
 
 ### Surface
+
 - **Canvas** ({colors.canvas}): Default page background and the body of every white card.
 - **Inverse Canvas** ({colors.inverse-canvas}): Footer, marquee strip, and a subset of "ship products"-style story sections.
 - **Surface Soft** ({colors.surface-soft}): Off-white tile background used for icon buttons, template cards, and feature illustration tiles when they sit on the white canvas.
@@ -311,11 +313,13 @@ This is a system built on contrast: the monochrome chrome makes the color blocks
 - **Block Navy** ({colors.block-navy}): Deep indigo story block — only place dark surfaces appear above the footer.
 
 ### Text
+
 - **Ink** ({colors.ink}): All headline, body, and caption type on light surfaces. There is no softer mid-gray text role on marketing — body copy is always black at weight 320–340, and weight (not opacity) carries the hierarchy.
 - **Inverse Ink** ({colors.inverse-ink}): Type on inverse-canvas surfaces (footer, marquee strip, navy color block).
 - **On-Inverse Soft** ({colors.on-inverse-soft}): White used at ~16% opacity for circular icon-button surfaces against dark sections (token captures the base color; the translucency is applied at render time).
 
 ### Semantic
+
 - **Success Green** ({colors.semantic-success}): Comparison-table checkmarks on pricing. Used as a glyph fill, not a surface.
 - **Overlay Scrim** ({colors.overlay-scrim}): Black used at ~60% opacity behind modal / video-overlay surfaces (token captures the base; opacity applied at render time).
 

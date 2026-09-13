@@ -14,6 +14,7 @@ type: architecture
 **Analysis Results**:
 
 ## Build Skills (6 skills)
+
 | Skill | Stack Fit | Verdict | Reasoning |
 |-------|-----------|---------|-----------|
 | **Superpowers** (Plans before writes) | ✅ HIGH | ABSORB | Replaces/Enhances `planning-and-task-breakdown` with more structured pre-write planning. Aligns with spec-driven development |
@@ -24,6 +25,7 @@ type: architecture
 | **I-Have-ADHD** (Straight to answer) | ❌ LOW | SKIP | Conflicts with doubt-driven-development and thorough analysis |
 
 ## Design Skills (6 skills)
+
 | Skill | Stack Fit | Verdict | Reasoning |
 |-------|-----------|---------|-----------|
 | **UI-UX-Pro-Max** (Fonts & color palettes) | ✅ HIGH | ABSORB | Enhances `frontend-ui-engineering` with design system capabilities |
@@ -34,6 +36,7 @@ type: architecture
 | **GSAP** (Smooth animations) | ⚠️ NATIVE | EXISTS | We already have this functionality via dashboard/web components |
 
 ## Research Skills (6 skills)
+
 | Skill | Stack Fit | Verdict | Reasoning |
 |-------|-----------|---------|-----------|
 | **Skill-Creator** (Build Claude skills) | ❌ NO | SKIP | Meta-skill; we use skills directly, not through another tool |
@@ -44,6 +47,7 @@ type: architecture
 | **Claude-HUD** (Live actions visibility) | ✅ MEDIUM | ABSORB | Enhances observability beyond current dashboard |
 
 ## Marketing Skills (4 skills)
+
 | Skill | Stack Fit | Verdict | Reasoning |
 |-------|-----------|---------|-----------|
 | **Remotion** (Videos with React) | ⚠️ LOW | SKIP | Specific tool, not a skill pattern |
@@ -54,6 +58,7 @@ type: architecture
 ## External Tools Analysis
 
 ### witr (19.8k ⭐) - pranshuparmar/witr
+
 **"Why is this running?"** - Trace process chain causality
 
 | Aspect | Assessment |
@@ -71,6 +76,7 @@ type: architecture
 - Would enhance "debugging-and-error-recovery" skill |
 
 ### firecrawl (162.9k ⭐) - firecrawl/firecrawl
+
 **"Context API for web"** - Search, scrape, extract at scale
 
 | Aspect | Assessment |
@@ -94,7 +100,7 @@ type: architecture
 
 **Where**: .opencode/skills/ analysis, external repo inspection
 
-**Learned**: 
+**Learned**:
 1. **3 HIGH priority absorbs**: Superpowers, Agent-Browser (via firecrawl), UI-UX-Pro-Max, Last30Days, Witr
 2. **4 MEDIUM priority inspects**: GStack, MarketingSkills, Taste-Skill, Emil, Humanizer, Impeccable
 3. **GitHub repos provide excellent data**: witr = 19.8k stars, firecrawl = 162.9k stars - both proven validations of concepts

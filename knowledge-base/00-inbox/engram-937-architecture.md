@@ -11,7 +11,7 @@ type: architecture
 
 **Why**: Cline, Cursor, Windsurf, Codex, Copilot, Antigravity no tienen skill tool ni mem tools nativos. Ahora todas tienen emulación vía skillRegistry (.atl/skill-registry.md), engramPaths, criticalSkills sections en sus configs.
 
-**Where**: 
+**Where**:
 - .clinerules (+7): skillRegistry, engram refs, agent rules
 - .cursor/rules/core-workflow.md (+14): skill loading + mem emulation sections
 - .windsurf/config.json (+17): skillEmulation, engramPaths, skillRegistry, fix project name

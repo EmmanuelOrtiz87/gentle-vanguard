@@ -13,7 +13,7 @@ type: architecture
 
 **Where**: scripts/utilities/dashboard/dashboard-{ws-autostart,start,stop}.ps1, config/session-autostart.config.json, .opencode/skills/dashboard/SKILL.md, AGENTS.md, scripts/dashboard-launcher.ps1
 
-**Learned**: 
+**Learned**:
 - `stack-dashboard.ps1` is about orchestrator health/token budget (console) and should NOT be deprecated — it's a complementary concern to the React dashboard
 - The WS server starts in ~3s, build takes ~3s, no overhead concerns for pipeline
 - Watchdog monitors both process existence AND port openness (Test-NetConnection localhost:8080) for reliable recovery detection

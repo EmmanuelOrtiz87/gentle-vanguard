@@ -258,6 +258,7 @@ Every interactive element is a pill (`{rounded.pill}` 9999 px) with 1 px white-t
 ## Colors
 
 ### Brand & Accent
+
 - **White** (`{colors.primary}` — `#ffffff`): The brand's primary "color" — used as button outline, button-primary fill, all display text. The brand's signature is white-on-near-black.
 - **Sunset Orange** (`{colors.accent-sunset}` — `#ff7a17`): A warm orange used inside product illustrations and accent moments.
 - **Sunset Soft** (`{colors.accent-sunset-soft}` — `#ffc285`): The lighter variant of the sunset accent.
@@ -267,6 +268,7 @@ Every interactive element is a pill (`{rounded.pill}` 9999 px) with 1 px white-t
 - **Midnight** (`{colors.accent-midnight}` — `#0d1726`): Deep blue-black for illustrative backgrounds.
 
 ### Surface
+
 - **Canvas** (`{colors.canvas}` — `#0a0a0a`): The default near-black page background. The brand's only true surface.
 - **Canvas Soft** (`{colors.canvas-soft}` — `#1a1c20`): A slightly lighter dark fill used for hovered nav items and tooltips.
 - **Canvas Card** (`{colors.canvas-card}` — `#191919`): The charcoal card fill used inside product-feature cards.
@@ -274,17 +276,20 @@ Every interactive element is a pill (`{rounded.pill}` 9999 px) with 1 px white-t
 - **Hairline** (`{colors.hairline}` — `#212327`): 1 px solid dividers on dark surfaces.
 
 ### Text
+
 - **Ink** (`{colors.ink}` — `#ffffff`): Default text on canvas — pure white.
 - **Ink Hover** (`{colors.ink-hover}` — `#fafaf7`): Slightly off-white used for hover states (filtered out per no-hover policy in component specs).
 - **Body** (`{colors.body}` — `#dadbdf`): Secondary body text — supporting copy in lighter weight.
 - **Body Mid / Mute** (`{colors.body-mid}` — `#7d8187`): Mid-emphasis body and mute text — captions, fine print.
 
 ### Semantic
+
 The brand doesn't surface a separate semantic palette on the marketing site. Validation cues use the white-on-canvas hierarchy.
 
 ## Typography
 
 ### Font Family
+
 Two faces ladder the system:
 1. **universalSans** — proprietary geometric sans used for every display, body, button, and link role. Weight 400 only on the marketing surface (the brand's restraint is part of the voice). Negative letter-spacing at display sizes is the visual signature.
 2. **GeistMono** — used for uppercase section eyebrows, label captions, and metric counters. Positive tracking (1.2 – 1.4 px) at 12 – 14 px.
@@ -306,11 +311,13 @@ Two faces ladder the system:
 | `{typography.button-md}` | 14px | 400 | 20px | 0 | Button label. |
 
 ### Principles
+
 - **Weight 400 for everything.** The brand never bolds. Negative tracking + size hierarchy do the emphasis work.
 - **Tight negative tracking on display sizes.** Reverting to neutral tracking loses the precision feel.
 - **GeistMono uppercase for eyebrows.** Tracked positively (1.4 px) to make the mono read as a code comment.
 
 ### Note on Font Substitutes
+
 universalSans is proprietary. Open-source substitutes:
 - **Display + body** — *Inter* weight 400 with `-0.04em` to `-0.02em` letter-spacing at display sizes comes closest. *Geist* is the second-best option.
 - **Mono** — *Geist Mono* is the documented brand companion; *JetBrains Mono* or *IBM Plex Mono* are alternates.
@@ -318,12 +325,14 @@ universalSans is proprietary. Open-source substitutes:
 ## Layout
 
 ### Spacing System
+
 - **Base unit**: 4 px.
 - **Tokens**: `{spacing.xxs}` 2 px · `{spacing.xs}` 4 px · `{spacing.sm}` 8 px · `{spacing.md}` 12 px · `{spacing.lg}` 16 px · `{spacing.xl}` 24 px · `{spacing.2xl}` 32 px · `{spacing.3xl}` 48 px · `{spacing.4xl}` 64 px.
 - **Section padding**: hero / content bands at `{spacing.4xl}` 64 px on desktop.
 - **Card interior padding**: `{spacing.xl}` 24 px.
 
 ### Grid & Container
+
 - Marketing content centres at ~1200 px.
 - Product / announcement card grid: 2-up at desktop, 1-up at mobile.
 
@@ -337,9 +346,11 @@ universalSans is proprietary. Open-source substitutes:
 | Desktop | ≥ 768px | Full hero + 2-up grids. |
 
 #### Touch Targets
+
 Buttons render ~32 – 40 px tall (8 vertical padding + 20 line). Mobile inflates touch area to meet WCAG 44 × 44 px.
 
 #### Image Behavior
+
 The brand uses sparse SVG illustrations for product moments (Grok, Voice, API). No photography on the marketing surface.
 
 ## Elevation & Depth
@@ -447,10 +458,10 @@ The brand uses no shadows. Hairline borders carry all elevation cues.
 **`ex-toast`** — Toast notification surface — feature-card shape + medium shadow.
 - Properties: `backgroundColor`, `rounded`, `padding`, `typography`
 
-
 ## Do's and Don'ts
 
 ### Do
+
 - Reserve `{colors.canvas}` (`#0a0a0a`) as the only page surface. The brand is dark-canvas only.
 - Set hero headlines in `{typography.display-xl}` Universal Sans weight 400 with `-2.4 px` tracking. The precision IS the voice.
 - Use `{rounded.pill}` 9999 px on every interactive element. The pill is the brand.
@@ -458,6 +469,7 @@ The brand uses no shadows. Hairline borders carry all elevation cues.
 - Use white-translucent borders for outline buttons — the brand never uses solid white borders on its outline pill.
 
 ### Don't
+
 - Don't introduce a light-mode counterpart. xAI is dark-canvas only.
 - Don't bold display headlines. Weight 400 is the entire scale.
 - Don't use filled buttons broadly. The brand uses outline pills almost exclusively; one Sign Up white-filled pill is the rare exception.

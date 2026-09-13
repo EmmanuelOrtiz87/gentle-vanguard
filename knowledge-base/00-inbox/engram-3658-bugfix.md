@@ -17,7 +17,7 @@ type: bugfix
 - `Access-Control-Allow-Headers: Content-Type, Authorization`
 - Manejar preflight OPTIONS requests
 
-**Learned**: 
+**Learned**:
 - El endpoint `/api/llm/detect` funciona perfectamente via curl desde consola (devuelve `{"configured":true,"provider":"custom","model":"claude-sonnet-4"}`)
 - El build del frontend SÍ contiene el código LLM (verificado en `dist/assets/index-CWas-HXW.js`)
 - El problema NO es el código, es la política de mismo origen del navegador

@@ -11,7 +11,7 @@ type: decision
 
 **Why**: Unificar todo el stack Gentle-Vanguard bajo Design System v3.0 "Premium Commercial" único.
 
-**Where**: 
+**Where**:
 - `packages/gv-design-system/src/tokens/tokens.json` v3.0 locked
 - `packages/gv-design-system/dist/` artifacts generados
 - `packages/gv-design-system/src/components/` (Button, Card, Input completados)

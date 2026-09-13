@@ -13,7 +13,7 @@ type: bugfix
 
 **Where**: .github/workflows/reusable-security.yml, scripts/utilities/model-router-tui/go.mod
 
-**Learned**: 
+**Learned**:
 1. El README de trivy-action documenta exit-code: "exit code when vulnerabilities were found" — es el estándar para gates.
 2. El repo tenía 2 vulns HIGH reales: react-router 7.18.1 (GHSA-qwww-vcr4-c8h2, fix 7.18.2/8.3.0) y golang.org/x/text v0.3.8 (CVE-2026-56852, fix 0.39.0). Ambas resueltas.
 3. apps/web-dashboard/package-lock.json (npm lock) fue eliminado del repo: la normativa rules/NORMATIVAS-SECURITY-COMPLIANCE.md dice "pnpm only, no package-lock.json", el proyecto es 100% pnpm, y el lock npm estaba desincronizado generando falsas vulns en trivy. Añadido a .gitignore.

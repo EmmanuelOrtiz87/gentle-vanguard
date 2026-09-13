@@ -13,7 +13,7 @@ type: decision
 
 **Where**: origin/main (b0dff835..227883ad)
 
-**Learned**: 
+**Learned**:
 - Stack verified green: watchtower 97 PASS / 0 FAIL after running `npm run process:reap` to clean a stale pidfile (monitor-daemon.pid PID 39768).
 - Only remaining WARN is model `qwen2.5-coder-7b-instruct` unhealthy in health registry (local ollama model, not blocking; active model is opencode-go/gpt-5.6-luna).
 - Incident log `.session/guardrails/incidents.jsonl` has 3 real incidents recorded from delegation tests.

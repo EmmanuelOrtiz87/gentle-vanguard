@@ -12,4 +12,5 @@ Delegate "$ARGUMENTS" through the stack's multi-domain router:
 3. Report which agent was chosen, why (routing domain match), and the result.
 
 If the agent hits maximum steps, re-assign with
-`node --import tsx src/orchestration/adaptive-steps.ts --resume <agent> --task_id <id>` (+20 steps, max 80).
+`node --import tsx src/orchestration/adaptive-steps.ts --resume <agent> --task_id <id>` (+20 steps,
+max 80).

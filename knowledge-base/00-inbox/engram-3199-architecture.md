@@ -18,7 +18,7 @@ Added test cases to `tests/unit/guardrail-orchestrator.test.ts` for each learnin
 
 **Where**: src/guardrail-orchestrator.ts, tests/unit/guardrail-orchestrator.test.ts
 
-**Learned**: 
+**Learned**:
 - Commit `7e9fff04` pushed to origin/main (227883ad..7e9fff04). All pre-push hooks passed.
 - Verified classifications: spawn ENOENT→config, ENOSPC→resource, EADDRINUSE→resource, EACCES→security.
 - Evaluated other pipeline points (session-close, saga, rollback, team-orchestrator spawnWorker, orchestrate-auto-fix writeDelegate) — all already have their own failure-handling mechanisms. Forcing guardrail integration would be over-engineering.

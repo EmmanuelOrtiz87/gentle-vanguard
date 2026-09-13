@@ -324,6 +324,7 @@ The dark surfaces are where Claude shows its product chrome — code blocks, ter
 ## Colors
 
 ### Brand & Accent
+
 - **Coral / Primary** (`{colors.primary}` — #cc785c): The signature Anthropic warm coral. Used on every primary CTA background, on full-bleed coral callout cards, on the brand wordmark accent. The most-recognized Anthropic color outside of the spike-mark logo.
 - **Coral Active** (`{colors.primary-active}` — #a9583e): The press / hover-darker variant.
 - **Coral Disabled** (`{colors.primary-disabled}` — #e6dfd8): A desaturated cream-tinted disabled state.
@@ -331,6 +332,7 @@ The dark surfaces are where Claude shows its product chrome — code blocks, ter
 - **Accent Amber** (`{colors.accent-amber}` — #e8a55a): A small companion warm-tone used on category badges and inline highlights.
 
 ### Surface
+
 - **Canvas** (`{colors.canvas}` — #faf9f5): The default page floor. Tinted cream — warm, deliberately not pure white.
 - **Surface Soft** (`{colors.surface-soft}` — #f5f0e8): Section dividers, very-soft band backgrounds.
 - **Surface Card** (`{colors.surface-card}` — #efe9de): Feature cards, content cards. One step darker than canvas.
@@ -342,6 +344,7 @@ The dark surfaces are where Claude shows its product chrome — code blocks, ter
 - **Hairline Soft** (`{colors.hairline-soft}` — #ebe6df): Barely-visible divider used inside the same band.
 
 ### Text
+
 - **Ink** (`{colors.ink}` — #141413): All headlines and primary text. Warm dark, slightly off-pure-black.
 - **Body Strong** (`{colors.body-strong}` — #252523): Emphasized paragraphs, lead text.
 - **Body** (`{colors.body}` — #3d3d3a): Default running-text color.
@@ -352,6 +355,7 @@ The dark surfaces are where Claude shows its product chrome — code blocks, ter
 - **On Dark Soft** (`{colors.on-dark-soft}` — #a09d96): Footer body text, secondary labels in dark mockups.
 
 ### Semantic
+
 - **Success** (`{colors.success}` — #5db872): Green status dots, "available" indicators.
 - **Warning** (`{colors.warning}` — #d4a017): Warning callouts (rare on marketing surfaces).
 - **Error** (`{colors.error}` — #c64545): Validation errors.
@@ -359,6 +363,7 @@ The dark surfaces are where Claude shows its product chrome — code blocks, ter
 ## Typography
 
 ### Font Family
+
 The system runs **Copernicus** (or **Tiempos Headline** as substitute) as the slab-serif display face for headlines, and **StyreneB** (or **Inter** as substitute) as the humanist sans for body, navigation, and UI labels. **JetBrains Mono** handles code blocks. The fallback stack walks `Tiempos Headline, Garamond, "Times New Roman", serif` for display and `Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif` for body.
 
 The display/body split is editorial:
@@ -386,16 +391,19 @@ The display/body split is editorial:
 | `{typography.nav-link}` | 14px | 500 | 1.4 | 0 | Top-nav menu items |
 
 ### Principles
+
 Display sizes use weight 400 (regular), never bold. Negative letter-spacing (-0.3 to -1.5px) is essential — Copernicus without it reads as off-brand. The serif character is what gives Anthropic its literary, considered voice; switching to a sans-serif display would make Claude feel like every other AI tool.
 
 Body type stays at weight 400 for paragraphs, weight 500 for labels and emphasized phrases. The sans body is humanist (StyreneB) — never geometric. Inter is an acceptable substitute because of its similar humanist proportions; Helvetica or Arial would be too neutral and break the warm-editorial feel.
 
 ### Note on Font Substitutes
+
 If Copernicus / Tiempos Headline is unavailable, **Cormorant Garamond** at weight 500 with -0.02em letter-spacing is the closest open-source approximation. **EB Garamond** is a fallback. For StyreneB, **Inter** is the closest match — both are humanist sans designed for screen reading. **Söhne** is another close alternative if licensed.
 
 ## Layout
 
 ### Spacing System
+
 - **Base unit:** 4px.
 - **Tokens:** `{spacing.xxs}` 4px · `{spacing.xs}` 8px · `{spacing.sm}` 12px · `{spacing.md}` 16px · `{spacing.lg}` 24px · `{spacing.xl}` 32px · `{spacing.xxl}` 48px · `{spacing.section}` 96px.
 - **Section padding:** `{spacing.section}` (96px) — modern-SaaS rhythm.
@@ -403,6 +411,7 @@ If Copernicus / Tiempos Headline is unavailable, **Cormorant Garamond** at weigh
 - **Callout / CTA bands:** `{spacing.xxl}` (48px) inside coral callout cards; 64px inside the larger dark CTA band.
 
 ### Grid & Container
+
 - **Max content width:** ~1200px centered.
 - **Editorial body:** Single 12-column grid; hero often uses 6/6 split (h1 left, illustration right).
 - **Feature card grids:** 3-up at desktop, 2-up at tablet, 1-up at mobile.
@@ -410,6 +419,7 @@ If Copernicus / Tiempos Headline is unavailable, **Cormorant Garamond** at weigh
 - **Pricing grid:** 3-up at desktop (Free / Pro / Team / Enterprise often), 1-up at mobile.
 
 ### Whitespace Philosophy
+
 The cream canvas + serif display + generous internal padding create an editorial pacing — Claude reads like a long-form magazine column rather than a marketing template. Whitespace between bands stays uniform at 96px; whitespace inside cards is generous (32px), letting type breathe.
 
 ## Elevation & Depth
@@ -425,6 +435,7 @@ The cream canvas + serif display + generous internal padding create an editorial
 The elevation philosophy is **color-block first, shadow rare**. Most depth comes from the cream-vs-dark surface contrast. Shadows are minimal. The dark surface mockups have their own internal product chrome (code editor scrollbars, line numbers, syntax highlighting) which adds detail without needing external shadows.
 
 ### Decorative Depth
+
 - The Anthropic spike-mark glyph (4-spoke radial asterisk) appears as a small black mark in the brand wordmark and inline as a content marker.
 - Code editor mockups carry their own internal depth: syntax-highlighted text in muted blues / oranges / grays, line numbers in `{colors.muted-soft}`, status bars at the bottom in `{colors.surface-dark-elevated}`.
 - Some hero illustrations use simple line-art with coral and dark-navy strokes on cream — minimal, hand-drawn-feeling, never photorealistic.
@@ -444,6 +455,7 @@ The elevation philosophy is **color-block first, shadow rare**. Most depth comes
 | `{rounded.full}` | 9999px / 50% | Avatar substitutes, icon buttons |
 
 ### Photography & Illustrations
+
 Claude's hero rarely uses photography. Instead it uses:
 - Simple line-art illustrations with coral + dark-navy strokes on the cream canvas
 - Code editor mockups (the dominant "hero" treatment on developer-focused pages)
@@ -523,6 +535,7 @@ When photography is used (rare — mostly testimonials), avatars crop to perfect
 ## Do's and Don'ts
 
 ### Do
+
 - Anchor every page on the cream canvas. Pure white reads as "any other AI tool"; the warm tint is the brand differentiator.
 - Use Copernicus serif for every display headline. Pair with StyreneB sans body. Negative letter-spacing on display sizes is non-negotiable.
 - Reserve `{colors.primary}` (coral) for primary CTAs and full-bleed `{component.callout-card-coral}` moments. Don't paint accent moments coral elsewhere.
@@ -532,6 +545,7 @@ When photography is used (rare — mostly testimonials), avatars crop to perfect
 - Apply `{spacing.section}` (96px) between major bands.
 
 ### Don't
+
 - Don't use cool grays or pure white for canvas. Cream is the brand.
 - Don't bold serif display weight. Copernicus at 700 reads as bombastic; the system stays at 400.
 - Don't use cool blue or saturated cyan as a brand accent. The coral is the brand voltage.
@@ -552,12 +566,14 @@ When photography is used (rare — mostly testimonials), avatars crop to perfect
 | Wide | > 1440px | Same as desktop with more outer breathing room; max content width caps at 1200px |
 
 ### Touch Targets
+
 - `{component.button-primary}` at minimum 40 × 40px.
 - `{component.button-icon-circular}` at exactly 36 × 36 — slightly under WCAG 44 but visually centered.
 - `{component.text-input}` height is 40px.
 - Connector tile entire card area is tappable; effective tap area >> 44px.
 
 ### Collapsing Strategy
+
 - Top nav collapses to hamburger at < 768px; menu opens as a full-screen cream sheet.
 - Hero band's 6-6 grid collapses to single-column on mobile — h1 + sub-head + buttons first, then the illustration / mockup card below.
 - Feature grids reduce columns rather than scaling cards down.
@@ -565,6 +581,7 @@ When photography is used (rare — mostly testimonials), avatars crop to perfect
 - Code-window cards retain code legibility at every breakpoint by allowing horizontal scroll within the card rather than wrapping code lines.
 
 ### Image Behavior
+
 - Code blocks inside dark mockups stay at fixed font-size; horizontal scroll on mobile rather than wrapping.
 - Hero illustrations scale proportionally; line-art strokes thin slightly on mobile.
 - Avatar photos in testimonials crop to circles at every breakpoint.

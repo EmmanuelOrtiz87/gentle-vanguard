@@ -11,7 +11,7 @@ type: architecture
 
 **Why**: Dotar al stack de GV de las capacidades de hash-anchored edits, orquestación multi-agente, MCPs on-demand vía skills, sin depender de plugins externos.
 
-**Where**: 
+**Where**:
 - scripts/editing/hashline.ps1
 - scripts/utilities/WORKFLOW-ORCHESTRATION/team-mode.ps1 (235 líneas)
 - scripts/utilities/WORKFLOW-ORCHESTRATION/dispatch-agent.ps1

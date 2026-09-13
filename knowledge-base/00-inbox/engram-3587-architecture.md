@@ -10,7 +10,7 @@ type: architecture
 **What**: Implemented intelligent session validation system with inventory tracking for selective close
 **Why**: Need to validate session state at start (active/nested/zombie), register resources, and close only what was started
 **Where**: src/session/session-validator.ts, src/core/session-autostart.ts, src/session/session-close/phases.ts, src/session/session-cleanup-start.ts
-**Learned**: 
+**Learned**:
 - Session validation detects active sessions via lock file (not blocking on Nexus query)
 - Inventory tracks daemonsStarted, skillsActivated, lazyStepsLaunched, cachesInitialized, checkpointsCreated
 - Selective close uses inventory instead of static whitelist

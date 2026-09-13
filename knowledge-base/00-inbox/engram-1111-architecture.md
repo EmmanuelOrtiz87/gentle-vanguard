@@ -11,7 +11,7 @@ type: architecture
 
 **Why**: check-skill-sizes.ps1 reportaba 82 skills oversized. Causa: SKILL.md acumulaba contenido de referencia (ejemplos, troubleshooting, tablas) que debía estar en references/.
 
-**Where**: 
+**Where**:
 - scripts/utilities/skill-splitter.ps1 — nuevo script automatizado de split
 - 86 skills/ */SKILL.md — reducidos
 - 86 skills/ */references/detail.md — creados con contenido movido

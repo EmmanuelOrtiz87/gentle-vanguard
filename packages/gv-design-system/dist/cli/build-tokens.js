@@ -39,194 +39,193 @@ const DESIGN_HUB_SHELL = join(DS_ROOT, '..', '..', 'apps', 'design-hub', 'public
 /** Top-level JSON keys that are package metadata, not tokens. */
 const RESERVED_KEYS = new Set(['$schema', 'version', 'name', 'description', 'mode', 'meta']);
 function isObj(v) {
-    return typeof v === 'object' && v !== null && !Array.isArray(v);
+  return typeof v === 'object' && v !== null && !Array.isArray(v);
 }
 /** Resolve a dotted path ('color.brand.purple') against the token tree. */
 function getPath(root, path) {
-    let cur = root;
-    for (const seg of path.split('.')) {
-        if (!isObj(cur))
-            return undefined;
-        cur = cur[seg];
-    }
-    return cur;
+  let cur = root;
+  for (const seg of path.split('.')) {
+    if (!isObj(cur)) return undefined;
+    cur = cur[seg];
+  }
+  return cur;
 }
 // ============================================================================
 // CSS mapping (token names frozen — values resolved from tokens.json)
 // ============================================================================
 /** Static (non-JSON) scales kept for continuity; append-only, never renamed. */
 const STATIC_SCALE = {
-    zScale: { base: 0, raised: 10, sticky: 50, overlay: 100, modal: 200, toast: 300, max: 9999 },
-    layout: { headerHeight: '62px', contentMaxWidth: '1180px' },
+  zScale: { base: 0, raised: 10, sticky: 50, overlay: 100, modal: 200, toast: 300, max: 9999 },
+  layout: { headerHeight: '62px', contentMaxWidth: '1180px' },
 };
 /** [css custom property, dotted path in tokens.json / STATIC_SCALE]. */
 const CSS_VARS = [
-    ['--gv-purple', 'color.brand.purple'],
-    ['--gv-purple-deep', 'color.brand.purpleDeep'],
-    ['--gv-purple-soft', 'color.brand.purpleSoft'],
-    ['--gv-cyan', 'color.brand.cyan'],
-    ['--gv-cyan-deep', 'color.brand.cyanDeep'],
-    ['--gv-cyan-soft', 'color.brand.cyanSoft'],
-    ['--gv-gold', 'color.brand.gold'],
-    ['--gv-bg', 'color.surface.bg'],
-    ['--gv-bg-elevated', 'color.surface.elevated'],
-    ['--gv-bg-deep', 'color.surface.bgDeep'],
-    ['--gv-surface', 'color.surface.surface'],
-    ['--gv-surface-raised', 'color.surface.surfaceRaised'],
-    ['--gv-surface-overlay', 'color.surface.surfaceOverlay'],
-    ['--gv-glass', 'color.surface.glass'],
-    ['--gv-glass-border', 'color.surface.glassBorder'],
-    ['--gv-text', 'color.text.primary'],
-    ['--gv-text-secondary', 'color.text.secondary'],
-    ['--gv-muted', 'color.text.muted'],
-    ['--gv-text-disabled', 'color.text.disabled'],
-    ['--gv-text-inverse', 'color.text.inverse'],
-    ['--gv-amber', 'color.feedback.warning'],
-    ['--gv-red', 'color.feedback.error'],
-    ['--gv-green', 'color.feedback.success'],
-    ['--gv-info', 'color.feedback.info'],
-    ['--gv-border', 'color.border.default'],
-    ['--gv-border-accent', 'color.border.accent'],
-    ['--gv-border-accent-strong', 'color.border.accentStrong'],
-    ['--gv-glow-purple', 'color.glow.purple'],
-    ['--gv-glow-cyan', 'color.glow.cyan'],
-    ['--gv-gradient', 'color.brand.gradient'],
-    ['--gv-gradient-subtle', 'color.brand.gradientSubtle'],
-    ['--gv-gradient-text', 'color.brand.gradientText'],
-    ['--gv-font-display', 'typography.fontFamily.display'],
-    ['--gv-font-body', 'typography.fontFamily.body'],
-    ['--gv-font-mono', 'typography.fontFamily.mono'],
-    ['--gv-font-mono-accent', 'typography.fontFamily.monoAccent'],
-    ['--gv-radius-sm', 'radius.sm'],
-    ['--gv-radius-md', 'radius.md'],
-    ['--gv-radius-lg', 'radius.lg'],
-    ['--gv-radius-xl', 'radius.xl'],
-    ['--gv-radius-2xl', 'radius.2xl'],
-    ['--gv-radius-pill', 'radius.full'],
-    ['--gv-elev-sm', 'shadow.sm'],
-    ['--gv-elev-md', 'shadow.md'],
-    ['--gv-elev-lg', 'shadow.lg'],
-    ['--gv-elev-xl', 'shadow.xl'],
-    ['--gv-elev-glow', 'shadow.glowCyan'],
-    ['--gv-duration-instant', 'motion.durations.instant'],
-    ['--gv-duration-fast', 'motion.durations.fast'],
-    ['--gv-duration-base', 'motion.durations.normal'],
-    ['--gv-duration-slow', 'motion.durations.slow'],
-    ['--gv-duration-epic', 'motion.durations.epic'],
-    ['--gv-ease-out', 'motion.easings.easeOut'],
-    ['--gv-ease-in-out', 'motion.easings.easeInOut'],
-    ['--gv-ease-smooth', 'motion.easings.smooth'],
-    ['--gv-ease-out-expo', 'motion.easings.outExpo'],
-    ['--gv-z-base', 'zScale.base'],
-    ['--gv-z-raised', 'zScale.raised'],
-    ['--gv-z-sticky', 'zScale.sticky'],
-    ['--gv-z-overlay', 'zScale.overlay'],
-    ['--gv-z-modal', 'zScale.modal'],
-    ['--gv-z-toast', 'zScale.toast'],
-    ['--gv-z-max', 'zScale.max'],
-    ['--gv-header-height', 'layout.headerHeight'],
-    ['--gv-content-max-width', 'layout.contentMaxWidth'],
+  ['--gv-purple', 'color.brand.purple'],
+  ['--gv-purple-deep', 'color.brand.purpleDeep'],
+  ['--gv-purple-soft', 'color.brand.purpleSoft'],
+  ['--gv-cyan', 'color.brand.cyan'],
+  ['--gv-cyan-deep', 'color.brand.cyanDeep'],
+  ['--gv-cyan-soft', 'color.brand.cyanSoft'],
+  ['--gv-gold', 'color.brand.gold'],
+  ['--gv-bg', 'color.surface.bg'],
+  ['--gv-bg-elevated', 'color.surface.elevated'],
+  ['--gv-bg-deep', 'color.surface.bgDeep'],
+  ['--gv-surface', 'color.surface.surface'],
+  ['--gv-surface-raised', 'color.surface.surfaceRaised'],
+  ['--gv-surface-overlay', 'color.surface.surfaceOverlay'],
+  ['--gv-glass', 'color.surface.glass'],
+  ['--gv-glass-border', 'color.surface.glassBorder'],
+  ['--gv-text', 'color.text.primary'],
+  ['--gv-text-secondary', 'color.text.secondary'],
+  ['--gv-muted', 'color.text.muted'],
+  ['--gv-text-disabled', 'color.text.disabled'],
+  ['--gv-text-inverse', 'color.text.inverse'],
+  ['--gv-amber', 'color.feedback.warning'],
+  ['--gv-red', 'color.feedback.error'],
+  ['--gv-green', 'color.feedback.success'],
+  ['--gv-info', 'color.feedback.info'],
+  ['--gv-border', 'color.border.default'],
+  ['--gv-border-accent', 'color.border.accent'],
+  ['--gv-border-accent-strong', 'color.border.accentStrong'],
+  ['--gv-glow-purple', 'color.glow.purple'],
+  ['--gv-glow-cyan', 'color.glow.cyan'],
+  ['--gv-gradient', 'color.brand.gradient'],
+  ['--gv-gradient-subtle', 'color.brand.gradientSubtle'],
+  ['--gv-gradient-text', 'color.brand.gradientText'],
+  ['--gv-font-display', 'typography.fontFamily.display'],
+  ['--gv-font-body', 'typography.fontFamily.body'],
+  ['--gv-font-mono', 'typography.fontFamily.mono'],
+  ['--gv-font-mono-accent', 'typography.fontFamily.monoAccent'],
+  ['--gv-radius-sm', 'radius.sm'],
+  ['--gv-radius-md', 'radius.md'],
+  ['--gv-radius-lg', 'radius.lg'],
+  ['--gv-radius-xl', 'radius.xl'],
+  ['--gv-radius-2xl', 'radius.2xl'],
+  ['--gv-radius-pill', 'radius.full'],
+  ['--gv-elev-sm', 'shadow.sm'],
+  ['--gv-elev-md', 'shadow.md'],
+  ['--gv-elev-lg', 'shadow.lg'],
+  ['--gv-elev-xl', 'shadow.xl'],
+  ['--gv-elev-glow', 'shadow.glowCyan'],
+  ['--gv-duration-instant', 'motion.durations.instant'],
+  ['--gv-duration-fast', 'motion.durations.fast'],
+  ['--gv-duration-base', 'motion.durations.normal'],
+  ['--gv-duration-slow', 'motion.durations.slow'],
+  ['--gv-duration-epic', 'motion.durations.epic'],
+  ['--gv-ease-out', 'motion.easings.easeOut'],
+  ['--gv-ease-in-out', 'motion.easings.easeInOut'],
+  ['--gv-ease-smooth', 'motion.easings.smooth'],
+  ['--gv-ease-out-expo', 'motion.easings.outExpo'],
+  ['--gv-z-base', 'zScale.base'],
+  ['--gv-z-raised', 'zScale.raised'],
+  ['--gv-z-sticky', 'zScale.sticky'],
+  ['--gv-z-overlay', 'zScale.overlay'],
+  ['--gv-z-modal', 'zScale.modal'],
+  ['--gv-z-toast', 'zScale.toast'],
+  ['--gv-z-max', 'zScale.max'],
+  ['--gv-header-height', 'layout.headerHeight'],
+  ['--gv-content-max-width', 'layout.contentMaxWidth'],
 ];
 function varLine(source, name, path) {
-    const value = getPath(source, path);
-    if (value === undefined)
-        throw new Error(`Unresolved token path: ${path}`);
-    return `  ${name}: ${String(value)};`;
+  const value = getPath(source, path);
+  if (value === undefined) throw new Error(`Unresolved token path: ${path}`);
+  return `  ${name}: ${String(value)};`;
 }
 function generateTokensCss(tokens) {
-    const source = { ...tokens, ...STATIC_SCALE };
-    const v = (name) => {
-        const entry = CSS_VARS.find(([n]) => n === name);
-        if (!entry)
-            throw new Error(`Unknown css var: ${name}`);
-        return varLine(source, entry[0], entry[1]);
-    };
-    const spacing = tokens.spacing;
-    const spacingLines = Object.keys(spacing)
-        .filter((k) => k !== '0')
-        .map((k) => `  --gv-space-${k}: ${String(spacing[k])};`);
-    const breakpoints = tokens.breakpoints;
-    const bpLines = Object.keys(breakpoints).map((k) => `  --gv-breakpoint-${kebab(k)}: ${String(breakpoints[k])};`);
-    const section = (title, lines) => [`  /* === ${title} === */`, ...lines].join('\n');
-    const body = [
-        section('PRIMARY', [
-            v('--gv-purple'),
-            v('--gv-purple-deep'),
-            v('--gv-purple-soft'),
-            v('--gv-cyan'),
-            v('--gv-cyan-deep'),
-            v('--gv-cyan-soft'),
-            v('--gv-gold'),
-        ]),
-        section('SURFACE', [
-            v('--gv-bg'),
-            v('--gv-bg-elevated'),
-            v('--gv-bg-deep'),
-            v('--gv-surface'),
-            v('--gv-surface-raised'),
-            v('--gv-surface-overlay'),
-            v('--gv-glass'),
-            v('--gv-glass-border'),
-        ]),
-        section('TEXT', [
-            v('--gv-text'),
-            v('--gv-text-secondary'),
-            v('--gv-muted'),
-            v('--gv-text-disabled'),
-            v('--gv-text-inverse'),
-        ]),
-        section('FEEDBACK', [v('--gv-amber'), v('--gv-red'), v('--gv-green'), v('--gv-info')]),
-        section('BORDER', [v('--gv-border'), v('--gv-border-accent'), v('--gv-border-accent-strong')]),
-        section('GLOW', [v('--gv-glow-purple'), v('--gv-glow-cyan')]),
-        section('GRADIENT', [v('--gv-gradient'), v('--gv-gradient-subtle'), v('--gv-gradient-text')]),
-        section('TYPOGRAPHY', [
-            v('--gv-font-display'),
-            v('--gv-font-body'),
-            v('--gv-font-mono'),
-            v('--gv-font-mono-accent'),
-        ]),
-        section('SPACING', spacingLines),
-        section('RADIUS', [
-            v('--gv-radius-sm'),
-            v('--gv-radius-md'),
-            v('--gv-radius-lg'),
-            v('--gv-radius-xl'),
-            v('--gv-radius-2xl'),
-            v('--gv-radius-pill'),
-        ]),
-        section('ELEVATION', [
-            v('--gv-elev-sm'),
-            v('--gv-elev-md'),
-            v('--gv-elev-lg'),
-            v('--gv-elev-xl'),
-            v('--gv-elev-glow'),
-        ]),
-        [
-            '  /* === MOTION === */',
-            v('--gv-duration-instant'),
-            v('--gv-duration-fast'),
-            v('--gv-duration-base'),
-            v('--gv-duration-slow'),
-            v('--gv-duration-epic'),
-            v('--gv-ease-out'),
-            v('--gv-ease-in-out'),
-            v('--gv-ease-smooth'),
-            v('--gv-ease-out-expo'),
-            '  /* Note: bounce/elastic easing is BANNED (per impeccable + DESIGN.md §7.2). Never define it. */',
-        ].join('\n'),
-        section('BREAKPOINTS (used in @media)', bpLines),
-        section('Z-INDEX', [
-            v('--gv-z-base'),
-            v('--gv-z-raised'),
-            v('--gv-z-sticky'),
-            v('--gv-z-overlay'),
-            v('--gv-z-modal'),
-            v('--gv-z-toast'),
-            v('--gv-z-max'),
-        ]),
-        section('LAYOUT', [v('--gv-header-height'), v('--gv-content-max-width')]),
-    ].join('\n\n');
-    return `/*
+  const source = { ...tokens, ...STATIC_SCALE };
+  const v = (name) => {
+    const entry = CSS_VARS.find(([n]) => n === name);
+    if (!entry) throw new Error(`Unknown css var: ${name}`);
+    return varLine(source, entry[0], entry[1]);
+  };
+  const spacing = tokens.spacing;
+  const spacingLines = Object.keys(spacing)
+    .filter((k) => k !== '0')
+    .map((k) => `  --gv-space-${k}: ${String(spacing[k])};`);
+  const breakpoints = tokens.breakpoints;
+  const bpLines = Object.keys(breakpoints).map(
+    (k) => `  --gv-breakpoint-${kebab(k)}: ${String(breakpoints[k])};`,
+  );
+  const section = (title, lines) => [`  /* === ${title} === */`, ...lines].join('\n');
+  const body = [
+    section('PRIMARY', [
+      v('--gv-purple'),
+      v('--gv-purple-deep'),
+      v('--gv-purple-soft'),
+      v('--gv-cyan'),
+      v('--gv-cyan-deep'),
+      v('--gv-cyan-soft'),
+      v('--gv-gold'),
+    ]),
+    section('SURFACE', [
+      v('--gv-bg'),
+      v('--gv-bg-elevated'),
+      v('--gv-bg-deep'),
+      v('--gv-surface'),
+      v('--gv-surface-raised'),
+      v('--gv-surface-overlay'),
+      v('--gv-glass'),
+      v('--gv-glass-border'),
+    ]),
+    section('TEXT', [
+      v('--gv-text'),
+      v('--gv-text-secondary'),
+      v('--gv-muted'),
+      v('--gv-text-disabled'),
+      v('--gv-text-inverse'),
+    ]),
+    section('FEEDBACK', [v('--gv-amber'), v('--gv-red'), v('--gv-green'), v('--gv-info')]),
+    section('BORDER', [v('--gv-border'), v('--gv-border-accent'), v('--gv-border-accent-strong')]),
+    section('GLOW', [v('--gv-glow-purple'), v('--gv-glow-cyan')]),
+    section('GRADIENT', [v('--gv-gradient'), v('--gv-gradient-subtle'), v('--gv-gradient-text')]),
+    section('TYPOGRAPHY', [
+      v('--gv-font-display'),
+      v('--gv-font-body'),
+      v('--gv-font-mono'),
+      v('--gv-font-mono-accent'),
+    ]),
+    section('SPACING', spacingLines),
+    section('RADIUS', [
+      v('--gv-radius-sm'),
+      v('--gv-radius-md'),
+      v('--gv-radius-lg'),
+      v('--gv-radius-xl'),
+      v('--gv-radius-2xl'),
+      v('--gv-radius-pill'),
+    ]),
+    section('ELEVATION', [
+      v('--gv-elev-sm'),
+      v('--gv-elev-md'),
+      v('--gv-elev-lg'),
+      v('--gv-elev-xl'),
+      v('--gv-elev-glow'),
+    ]),
+    [
+      '  /* === MOTION === */',
+      v('--gv-duration-instant'),
+      v('--gv-duration-fast'),
+      v('--gv-duration-base'),
+      v('--gv-duration-slow'),
+      v('--gv-duration-epic'),
+      v('--gv-ease-out'),
+      v('--gv-ease-in-out'),
+      v('--gv-ease-smooth'),
+      v('--gv-ease-out-expo'),
+      '  /* Note: bounce/elastic easing is BANNED (per impeccable + DESIGN.md §7.2). Never define it. */',
+    ].join('\n'),
+    section('BREAKPOINTS (used in @media)', bpLines),
+    section('Z-INDEX', [
+      v('--gv-z-base'),
+      v('--gv-z-raised'),
+      v('--gv-z-sticky'),
+      v('--gv-z-overlay'),
+      v('--gv-z-modal'),
+      v('--gv-z-toast'),
+      v('--gv-z-max'),
+    ]),
+    section('LAYOUT', [v('--gv-header-height'), v('--gv-content-max-width')]),
+  ].join('\n\n');
+  return `/*
  * Gentle-Vanguard Design System v${String(tokens.version)} — Tokens (CSS)
  * GENERATED from src/tokens/tokens.json by src/cli/build-tokens.ts — do not edit by hand.
  * Regenerate: npx tsx packages/gv-design-system/src/cli/build-tokens.ts
@@ -292,18 +291,17 @@ ${body}
 // TypeScript generation (structure frozen — values from JSON)
 // ============================================================================
 function q(v) {
-    return JSON.stringify(String(v));
+  return JSON.stringify(String(v));
 }
 function generateTokensTs(tokens) {
-    const g = (path) => {
-        const v = getPath(tokens, path);
-        if (v === undefined)
-            throw new Error(`Unresolved token path: ${path}`);
-        return String(v);
-    };
-    const s = (path) => q(g(path));
-    const n = (path) => String(getPath(tokens, path));
-    return `/**
+  const g = (path) => {
+    const v = getPath(tokens, path);
+    if (v === undefined) throw new Error(`Unresolved token path: ${path}`);
+    return String(v);
+  };
+  const s = (path) => q(g(path));
+  const n = (path) => String(getPath(tokens, path));
+  return `/**
  * Gentle-Vanguard Design System v2 — Tokens (TypeScript)
  * GENERATED from src/tokens/tokens.json by src/cli/build-tokens.ts — do not edit by hand.
  * Regenerate: npx tsx packages/gv-design-system/src/cli/build-tokens.ts
@@ -526,34 +524,30 @@ export const BRAND_WAIVERS = {
 // dist artifacts (tailwind / figma / css-modules / copies)
 // ============================================================================
 function kebab(s) {
-    return s.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
+  return s.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
 }
 function flatten(obj, prefix = '') {
-    const out = {};
-    for (const [k, v] of Object.entries(obj)) {
-        if (RESERVED_KEYS.has(k))
-            continue;
-        const key = prefix ? `${prefix}-${kebab(k)}` : kebab(k);
-        if (isObj(v))
-            Object.assign(out, flatten(v, key));
-        else
-            out[key] = v;
-    }
-    return out;
+  const out = {};
+  for (const [k, v] of Object.entries(obj)) {
+    if (RESERVED_KEYS.has(k)) continue;
+    const key = prefix ? `${prefix}-${kebab(k)}` : kebab(k);
+    if (isObj(v)) Object.assign(out, flatten(v, key));
+    else out[key] = v;
+  }
+  return out;
 }
 function generateTailwindConfig(tokens) {
-    const colors = {};
-    for (const [k, v] of Object.entries(flatten(tokens.color))) {
-        if (typeof v === 'string' && /^(#|rgb)/.test(v))
-            colors[`gv-${k}`] = v;
-    }
-    const fontFamily = {};
-    for (const [k, v] of Object.entries(tokens.typography.fontFamily)) {
-        fontFamily[kebab(k)] = String(v)
-            .split(',')
-            .map((f) => f.trim().replace(/['"]/g, ''));
-    }
-    return `/** @type {import('tailwindcss').Config} */
+  const colors = {};
+  for (const [k, v] of Object.entries(flatten(tokens.color))) {
+    if (typeof v === 'string' && /^(#|rgb)/.test(v)) colors[`gv-${k}`] = v;
+  }
+  const fontFamily = {};
+  for (const [k, v] of Object.entries(tokens.typography.fontFamily)) {
+    fontFamily[kebab(k)] = String(v)
+      .split(',')
+      .map((f) => f.trim().replace(/['"]/g, ''));
+  }
+  return `/** @type {import('tailwindcss').Config} */
 /* GENERATED from src/tokens/tokens.json by src/cli/build-tokens.ts — do not edit by hand. */
 module.exports = {
   darkMode: 'class',
@@ -578,100 +572,11 @@ module.exports = {
 }`;
 }
 function generateFigmaTokens(tokens) {
-    const figma = {
-        $schema: 'https://tokens.studio/schema.json',
-        $version: '0.1.0',
-        $metadata: {
-            tokenSetOrder: [
-                'color',
-                'surface',
-                'typography',
-                'spacing',
-                'radius',
-                'shadow',
-                'transition',
-                'breakpoints',
-                'zIndex',
-            ],
-            tokenSetVersion: tokens.version,
-            canon: tokens.meta.canon,
-        },
-        global: {
-            $type: 'color',
-            $value: getPath(tokens, 'color.surface.bg'),
-            $description: 'Global background color (v2 Premium)',
-        },
-    };
-    for (const [group, values] of Object.entries(tokens.color)) {
-        figma[group] = {};
-        for (const [k, v] of Object.entries(values)) {
-            figma[group][k] = {
-                $type: 'color',
-                $value: v,
-                $description: `color.${group}.${k}`,
-            };
-        }
-    }
-    figma.surfaceSet = {};
-    for (const [k, v] of Object.entries(tokens.surface)) {
-        figma.surfaceSet[k] = { $type: 'color', $value: v, $description: `surface.${k}` };
-    }
-    figma.typography = {
-        fontFamilies: Object.fromEntries(Object.entries(tokens.typography.fontFamily).map(([k, v]) => [
-            k,
-            {
-                $type: 'fontFamilies',
-                $value: String(v)
-                    .split(',')
-                    .map((f) => f.trim().replace(/['"]/g, '')),
-            },
-        ])),
-        fontWeights: Object.fromEntries(Object.entries(tokens.typography.weight).map(([k, v]) => [
-            k,
-            { $type: 'fontWeight', $value: v },
-        ])),
-        fontSizes: Object.fromEntries(Object.entries(tokens.typography.size).map(([k, v]) => [
-            k,
-            { $type: 'fontSize', $value: v },
-        ])),
-        lineHeights: Object.fromEntries(Object.entries(tokens.typography.lineHeight).map(([k, v]) => [
-            k,
-            { $type: 'lineHeight', $value: v },
-        ])),
-    };
-    figma.spacing = Object.fromEntries(Object.entries(tokens.spacing).map(([k, v]) => [k, { $type: 'spacing', $value: v }]));
-    figma.borderRadius = Object.fromEntries(Object.entries(tokens.radius).map(([k, v]) => [
-        k,
-        { $type: 'borderRadius', $value: v },
-    ]));
-    figma.shadow = Object.fromEntries(Object.entries(tokens.shadow).map(([k, v]) => [k, { $type: 'boxShadow', $value: v }]));
-    figma.breakpoints = Object.fromEntries(Object.entries(tokens.breakpoints).map(([k, v]) => [
-        k,
-        { $type: 'breakpoint', $value: v },
-    ]));
-    figma.zIndex = Object.fromEntries(Object.entries(tokens.zIndex).map(([k, v]) => [k, { $type: 'zIndex', $value: v }]));
-    return JSON.stringify(figma, null, 2);
-}
-function generateCssModulesTypes(css) {
-    const names = [...css.matchAll(/^(?:  )?(--gv-[a-z0-9-]+):/gm)].map((m) => m[1]);
-    const uniq = [...new Set(names)];
-    let dts = `// Auto-generated CSS Modules types from tokens.css — do not edit by hand.\n`;
-    dts += `// Regenerate: npx tsx packages/gv-design-system/src/cli/build-tokens.ts\n\n`;
-    for (const mod of ['*.module.css', '*.module.scss', '*.module.sass']) {
-        dts += `declare module '${mod}' {\n  const classes: Record<string, string>;\n  export default classes;\n}\n\n`;
-    }
-    dts += `interface GVTokenMap {\n`;
-    for (const nm of uniq)
-        dts += `  '${nm}': string;\n`;
-    dts += `}\n`;
-    return dts;
-}
-// ============================================================================
-// Validation + main
-// ============================================================================
-function validate(tokens) {
-    const errors = [];
-    const requiredKeys = [
+  const figma = {
+    $schema: 'https://tokens.studio/schema.json',
+    $version: '0.1.0',
+    $metadata: {
+      tokenSetOrder: [
         'color',
         'surface',
         'typography',
@@ -681,122 +586,218 @@ function validate(tokens) {
         'transition',
         'breakpoints',
         'zIndex',
-        'motion',
-        'meta',
-    ];
-    for (const k of requiredKeys) {
-        if (!tokens[k])
-            errors.push(`Missing required top-level key: ${k}`);
+      ],
+      tokenSetVersion: tokens.version,
+      canon: tokens.meta.canon,
+    },
+    global: {
+      $type: 'color',
+      $value: getPath(tokens, 'color.surface.bg'),
+      $description: 'Global background color (v2 Premium)',
+    },
+  };
+  for (const [group, values] of Object.entries(tokens.color)) {
+    figma[group] = {};
+    for (const [k, v] of Object.entries(values)) {
+      figma[group][k] = {
+        $type: 'color',
+        $value: v,
+        $description: `color.${group}.${k}`,
+      };
     }
-    if (tokens.color) {
-        for (const k of ['brand', 'surface', 'text', 'feedback', 'border', 'glow', 'gradient']) {
-            if (!tokens.color[k])
-                errors.push(`Missing color.${k}`);
-        }
+  }
+  figma.surfaceSet = {};
+  for (const [k, v] of Object.entries(tokens.surface)) {
+    figma.surfaceSet[k] = { $type: 'color', $value: v, $description: `surface.${k}` };
+  }
+  figma.typography = {
+    fontFamilies: Object.fromEntries(
+      Object.entries(tokens.typography.fontFamily).map(([k, v]) => [
+        k,
+        {
+          $type: 'fontFamilies',
+          $value: String(v)
+            .split(',')
+            .map((f) => f.trim().replace(/['"]/g, '')),
+        },
+      ]),
+    ),
+    fontWeights: Object.fromEntries(
+      Object.entries(tokens.typography.weight).map(([k, v]) => [
+        k,
+        { $type: 'fontWeight', $value: v },
+      ]),
+    ),
+    fontSizes: Object.fromEntries(
+      Object.entries(tokens.typography.size).map(([k, v]) => [k, { $type: 'fontSize', $value: v }]),
+    ),
+    lineHeights: Object.fromEntries(
+      Object.entries(tokens.typography.lineHeight).map(([k, v]) => [
+        k,
+        { $type: 'lineHeight', $value: v },
+      ]),
+    ),
+  };
+  figma.spacing = Object.fromEntries(
+    Object.entries(tokens.spacing).map(([k, v]) => [k, { $type: 'spacing', $value: v }]),
+  );
+  figma.borderRadius = Object.fromEntries(
+    Object.entries(tokens.radius).map(([k, v]) => [k, { $type: 'borderRadius', $value: v }]),
+  );
+  figma.shadow = Object.fromEntries(
+    Object.entries(tokens.shadow).map(([k, v]) => [k, { $type: 'boxShadow', $value: v }]),
+  );
+  figma.breakpoints = Object.fromEntries(
+    Object.entries(tokens.breakpoints).map(([k, v]) => [k, { $type: 'breakpoint', $value: v }]),
+  );
+  figma.zIndex = Object.fromEntries(
+    Object.entries(tokens.zIndex).map(([k, v]) => [k, { $type: 'zIndex', $value: v }]),
+  );
+  return JSON.stringify(figma, null, 2);
+}
+function generateCssModulesTypes(css) {
+  const names = [...css.matchAll(/^(?:  )?(--gv-[a-z0-9-]+):/gm)].map((m) => m[1]);
+  const uniq = [...new Set(names)];
+  let dts = `// Auto-generated CSS Modules types from tokens.css — do not edit by hand.\n`;
+  dts += `// Regenerate: npx tsx packages/gv-design-system/src/cli/build-tokens.ts\n\n`;
+  for (const mod of ['*.module.css', '*.module.scss', '*.module.sass']) {
+    dts += `declare module '${mod}' {\n  const classes: Record<string, string>;\n  export default classes;\n}\n\n`;
+  }
+  dts += `interface GVTokenMap {\n`;
+  for (const nm of uniq) dts += `  '${nm}': string;\n`;
+  dts += `}\n`;
+  return dts;
+}
+// ============================================================================
+// Validation + main
+// ============================================================================
+function validate(tokens) {
+  const errors = [];
+  const requiredKeys = [
+    'color',
+    'surface',
+    'typography',
+    'spacing',
+    'radius',
+    'shadow',
+    'transition',
+    'breakpoints',
+    'zIndex',
+    'motion',
+    'meta',
+  ];
+  for (const k of requiredKeys) {
+    if (!tokens[k]) errors.push(`Missing required top-level key: ${k}`);
+  }
+  if (tokens.color) {
+    for (const k of ['brand', 'surface', 'text', 'feedback', 'border', 'glow', 'gradient']) {
+      if (!tokens.color[k]) errors.push(`Missing color.${k}`);
     }
-    // Hex sanity: any string that starts with '#' must be a 6-digit hex.
-    const hexPattern = /^#[0-9a-f]{6}$/i;
-    (function checkHex(obj, path = '') {
-        for (const [k, v] of Object.entries(obj)) {
-            const fullPath = path ? `${path}.${k}` : k;
-            if (typeof v === 'string' && v.startsWith('#') && !hexPattern.test(v)) {
-                errors.push(`Invalid hex at ${fullPath}: ${v}`);
-            }
-            else if (isObj(v)) {
-                checkHex(v, fullPath);
-            }
-        }
-    })(tokens);
-    if (tokens.version !== '2.0.0') {
-        errors.push(`Expected version 2.0.0 (v2 Premium canon), got: ${String(tokens.version)}`);
+  }
+  // Hex sanity: any string that starts with '#' must be a 6-digit hex.
+  const hexPattern = /^#[0-9a-f]{6}$/i;
+  (function checkHex(obj, path = '') {
+    for (const [k, v] of Object.entries(obj)) {
+      const fullPath = path ? `${path}.${k}` : k;
+      if (typeof v === 'string' && v.startsWith('#') && !hexPattern.test(v)) {
+        errors.push(`Invalid hex at ${fullPath}: ${v}`);
+      } else if (isObj(v)) {
+        checkHex(v, fullPath);
+      }
     }
-    const meta = tokens.meta;
-    if (meta) {
-        if (meta.version !== tokens.version) {
-            errors.push(`meta.version (${String(meta.version)}) != version (${String(tokens.version)})`);
-        }
-        if (typeof meta.canon !== 'string' || !meta.canon) {
-            errors.push('meta.canon must point to docs/brand/TOKENS-v2.json');
-        }
+  })(tokens);
+  if (tokens.version !== '2.0.0') {
+    errors.push(`Expected version 2.0.0 (v2 Premium canon), got: ${String(tokens.version)}`);
+  }
+  const meta = tokens.meta;
+  if (meta) {
+    if (meta.version !== tokens.version) {
+      errors.push(`meta.version (${String(meta.version)}) != version (${String(tokens.version)})`);
     }
-    // Every CSS/TS mapping must resolve.
-    const source = { ...tokens, ...STATIC_SCALE };
-    for (const [, path] of CSS_VARS) {
-        if (getPath(source, path) === undefined) {
-            errors.push(`CSS mapping cannot resolve: ${path}`);
-        }
+    if (typeof meta.canon !== 'string' || !meta.canon) {
+      errors.push('meta.canon must point to docs/brand/TOKENS-v2.json');
     }
-    const tsPaths = [
-        'color.brand.gold',
-        'color.surface.elevated',
-        'color.surface.glass',
-        'color.surface.glassBorder',
-        'color.text.secondary',
-        'color.text.disabled',
-        'typography.fontFamily.monoAccent',
-        'motion.durations.epic',
-        'motion.easings.smooth',
-        'motion.easings.outExpo',
-    ];
-    for (const p of tsPaths) {
-        if (getPath(tokens, p) === undefined)
-            errors.push(`TS mapping cannot resolve: ${p}`);
+  }
+  // Every CSS/TS mapping must resolve.
+  const source = { ...tokens, ...STATIC_SCALE };
+  for (const [, path] of CSS_VARS) {
+    if (getPath(source, path) === undefined) {
+      errors.push(`CSS mapping cannot resolve: ${path}`);
     }
-    return errors;
+  }
+  const tsPaths = [
+    'color.brand.gold',
+    'color.surface.elevated',
+    'color.surface.glass',
+    'color.surface.glassBorder',
+    'color.text.secondary',
+    'color.text.disabled',
+    'typography.fontFamily.monoAccent',
+    'motion.durations.epic',
+    'motion.easings.smooth',
+    'motion.easings.outExpo',
+  ];
+  for (const p of tsPaths) {
+    if (getPath(tokens, p) === undefined) errors.push(`TS mapping cannot resolve: ${p}`);
+  }
+  return errors;
 }
 function main() {
-    console.log('🔨 Gentle-Vanguard Design System — token builder');
-    console.log(`   Source: ${TOKENS_JSON}`);
-    console.log('');
-    if (!existsSync(TOKENS_JSON)) {
-        console.error(`❌ tokens.json not found: ${TOKENS_JSON}`);
-        process.exit(1);
-    }
-    const raw = readFileSync(TOKENS_JSON, 'utf-8');
-    const tokens = JSON.parse(raw);
-    console.log(`📦 Version: ${String(tokens.version)} · Canon: ${String(tokens.meta.canon)}`);
-    console.log(`📦 Mode: ${String(tokens.mode)}`);
-    console.log(`🎨 Colors: ${Object.keys(tokens.color.brand ?? {}).length} brand, ` +
-        `${Object.keys(tokens.color.feedback ?? {}).length} feedback`);
-    console.log(`🔤 Typography: ${Object.keys(tokens.typography.fontFamily ?? {}).length} families, ` +
-        `${Object.keys(tokens.typography.size ?? {}).length} sizes`);
-    console.log('');
-    const errors = validate(tokens);
-    if (errors.length > 0) {
-        console.error(`❌ ${errors.length} validation error(s):`);
-        for (const e of errors)
-            console.error(`   - ${e}`);
-        process.exit(1);
-    }
-    console.log('✅ All token validations passed.');
-    const css = generateTokensCss(tokens);
-    const ts = generateTokensTs(tokens);
-    writeFileSync(SRC_CSS, css);
-    writeFileSync(SRC_TS, ts);
-    console.log('✅ src/tokens/tokens.css regenerated');
-    console.log('✅ src/tokens/tokens.ts regenerated');
-    mkdirSync(DIST, { recursive: true });
-    writeFileSync(join(DIST, 'tokens.css'), css);
-    writeFileSync(join(DIST, 'components.css'), css);
-    if (!existsSync(SRC_SHELL))
-        throw new Error(`Shared shell not found: ${SRC_SHELL}`);
-    const shell = readFileSync(SRC_SHELL, 'utf8');
-    writeFileSync(join(DIST, 'shell.css'), shell);
-    writeFileSync(RUNTIME_SHELL, shell);
-    if (existsSync(dirname(DESIGN_HUB_SHELL)))
-        writeFileSync(DESIGN_HUB_SHELL, shell);
-    writeFileSync(join(DIST, 'tokens.ts'), ts);
-    writeFileSync(join(DIST, 'tailwind.config.ts'), generateTailwindConfig(tokens));
-    writeFileSync(join(DIST, 'figma-tokens.json'), generateFigmaTokens(tokens));
-    writeFileSync(join(DIST, 'css-modules.d.ts'), generateCssModulesTypes(css));
-    writeFileSync(join(DIST, 'tokens.json'), JSON.stringify(tokens, null, 2) + '\n');
-    console.log('✅ dist/tokens.css, components.css, shell.css, tokens.ts regenerated');
-    console.log(`✅ runtime shell snapshot: ${RUNTIME_SHELL}`);
-    console.log(`✅ Design Hub shell snapshot: ${DESIGN_HUB_SHELL}`);
-    console.log('✅ dist/tailwind.config.ts, figma-tokens.json, css-modules.d.ts, tokens.json regenerated');
-    console.log('');
-    console.log('ℹ️  Next: `impeccable detect src/tokens/` (anti-slop regression) and');
-    console.log('    `tsc -p tsconfig.json` (typecheck consumers of tokens.ts).');
+  console.log('🔨 Gentle-Vanguard Design System — token builder');
+  console.log(`   Source: ${TOKENS_JSON}`);
+  console.log('');
+  if (!existsSync(TOKENS_JSON)) {
+    console.error(`❌ tokens.json not found: ${TOKENS_JSON}`);
+    process.exit(1);
+  }
+  const raw = readFileSync(TOKENS_JSON, 'utf-8');
+  const tokens = JSON.parse(raw);
+  console.log(`📦 Version: ${String(tokens.version)} · Canon: ${String(tokens.meta.canon)}`);
+  console.log(`📦 Mode: ${String(tokens.mode)}`);
+  console.log(
+    `🎨 Colors: ${Object.keys(tokens.color.brand ?? {}).length} brand, ` +
+      `${Object.keys(tokens.color.feedback ?? {}).length} feedback`,
+  );
+  console.log(
+    `🔤 Typography: ${Object.keys(tokens.typography.fontFamily ?? {}).length} families, ` +
+      `${Object.keys(tokens.typography.size ?? {}).length} sizes`,
+  );
+  console.log('');
+  const errors = validate(tokens);
+  if (errors.length > 0) {
+    console.error(`❌ ${errors.length} validation error(s):`);
+    for (const e of errors) console.error(`   - ${e}`);
+    process.exit(1);
+  }
+  console.log('✅ All token validations passed.');
+  const css = generateTokensCss(tokens);
+  const ts = generateTokensTs(tokens);
+  writeFileSync(SRC_CSS, css);
+  writeFileSync(SRC_TS, ts);
+  console.log('✅ src/tokens/tokens.css regenerated');
+  console.log('✅ src/tokens/tokens.ts regenerated');
+  mkdirSync(DIST, { recursive: true });
+  writeFileSync(join(DIST, 'tokens.css'), css);
+  writeFileSync(join(DIST, 'components.css'), css);
+  if (!existsSync(SRC_SHELL)) throw new Error(`Shared shell not found: ${SRC_SHELL}`);
+  const shell = readFileSync(SRC_SHELL, 'utf8');
+  writeFileSync(join(DIST, 'shell.css'), shell);
+  writeFileSync(RUNTIME_SHELL, shell);
+  if (existsSync(dirname(DESIGN_HUB_SHELL))) writeFileSync(DESIGN_HUB_SHELL, shell);
+  writeFileSync(join(DIST, 'tokens.ts'), ts);
+  writeFileSync(join(DIST, 'tailwind.config.ts'), generateTailwindConfig(tokens));
+  writeFileSync(join(DIST, 'figma-tokens.json'), generateFigmaTokens(tokens));
+  writeFileSync(join(DIST, 'css-modules.d.ts'), generateCssModulesTypes(css));
+  writeFileSync(join(DIST, 'tokens.json'), JSON.stringify(tokens, null, 2) + '\n');
+  console.log('✅ dist/tokens.css, components.css, shell.css, tokens.ts regenerated');
+  console.log(`✅ runtime shell snapshot: ${RUNTIME_SHELL}`);
+  console.log(`✅ Design Hub shell snapshot: ${DESIGN_HUB_SHELL}`);
+  console.log(
+    '✅ dist/tailwind.config.ts, figma-tokens.json, css-modules.d.ts, tokens.json regenerated',
+  );
+  console.log('');
+  console.log('ℹ️  Next: `impeccable detect src/tokens/` (anti-slop regression) and');
+  console.log('    `tsc -p tsconfig.json` (typecheck consumers of tokens.ts).');
 }
 main();
 //# sourceMappingURL=build-tokens.js.map

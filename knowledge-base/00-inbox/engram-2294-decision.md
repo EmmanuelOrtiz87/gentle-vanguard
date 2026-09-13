@@ -11,7 +11,7 @@ type: decision
 
 **Why**: El sistema necesitaba pasar de reactivo a predictivo, anticipando lo que el usuario necesitará antes de que lo pida.
 
-**Where**: 
+**Where**:
 - `src/proactive-intelligence-engine.ts` - Motor principal
 - `src/document-processor.ts` - Procesamiento de documentos
 - `src/data-analyst.ts` - Análisis de datos

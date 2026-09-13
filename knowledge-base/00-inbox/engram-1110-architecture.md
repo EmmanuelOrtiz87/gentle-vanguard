@@ -11,7 +11,7 @@ type: architecture
 
 **Why**: En PC nueva, el stack quedaba roto porque: (a) lefthook no se instalaba automáticamente, (b) hooks post-commit/post-merge para CodeGraph no existían, (c) scheduled task no se creaba, (d) bootstrap.ps1 apuntaba a scripts/git-hooks/ legacy que rompía lefthook.
 
-**Where**: 
+**Where**:
 - scripts/core/bootstrap.ps1 — Step 4 reescrito (lefthook install + scheduled task + health report expandido)
 - scripts/utilities/lefthook-verify.ps1 — nuevo script de verificación
 - config/session-autostart.config.json — nuevo step lefthook-verify antes de codegraph-sync

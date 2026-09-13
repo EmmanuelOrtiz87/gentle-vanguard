@@ -27,6 +27,7 @@ doc-agent, gov-agent, ops-agent, orchestrator, premortem-agent, sdd-apply, sdd-d
 
 **Formato requerido .md:**
 Cada archivo debe seguir el patrón:
+
 ```
 # Nombre Agente
 

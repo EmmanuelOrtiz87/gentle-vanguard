@@ -29,7 +29,7 @@ type: architecture
 10. `adaptive-router.ts` (997 → 7 modules, 26-line barrel)
 11. `useLocale.ts` (1,956 → 2 modules in i18n/, 35-line hook)
 12. `workload-guard.ts` (847 → 4 modules, 28-line barrel)
-+ 5+ more = ~22K lines restructured total
+- 5+ more = ~22K lines restructured total
 
 **How**: Mechanical per-domain pattern:
 1. Identify clusters (validation, caching, telemetry, etc.) within monolith

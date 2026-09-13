@@ -11,7 +11,7 @@ type: architecture
 
 **Why**: Dashboard web pasa de solo monitoreo a interfaz interactiva de agentes con streaming en vivo, como fue planificado en docs/plans/COPILOTKIT-ANALYSIS-AND-ADOPTION-PLAN.md
 
-**Where**: 
+**Where**:
 - apps/web-dashboard/src/types/agent.ts (ui_hints v1 schema, tipos AgentMessage/ToolCall/Session)
 - apps/web-dashboard/server/mcp-bridge.ts (bridge subproceso stdio)
 - apps/web-dashboard/server/websocket-server.ts (canales agente + HTTP /api/agent/*)

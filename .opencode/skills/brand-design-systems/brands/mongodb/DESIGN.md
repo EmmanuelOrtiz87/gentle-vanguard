@@ -421,6 +421,7 @@ The system uses Euclid Circular A as its display face. The face is contemporary 
 > Source pages: mongodb.com/ (homepage), /products/platform/atlas-database (Atlas product), /products/self-managed/community-edition, learn.mongodb.com/ (MongoDB University), /solutions/use-cases/artificial-intelligence (AI), /pricing (3-tier comparison). Token coverage was identical across all six pages.
 
 ### Brand & Accent
+
 - **MongoDB Green** ({colors.brand-green}): The brand's most recognizable signal — bright pill-CTA color
 - **Green Dark** ({colors.brand-green-dark}): Inline link color, secondary green
 - **Green Mid** ({colors.brand-green-mid}): Mid-spectrum green for atmospheric tints
@@ -430,12 +431,14 @@ The system uses Euclid Circular A as its display face. The face is contemporary 
 - **Brand Teal Mid** ({colors.brand-teal-mid}): Lighter teal for hero platform cards
 
 ### Category Accent (Course Tags)
+
 - **Accent Purple** ({colors.accent-purple}): Course tag for "Database & Security"
 - **Accent Orange** ({colors.accent-orange}): Course tag for "Search"
 - **Accent Pink** ({colors.accent-pink}): Course tag variant
 - **Accent Blue** ({colors.accent-blue}): Course tag variant for atlas/cloud topics
 
 ### Surface
+
 - **Canvas White** ({colors.canvas}): Page background and primary card surface
 - **Canvas Dark** ({colors.canvas-dark}): Code-block backgrounds, dark mockup canvas
 - **Surface** ({colors.surface}): Subtle section backgrounds, search-pill rest
@@ -447,6 +450,7 @@ The system uses Euclid Circular A as its display face. The face is contemporary 
 - **Hairline Dark** ({colors.hairline-dark}): Border on dark surfaces
 
 ### Text
+
 - **Ink** ({colors.ink}): Primary headlines and body text (deep navy-teal)
 - **Charcoal** ({colors.charcoal}): Body emphasis
 - **Slate** ({colors.slate}): Secondary text
@@ -457,12 +461,14 @@ The system uses Euclid Circular A as its display face. The face is contemporary 
 - **On Dark Muted** ({colors.on-dark-muted}): Reduced-opacity white
 
 ### Semantic
+
 - **Warning Background** ({colors.semantic-warning-bg}): Pale yellow callout bg
 - **Warning Text** ({colors.semantic-warning-text}): Warning state copy color
 
 ## Typography
 
 ### Font Family
+
 **Euclid Circular A** (primary): MongoDB's geometric sans-serif. Fallbacks: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif.
 **Source Code Pro** (code): Monospace for code mockups. Fallbacks: 'SF Mono', Menlo, Consolas, monospace.
 
@@ -487,6 +493,7 @@ The system uses Euclid Circular A as its display face. The face is contemporary 
 | `{typography.code-md}` | 14px | 400 | 1.55 | 0 | Code mockups |
 
 ### Principles
+
 - Tight hero leading (1.10) on 72px display
 - Negative letter-spacing on display sizes (-1.5px to -0.5px)
 - 600 weight reserved for buttons and small emphasis (FAQ headings, badges)
@@ -495,17 +502,20 @@ The system uses Euclid Circular A as its display face. The face is contemporary 
 ## Layout
 
 ### Spacing System
+
 - **Base unit**: 4px (8px primary increment)
 - **Tokens**: `{spacing.xxs}` (4px) through `{spacing.hero}` (120px)
 - **Section rhythm**: Marketing pages use `{spacing.section-lg}` (96px); pricing tightens to `{spacing.section}` (64px)
 
 ### Grid & Container
+
 - 1280px max-width with 32px gutters
 - Pricing: 3-tier card row, dense feature comparison table below
 - Learn catalog: 3-up course tile grid, 4-up certification grid
 - AI use cases: 2-column hero with atmospheric illustration
 
 ### Whitespace Philosophy
+
 Marketing surfaces give content generous breathing room — `{spacing.hero}` (120px) hero padding for deep teal bands. Pricing/learn surfaces tighten dramatically.
 
 ## Elevation & Depth
@@ -519,6 +529,7 @@ Marketing surfaces give content generous breathing room — `{spacing.hero}` (12
 | 4 (modal) | `rgba(0, 30, 43, 0.16) 0px 16px 48px -8px` | Modals, dropdowns |
 
 ### Decorative Depth
+
 - Dark teal hero bands carry atmospheric gradient depth
 - Code mockup cards on hero use canvas-dark surface with terminal aesthetic
 - Pale-mint pricing-feature tier uses brand-tinted shadow
@@ -538,6 +549,7 @@ Marketing surfaces give content generous breathing room — `{spacing.hero}` (12
 | `{rounded.full}` | 9999px | All buttons, status badges |
 
 ### Photography Geometry
+
 - Hero illustrations sit on full-bleed dark backgrounds
 - Course tile thumbnails use `{rounded.lg}` corners
 - Customer logos wall: wordmarks at consistent 60–80px height
@@ -701,6 +713,7 @@ Marketing surfaces give content generous breathing room — `{spacing.hero}` (12
 ## Do's and Don'ts
 
 ### Do
+
 - Use `{colors.brand-green}` (bright MongoDB green) for primary CTAs everywhere
 - Pair dark-teal hero bands with bright green CTA pills
 - Apply `{rounded.full}` to every button, every status badge
@@ -710,6 +723,7 @@ Marketing surfaces give content generous breathing room — `{spacing.hero}` (12
 - Use code mockup cards with terminal-aesthetic content for product showcases
 
 ### Don't
+
 - Don't use the bright green for body text or large surfaces
 - Don't introduce additional accent colors beyond the brand green and category-encoding palette
 - Don't soften corners on buttons; the pill is a brand signature
@@ -720,6 +734,7 @@ Marketing surfaces give content generous breathing room — `{spacing.hero}` (12
 ## Responsive Behavior
 
 ### Breakpoints
+
 | Name | Width | Key Changes |
 |---|---|---|
 | Mobile (small) | < 480px | Single column. Hero 36px. Pricing 1-up. Course catalog 1-up. |
@@ -729,12 +744,14 @@ Marketing surfaces give content generous breathing room — `{spacing.hero}` (12
 | Wide Desktop | ≥ 1280px | Full 72px hero presentation. |
 
 ### Touch Targets
+
 - Pill buttons render at 40–44px effective height
 - Form inputs render at 44px height
 - Search pill (large) renders at 56px
 - Pill tabs ~32px → 44px on mobile
 
 ### Collapsing Strategy
+
 - **Promo banner** stays full-width; truncates at < 480px
 - **Top nav** below 1024px collapses to hamburger
 - **Hero band**: code mockup card moves below text on mobile
@@ -744,6 +761,7 @@ Marketing surfaces give content generous breathing room — `{spacing.hero}` (12
 - **Footer**: 6-column desktop → 3-column tablet → accordion mobile
 
 ### Image Behavior
+
 - Atmospheric AI imagery uses 16:9 ratio with full-bleed scaling
 - Code mockup card content remains readable across breakpoints
 - Customer logo wall: wordmarks at consistent 60–80px height

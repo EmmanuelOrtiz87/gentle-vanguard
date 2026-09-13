@@ -11,7 +11,7 @@ type: decision
 
 **Why**: Dar a los agentes/scripts del stack una vía nativa robusta para operar el motor de diagramas (no solo la UI).
 
-**Where**: 
+**Where**:
 - Raíz package.json: scripts `archify:render|compare|validate|cli|start|smoke|api`
 - apps/archify/server/api-client.mjs: cliente CLI que usa la API REST (render/validate/delta/health/examples)
 - skills/archify-studio/SKILL.md: skill con formato JSON IR exacto del motor

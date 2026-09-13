@@ -11,14 +11,14 @@ type: decision
 
 **Why**: El usuario pidió que el stack completo esté actualizado en el repo privado, homologado al público y con el .exe instalador subido para que la gente pueda instalar el stack desde cero. Además: "no deberiamos tener ps1 en el repo", "no deberiamos tener ninguna app", "debemos dejar todo homologado, actualizado y documentado".
 
-**Where**: 
+**Where**:
 - src/infrastructure/sync-to-public.ts (4 mejoras: elimina apps, limpia .ps1, limpia directorios stale, limpia archivos root stale)
 - docs/guides/HOMOLOGATION-GUIDE.md (reglas actualizadas: 0 .ps1, 0 apps, allowlist)
 - README-PUBLIC.md (4.0.0)
 - C:\Workspace_local\gentle-vanguard-public (repo público local, develop/main sync + tag v4.0.0 + GitHub Release)
 - dist/Gentle-Vanguard-Setup-4.0.0.exe + .sha256
 
-**Learned**: 
+**Learned**:
 1. **Bug NSIS real**: makensis rechaza .nsi con em-dash (—, U+2014) en UTF-8 sin BOM — NSIS lee como ACP. Fix: ASCII puro en template (3 líneas cabecera + 1 DetailPrint).
 2. **sync-to-public.ts copiaba .exe legacy**: buscaba dist/Gentle-Vanguard.exe (31 MB) pero build genera dist/Gentle-Vanguard-Setup-<ver>.exe. Fix: regex para installer versionado más reciente + copia .sha256.
 3. **commitlint exige conventional commits**: git merge --no-edit falla; usar git commit -m "chore(merge): ..." explícito.

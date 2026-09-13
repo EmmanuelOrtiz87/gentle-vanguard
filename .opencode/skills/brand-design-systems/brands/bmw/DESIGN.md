@@ -291,10 +291,12 @@ The configuration and reservation flows add a dealer-side inventory UI on top of
 ## Colors
 
 ### Brand & Accent
+
 - **BMW Blue (Primary)** (`{colors.primary}` — #1c69d4): The single brand action color. All primary CTAs, "Learn More" link prefixes (blue text), nav-link active state. Press shifts to `{colors.primary-active}` (#0653b6).
 - **M Blue Light** (`{colors.m-blue-light}` — #0066b1) + **M Blue Dark** (`{colors.m-blue-dark}` — #1c69d4) + **M Red** (`{colors.m-red}` — #e22718): The M tricolor stripe — appears on the corporate site only on M-model pages and the "M" badge. Never as CTA colors.
 
 ### Surface
+
 - **Canvas** (`{colors.canvas}` — #ffffff): The default page surface.
 - **Surface Soft** (`{colors.surface-soft}` — #f7f7f7): Soft grey for the footer and sub-navigation bands.
 - **Surface Card** (`{colors.surface-card}` — #fafafa): The light plate behind a model card's photo block.
@@ -303,10 +305,12 @@ The configuration and reservation flows add a dealer-side inventory UI on top of
 - **Surface Dark Elevated** (`{colors.surface-dark-elevated}` — #262e38): One step lighter, used for nested cards on top of the dark hero.
 
 ### Hairlines
+
 - **Hairline** (`{colors.hairline}` — #e6e6e6): The 1px divider — input outline, configurator card outline, table separator.
 - **Hairline Strong** (`{colors.hairline-strong}` — #cccccc): A more visible 1px outline — disabled secondary buttons, emphasized table border.
 
 ### Text
+
 - **Ink** (`{colors.ink}` — #262626): All display and primary text. Not pure black — soft against photography.
 - **Body** (`{colors.body}` — #3c3c3c): Default running text.
 - **Body Strong** (`{colors.body-strong}` — #1a1a1a): Emphasized paragraphs and lead text.
@@ -317,6 +321,7 @@ The configuration and reservation flows add a dealer-side inventory UI on top of
 - **On Dark Soft** (`{colors.on-dark-soft}` — #bbbbbb): A slightly muted white for secondary text on dark bands.
 
 ### Semantic
+
 - **Success** (`{colors.success}` — #22c55e): Confirmation messages and "available" indicators.
 - **Warning** (`{colors.warning}` — #f59e0b): Warning callouts.
 - **Error** (`{colors.error}` — #dc2626): Validation errors.
@@ -324,6 +329,7 @@ The configuration and reservation flows add a dealer-side inventory UI on top of
 ## Typography
 
 ### Font Family
+
 The system runs **BMW Type Next Latin** in two cuts: regular (display + UI labels) and **BMW Type Next Latin Light** (body + secondary copy). Fallback stack: `system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif`.
 
 The display/body split is functional:
@@ -352,12 +358,14 @@ This three-way split mirrors BMW M's — corporate and the M sub-brand share the
 | `{typography.nav-link}` | 14px | 400 | 1.4 | 0.3px | Top-nav menu items |
 
 ### Principles
+
 - The **700/300 contrast** is the editorial signature. Weight 500 is absent from the system.
 - **No negative letter-spacing** — BMW Type Next Latin works on a wide body, so tracking stays at default. Apple/Cal.com-style tightening reads off-brand here.
 - **UPPERCASE inline links** — "LEARN MORE"-style CTAs run uppercase with 1.5px tracking. The "machined precision" voice.
 - **Weight 400 lives in a narrow lane** — only caption and nav-link, both neutral utility roles.
 
 ### Note on Font Substitutes
+
 BMW Type Next Latin is a licensed BMW typeface. Open-source alternatives:
 - **Inter** (variable) — close match at weight 700/300. Leave letter-spacing at 0.0em.
 - **Saira Condensed** — for a slightly more compressed BMW Type feel.
@@ -365,18 +373,21 @@ BMW Type Next Latin is a licensed BMW typeface. Open-source alternatives:
 ## Layout
 
 ### Spacing System
+
 - **Base unit:** 8px.
 - **Tokens:** `{spacing.xxs}` 4px · `{spacing.xs}` 8px · `{spacing.sm}` 12px · `{spacing.md}` 16px · `{spacing.lg}` 24px · `{spacing.xl}` 32px · `{spacing.xxl}` 48px · `{spacing.section}` 80px.
 - **Section padding:** `{spacing.section}` (80px) for every major editorial band.
 - **Card internal padding:** `{spacing.lg}` (24px) for model and feature cards.
 
 ### Grid & Container
+
 - **Max content width:** ~1440px center-aligned.
 - **Editorial body:** A single 12-column grid.
 - **Model card grids:** 4-up or 5-up at desktop, 2-up at tablet, 1-up on mobile.
 - **Configurator inventory grids:** 3-up filter row + 4-up vehicle cards, dense layout.
 
 ### Whitespace Philosophy
+
 BMW's whitespace strategy is tighter than BMW M's motorsport-aerated grenadier — the corporate side is more utility-driven. Section rhythm is 80px (not M's 96px). Card padding is 24px (not M's 32px). The page is denser, more dealership-functional.
 
 ## Elevation & Depth
@@ -391,6 +402,7 @@ BMW's whitespace strategy is tighter than BMW M's motorsport-aerated grenadier �
 The system never uses a drop shadow. Depth comes entirely from (a) color-block contrast (light canvas vs dark hero) and (b) photographic subject + lighting.
 
 ### Decorative Depth
+
 - **`m-stripe-divider`** — a 4px-tall horizontal tricolor stripe (`{colors.m-blue-light}` → `{colors.m-blue-dark}` → `{colors.m-red}`). Only in M-model contexts, motorsport badges, or as an M-related section divider. Not part of the main corporate flow.
 - **Photographic depth** — full-bleed vehicle photography (lighting + subject) does the work chrome would otherwise do.
 
@@ -411,6 +423,7 @@ The system never uses a drop shadow. Depth comes entirely from (a) color-block c
 The radius hierarchy is binary: **rectangular for everything, circular only for icon buttons.** A clear departure from the soft-cornered SaaS dialect of Apple or Cal.com — closer to BMW corporate-automotive's "engineered precision" voice.
 
 ### Photography Geometry
+
 - Hero photography is full-bleed at 16:9 or 21:9 cinematic ratio.
 - Model card photos sit at 16:10, edge-to-edge with `{rounded.none}` corners.
 - Configurator vehicle renders sit on a white studio background, full silhouette visible.
@@ -478,6 +491,7 @@ The radius hierarchy is binary: **rectangular for everything, circular only for 
 ## Do's and Don'ts
 
 ### Do
+
 - Sit every page on `{colors.canvas}` (pure white); reserve `{colors.surface-dark}` for hero bands only.
 - Pair primary CTAs with `{colors.primary}` (BMW Blue) + `{colors.on-primary}` white text + `{rounded.none}` 0px corners — the corporate signature.
 - Set display headlines in BMW Type Next Latin 700 and body in Light 300. The contrast is non-negotiable.
@@ -487,6 +501,7 @@ The radius hierarchy is binary: **rectangular for everything, circular only for 
 - Reserve the M tricolor stripe for M-model contexts and motorsport dividers.
 
 ### Don't
+
 - Don't add a brand color other than blue — BMW Blue is the only primary action color.
 - Don't use pill or rounded buttons — `{rounded.none}` (0px) rectangular IS the brand button.
 - Don't drop display weight to 500 — the system uses 700 / 400 / 300; 500 is absent.
@@ -508,11 +523,13 @@ The radius hierarchy is binary: **rectangular for everything, circular only for 
 | Wide | > 1440px | Same as desktop, content fixed at 1440px; gutters absorb the rest |
 
 ### Touch Targets
+
 - `{component.button-primary}` minimum 48 × 48px — above WCAG AAA (44 × 44).
 - `{component.text-input}` height 48px.
 - Category tabs run with 12px vertical padding, giving an effective tap area > 44px.
 
 ### Collapsing Strategy
+
 - The top nav collapses to a hamburger below 768px; the menu opens as a full-screen sheet.
 - The hero band's internal layout drops to a single column.
 - Model card grid 4-up/5-up → 2-up → 1-up.
@@ -520,6 +537,7 @@ The radius hierarchy is binary: **rectangular for everything, circular only for 
 - The M tricolor stripe stays at 4px height across every breakpoint.
 
 ### Image Behavior
+
 - Model renders scale at every breakpoint while preserving native aspect ratios.
 - Hero photography may shift to a more vertical crop on mobile (art direction).
 - Inventory vehicle photos may move from 16:9 to 4:3 on mobile.

@@ -12,6 +12,7 @@ type: decision
 **Status Final:**
 
 ## ✅ SUGERENCIA 1: User Operating Context
+
 **Archivo**: `src/user-operating-context.ts` (622 líneas)
 **Status**: ✅ COMPLETADO Y PROBADO
 **Typecheck**: ✅ Pasa
@@ -31,6 +32,7 @@ type: decision
 - `npm run user:report-weekly`
 
 ## ✅ SUGERENCIA 2: Memoria de Decisiones Humanas
+
 **Archivo**: `src/decisions-log.ts` (547 líneas)
 **Status**: ✅ COMPLETADO Y PROBADO
 **Typecheck**: ✅ Pasa
@@ -50,6 +52,7 @@ type: decision
 - `npm run agreement:list`
 
 ## ✅ SUGERENCIA 5: Plantillas de Dominio
+
 **Archivo**: `src/domain-templates.ts` (458 líneas)
 **Status**: ✅ COMPLETADO Y PROBADO
 **Typecheck**: ✅ Pasa
@@ -74,17 +77,20 @@ Cada uno con: skills, conectores, hooks, autonomy config, SDD config (temperatur
 ## ✅ INFRAESTRUCTURA ADICIONAL
 
 ### Event Sourcing API
+
 **Archivo**: `src/event-sourcing-api.ts` (206 líneas)
 - Wrapper exportable para event-sourcing.ts
 - Fire-and-forget events para no bloquear operaciones
 - Soporte para append, getEvents, getProjection
 
 ### CLI Unificado
+
 **Archivo**: `src/user-context-cli.ts`
 - Combina user-context + decisions + domain-templates
 - Scripts añadidos a package.json
 
 ### Test de Verificación
+
 **Archivo**: `src/user-context-test.ts`
 - Carga de módulos probada exitosamente
 - 8 dominios confirmados

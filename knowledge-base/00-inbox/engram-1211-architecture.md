@@ -13,7 +13,7 @@ type: architecture
 
 **Where**: scripts/utilities/SKILL-FACTORY/skill-factory.ps1, skills/rust-backend-skill/
 
-**Learned**: 
+**Learned**:
 - MCP server auto-rebuild on skill creation ensures immediate discoverability
 - Manual registry append needed when skill exists but wasn't registered initially
 - PowerShell here-strings require closing not on the same line as content

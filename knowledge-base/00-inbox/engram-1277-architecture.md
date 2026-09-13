@@ -11,7 +11,7 @@ type: architecture
 
 **Why**: User requested to take project to next level with all optimizations, checks, and best practices
 
-**Where**: 
+**Where**:
 - `.github/workflows/python-quality.yml` — Ruff lint + pytest + coverage (Python)
 - `.github/workflows/coverage.yml` — JS/TS coverage via c8
 - `.github/workflows/stale.yml` — Weekly stale issue/PR cleanup
@@ -23,7 +23,7 @@ type: architecture
 - `config/quality-gates.json` — Added all new workflows to requiredWorkflows/requiredStatusChecks
 - `docs/AGENTS.md` — Key References table updated with all new CI and devcontainer
 
-**Learned**: 
+**Learned**:
 - GitHub labeler v6 uses `changed-files` with `any-glob-to-any-file` (different from v5)
 - OpenAPI validation needs `@apidevtools/swagger-cli` globally installed
 - Devcontainer `features` syntax supports multiple language runtimes in one container

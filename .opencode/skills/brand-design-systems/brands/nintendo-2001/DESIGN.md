@@ -365,12 +365,14 @@ Atmosphere comes from the **hero fields**, which break the periwinkle calm with 
 The palette is a **cool metallic chassis with rationed warm signal**. Read it as three layers: the periwinkle chrome that everything is built from, the carbon command slabs, and the warm wayfinding accents that are the only saturated color in the steady-state interface.
 
 ### Brand & Accent
+
 - **Nintendo Red** (`{colors.primary}` — #e60012): The racetrack logo wordmark and the brand's anchor hue. Used sparingly as pure brand identity and doubled as the validation/alert color. Never a surface fill outside the logo plate.
 - **Signal Orange** (`{colors.signal}` — #f68d1f): The "go forward" color. Fills every round arrow button, every chevron chip beside a headline, the Submit button, and the "Play It On" platform badges. If something advances you, it is orange.
 - **Amber** (`{colors.amber}` — #ecab37): Utility energy. Fills the Code Bank / Game Finder / Go chips, the info-box header tabs, the sweepstakes stars, and the ESRB Privacy-Certified badge. Distinguished from Signal Orange by being more golden and reserved for *tools and marks* rather than *forward motion*.
 - **Nav Gold** (`{colors.nav-gold}` — #e48600): The deeper orange-gold reserved exclusively for the primary navigation words (Games, Systems, News, Nsider, Downloads) glowing on the carbon bar.
 
 ### Surface
+
 - **Periwinkle Metallic** (`{colors.canvas}` — #7a8aba): The primary interface body — the brushed-metal chrome that every module is inset into.
 - **Light Periwinkle** (`{colors.periwinkle}` — #8ba1d4): Raised mid panels (poll panel, system tiles) — one step brighter than canvas for elevation.
 - **Pale Sky** (`{colors.sky}` / `{colors.canvas-soft}` — #9fbee7): The secondary-nav strip and light inset panel fills.
@@ -382,11 +384,13 @@ The palette is a **cool metallic chassis with rationed warm signal**. Read it as
 - **White** (`{colors.surface}` — #ffffff): Content cards, form fields, the logo pill, and list-row highlight.
 
 ### Text
+
 - **Carbon Navy** (`{colors.ink}` — #21242e): Primary text on light chrome, and the fill of the dark command layer (nav bar, rail buttons, footer).
 - **Chrome Indigo** (`{colors.ink-soft}` — #3d4f97): Secondary text and small-caps chrome labels.
 - **White** (`{colors.on-primary}` — #ffffff): Text on carbon, red, and orange chrome.
 
 ### Semantic
+
 - **Error / Alert** (`{colors.error}` — #e60012): Validation and destructive states reuse the brand red.
 - **Systems Teal** (`{colors.systems-teal}` — #206479): Page-accent tint — the Systems hero's circuit-board cyan field.
 - **Games Red** (`{colors.games-red}` — #a7282b): Page-accent tint — the Games hero's motion-blurred racetrack field.
@@ -394,6 +398,7 @@ The palette is a **cool metallic chassis with rationed warm signal**. Read it as
 ## Typography
 
 ### Font Family
+
 The era's web-safe reality is **Arial / Helvetica** throughout — there are no webfonts. The system gets its character not from typeface choice but from *treatment*: tight uppercase tracking on every chrome label, and a heavy outlined-and-shadowed display style for hero wordmarks that mimics console box-art logotype. Body copy is plain small Arial; links are the same family at bold weight in `{colors.ink-soft}`.
 
 The micro-labels (vertical left-rail tabs, footer fine print) render with the soft pixelation characteristic of small bitmap-rendered Arial of the period — for a faithful reproduction, pair Arial with a pixel face such as **Silkscreen** or **VT323** at the 10–11px label sizes.
@@ -411,21 +416,25 @@ The micro-labels (vertical left-rail tabs, footer fine print) render with the so
 | `{typography.micro}` | 10px | 400 | 1.3 | 0 | Footer copyright, calendar cells, fine print |
 
 ### Principles
+
 - **Uppercase + tracking is the chrome voice.** Every structural label — nav words, panel headers ("Official News", "Featured Sites", "Player's Poll"), button text — is uppercase Arial Bold with a half-pixel of tracking. It reads like silkscreened legends on a controller.
 - **Display type is outlined, never flat.** Hero wordmarks always carry a thick contrasting outline and a hard offset shadow so they pop off the photographic field — the box-art convention.
 - **Body stays small and quiet.** At 12px, descriptive copy never competes with the chrome; the hierarchy is carried entirely by the labels and the photography.
 
 ### Note on Font Substitutes
+
 Arial is freely available system-wide and needs no substitute. To recreate the period bitmap rendering of micro-labels, layer a pixel font (**Silkscreen**, **VT323**, or **Press Start 2P** for the chunkiest legends) at 10–11px and disable anti-aliasing. The display wordmarks are bespoke logotypes; the closest open substitute is **Archivo Black** (italicized) or **Arial Black** with a CSS text-stroke outline and `text-shadow` offset.
 
 ## Layout
 
 ### Spacing System
+
 - **Base unit**: 8px (`{spacing.sm}`) — the gutter rhythm between list rows and grid cells.
 - **Tokens**: `{spacing.xxs}` 2px · `{spacing.xs}` 4px · `{spacing.sm}` 8px · `{spacing.md}` 12px · `{spacing.lg}` 16px · `{spacing.xl}` 24px · `{spacing.xxl}` 32px · `{spacing.section}` 48px
 - Panels carry **12px interior padding** (`{spacing.md}`); larger content modules use **16px** (`{spacing.lg}`). Inter-module gaps run 16–24px. The layout is deliberately dense — whitespace is a structural seam between plates, not a luxury.
 
 ### Grid & Container
+
 - **Fixed-width canvas** ~780–830px wide (a desktop-era fixed table layout, centered). No fluid scaling — the interface is sized to a single target window like an application.
 - **Masthead row**: Mario mascot + speech bubble (left) and search module (right) float above the chrome.
 - **Dual nav bars**: a carbon primary bar (logo + 5 section words + Code Bank / Game Finder utility chips) stacked over a periwinkle secondary strip (Parents, Customer Service, Corporate, Global, Privacy, Store, Contact).
@@ -433,11 +442,13 @@ Arial is freely available system-wide and needs no substitute. To recreate the p
 - **Left rail**: a thin vertical strip of rotated tabs (Top Ten, Top Rentals, Player's Choice, ESRB Ratings) clipped to the chrome edge.
 
 ### Whitespace Philosophy
+
 Empty space is **engineered seam**, not breathing room. Modules butt against each other separated by thin `{colors.chrome-indigo}` bevel lines and a few pixels of canvas, so the eye reads grouped plates. The density is intentional: it makes the page feel like a packed control panel where everything is one click away.
 
 ### Responsive Strategy
 
 #### Breakpoints
+
 | Name | Width | Key Changes |
 |---|---|---|
 | Desktop (only) | ~780–830px fixed | The native, sole target — a fixed-width application-style layout |
@@ -446,12 +457,15 @@ Empty space is **engineered seam**, not breathing room. Modules butt against eac
 This is a **pre-responsive, fixed-canvas** design. It was authored for a single desktop window size and does not reflow. A faithful *modern* re-implementation would preserve the fixed chrome metaphor on desktop and, below ~720px, stack the right action rail beneath the content column and collapse the dual nav bars into a single carbon bar with a disclosure toggle.
 
 #### Touch Targets
+
 Not a consideration in the original (mouse-only era); buttons and chips are 18–28px tall. A modern port must enlarge the `{components.button-primary}`, `{components.button-icon-arrow}`, and `{components.radio-option}` hit areas to a 44×44px minimum.
 
 #### Collapsing Strategy
+
 On a modern narrow viewport: dual nav bars → single carbon bar + menu disclosure; two-column body → single stacked column with the right rail moving below content; the left rotated-tab strip → a horizontal scroll chip row or removed; fixed hero → fluid full-bleed hero retaining the outlined wordmark.
 
 #### Image Behavior
+
 Hero fields are **full-bleed photographic plates** clipped to the panel's beveled rectangle; featured-site and game tiles are fixed-pixel thumbnails (~95×60px) in a tight grid. No lazy loading (era predates it). Product renders sit on textured backdrops rather than transparent cutouts.
 
 ## Elevation & Depth
@@ -466,6 +480,7 @@ Depth in this system is **physical bevel simulation**, not soft shadow. There is
 | 3 — Command slab | `{colors.carbon}` near-black with halftone texture, sits "above" the chrome | Top nav bar, right-rail buttons, footer |
 
 ### Decorative Depth
+
 Depth is also carried by **texture and photography**: the halftone dot-matrix on carbon slabs reads as a recessed speaker grille; hero fields use motion-blur, circuit-board patterns, and product renders with their own cast shadows to create literal pictorial depth; chamfered corners on the outer chrome suggest a machined faceplate edge. The left-rail rotated tabs appear to tuck *behind* the main chrome, a small but effective layered cue.
 
 ## Shapes
@@ -484,6 +499,7 @@ Depth is also carried by **texture and photography**: the halftone dot-matrix on
 The signature is **sharpness with rationed roundness**. The chrome is hard-edged and frequently *chamfered* (corners cut at 45° rather than curved) — this is the manufactured-faceplate look. Roundness appears only where it signals a physical control: the fully-pill logo, the round radio buttons, and the round Signal-Orange arrow badges. A modern reproduction should resist the urge to soften every corner; the tension between sharp plates and the few pill elements is the whole character.
 
 ### Photography Geometry
+
 Hero photography fills beveled rectangles at roughly 4:1 (banner) and 16:9 proportions, full-bleed within the panel. Featured-site and game thumbnails are near-4:3 fixed tiles (~95×60px) framed by a 1–2px `{colors.chrome-indigo}` edge with `{rounded.sm}` corners. The mascot is a transparent cutout overlapping the masthead, breaking the rectangular grid for personality.
 
 ## Components
@@ -627,10 +643,10 @@ Hero photography fills beveled rectangles at roughly 4:1 (banner) and 16:9 propo
 **`ex-toast`** — Toast notification surface — feature-card shape + medium shadow.
 - Properties: `backgroundColor`, `rounded`, `padding`, `typography`
 
-
 ## Do's and Don'ts
 
 ### Do
+
 - Build every region as a **beveled plate**: a `{colors.canvas}` body with a brighter top edge and a `{colors.chrome-indigo}` shadow line beneath. The "assembled machine" feel depends on it.
 - Reserve warm color for **wayfinding only** — `{colors.nav-gold}` for nav words, `{colors.amber}` for utility/badges, `{colors.signal}` for forward/Submit. Cool chrome never carries action color.
 - Keep structural labels **uppercase Arial Bold with 0.5px tracking** (`{typography.ui-label}`) — it is the silkscreen-legend voice of the whole system.
@@ -640,6 +656,7 @@ Hero photography fills beveled rectangles at roughly 4:1 (banner) and 16:9 propo
 - Default corners to **sharp/chamfered** (`{rounded.none}`); spend roundness only on the logo pill, radio dots, and circle-arrow badges.
 
 ### Don't
+
 - Don't soften every corner — turning the sharp chrome into a uniformly rounded card system erases the manufactured-faceplate identity.
 - Don't introduce a **soft blurred drop-shadow** elevation language; depth here is hard bevels and pictorial photography, not Material elevation.
 - Don't let `{colors.signal}` and `{colors.amber}` bleed into decorative use — warm color must always mean "act here."

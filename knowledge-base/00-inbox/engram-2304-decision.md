@@ -16,6 +16,7 @@ type: decision
 **Learned**:
 
 ## Key Metrics:
+
 - **TypeScript Files**: 177 files en src/ (migración exitosa desde PowerShell)
 - **PowerShell Legacy**: ~98% migrado (quedan scripts residuales en scripts/)
 - **Skills**: 42+ skills en .opencode/skills/
@@ -24,6 +25,7 @@ type: decision
 - **Pipeline**: 30 pasos eager + 66 lazy steps
 
 ## Health Status:
+
 ✅ TypeScript strict mode - NO ERRORS
 ✅ tests passing
 ⚠️  ESLint warnings (seguridad - object injection sinks)
@@ -33,6 +35,7 @@ type: decision
 ✅ Nexus DB inicializado
 
 ## Stack Comparison Data:
+
 - Similar to: LangChain agents, AutoGPT, CrewAI
 - Diferenciador: Pipeline de 53 pasos, memoria persistente (Engram), sistema de normativas robusto
 - Fortaleza: Orquestación multi-agente con 9 tipos de subagentes

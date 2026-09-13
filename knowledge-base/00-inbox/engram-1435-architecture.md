@@ -11,7 +11,7 @@ type: architecture
 
 **Why**: Reemplazar datos mock con métricas reales, agregar telemetría tipo Langfuse (costos por modelo, latencia percentiles, feedback, SLA, alertas)
 
-**Where**: 
+**Where**:
 - apps/web-dashboard/src/types/dashboard.ts — tipos extendidos (ModelCost, LatencyMetrics, FeedbackMetric, CostInsight, SLA)
 - apps/web-dashboard/server/real-data.ts — pipeline real desde .session/context-log/*/.state.json y .runtime/metrics/
 - apps/web-dashboard/src/components/Dashboard.tsx — 7 filas: KPIs, Cost/Feedback/SLA/System, Active Alerts, Cost by Model, Cost Insights, Latency Percentiles, SLA & Reliability
@@ -22,7 +22,7 @@ type: architecture
 - config/dashboard-alerts.json — 8 reglas configurables
 - apps/web-dashboard/src/hooks/useAlerts.ts, useSessions.ts
 
-**Learned**: 
+**Learned**:
 - Los archivos .state.json en .session/context-log/ contienen datos reales de sesiones con turns, tokens, cost, modelo
 - Vite proxy configura /api y /ws para forward a backend en puerto 8080
 - El build de Vite produce chunks optimizados por dependencia (react, recharts, lucide-react)

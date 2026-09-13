@@ -12,12 +12,14 @@ type: decision
 ## ✅ PROCEDIMIENTO EJECUTADO:
 
 ### Cache Hook System - ACTIVADO:
+
 ```
 npx tsx src/core/cache-hook-system.ts --init
 [2026-08-13T04:25:26.360Z] [CACHE-HOOK] Cache hook system initialized successfully
 ```
 
 ### Test de Cache - FUNCIONANDO:
+
 1. Guardado: `npx tsx src/response-cache.ts set "test-input-123" "Test response" --tokens 50`
    ✅ Response cached successfully
 
@@ -25,6 +27,7 @@ npx tsx src/core/cache-hook-system.ts --init
    ✅ Cache HIT! Tokens Saved: 100
 
 ### Estadísticas del Cache:
+
 ```
 Storage:         SQLite
 Cache Hits:      1
@@ -36,6 +39,7 @@ Expired Removed: 0
 ```
 
 ### Health Check Final:
+
 ```
 PASS: 89 | WARN: 0 | FAIL: 0 | SKIP: 0 | Total: 89
 
@@ -53,9 +57,11 @@ Componentes OK:
 ```
 
 ## 🎉 PROCEDIMIENTO COMPLETO:
+
 El cache-hook-system está **ACTIVO, FUNCIONANDO y OPERATIVO**.
 
 **Para OpenChamber:**
+
 ```typescript
 import 'C:/Workspace_local/gentle-vanguard/src/core/cache-hook-system.js';
 ```

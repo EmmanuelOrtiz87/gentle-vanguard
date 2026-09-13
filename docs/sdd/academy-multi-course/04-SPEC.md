@@ -4,13 +4,12 @@
 
 ## Problem statement
 
-`apps/academy-web/` es hoy un curso web estático dedicado exclusivamente a
-gentle-vanguard (12 tracks, 11 archivos de contenido, glosario global). El usuario
-necesita convertirlo en un **centro de estudio multi-tema** donde cada tema es un
-curso publicable, con gentle-vanguard como un curso más y un curso nuevo "IA —
-Fundamentos" como primera adición. La transformación debe mantener compatibilidad
-total con URLs, i18n (es/en/pt), tema dark/light, y DS v2 Premium, sin agregar
-build, dependencias, ni backends (modelo LOCAL-FIRST / ADR-0017).
+`apps/academy-web/` es hoy un curso web estático dedicado exclusivamente a gentle-vanguard (12
+tracks, 11 archivos de contenido, glosario global). El usuario necesita convertirlo en un **centro
+de estudio multi-tema** donde cada tema es un curso publicable, con gentle-vanguard como un curso
+más y un curso nuevo "IA — Fundamentos" como primera adición. La transformación debe mantener
+compatibilidad total con URLs, i18n (es/en/pt), tema dark/light, y DS v2 Premium, sin agregar build,
+dependencias, ni backends (modelo LOCAL-FIRST / ADR-0017).
 
 ## Scope
 
@@ -18,8 +17,8 @@ build, dependencias, ni backends (modelo LOCAL-FIRST / ADR-0017).
 
 1. Registro de cursos (`data/courses.js`) con carga de manifests JSON.
 2. Estructura `data/courses/<curso>/` con `course.json` + tracks + content + glossary + i18n.
-3. Migración completa de los 12 tracks + 11 archivos de contenido + glosario de
-   gentle-vanguard a `data/courses/gentle-vanguard/`.
+3. Migración completa de los 12 tracks + 11 archivos de contenido + glosario de gentle-vanguard a
+   `data/courses/gentle-vanguard/`.
 4. Selector de curso en topbar (dropdown) con persistencia en localStorage.
 5. Router actualizado: `#/course/:cid/track/:tid`, `#/course/:cid/lesson/:tid/:lid`,
    `#/course/:cid/glosario`, `#/courses` (catálogo), `#/` (home de academy = catálogo).
@@ -45,48 +44,48 @@ build, dependencias, ni backends (modelo LOCAL-FIRST / ADR-0017).
 
 ## Non-goals
 
-- **No es un LMS**: no hay calificaciones, certificados, ni matrículas. El README
-  del repo debe seguir diciendo "Sitio estático; no es un LMS".
-- **No es una plataforma de video/audio**: el formato sigue siendo texto + diagrama,
-  consistente con el renderer actual.
-- **No compite con Udemy**: no replicamos su superficie. Solo el patrón "catálogo de
-  cursos + índice de lecciones + glosario".
+- **No es un LMS**: no hay calificaciones, certificados, ni matrículas. El README del repo debe
+  seguir diciendo "Sitio estático; no es un LMS".
+- **No es una plataforma de video/audio**: el formato sigue siendo texto + diagrama, consistente con
+  el renderer actual.
+- **No compite con Udemy**: no replicamos su superficie. Solo el patrón "catálogo de cursos + índice
+  de lecciones + glosario".
 
 ## Functional requirements
 
-| # | Requerimiento                                                                  | Prioridad |
-| - | ------------------------------------------------------------------------------ | --------- |
-| F1 | La home de academy-web muestra un catálogo de cursos disponibles              | MUST      |
-| F2 | Click en un curso → home del curso con sus tracks                              | MUST      |
-| F3 | Selector de curso en topbar permite cambiar de curso sin pasar por la home     | MUST      |
-| F4 | URLs modernas: `#/course/:cid/track/:tid`                                     | MUST      |
-| F5 | URLs legacy redirigen a su equivalente moderno sin error                       | MUST      |
-| F6 | Cada curso es autocontenido en `data/courses/<curso>/`                         | MUST      |
-| F7 | El manifest `course.json` describe metadata, orden y archivos del curso       | MUST      |
-| F8 | Agregar un curso nuevo no requiere modificar `app.js` ni `courses.js`          | MUST      |
-| F9 | Búsqueda solo busca en el curso activo                                         | MUST      |
-| F10| Progreso (lesson completions) está scoped por curso                            | MUST      |
-| F11| Glosario del curso activo está disponible en `#/course/:cid/glosario`         | MUST      |
-| F12| i18n (es/en/pt) traduce los tracks del curso activo                            | MUST      |
-| F13| Tema dark/light funciona igual que antes                                       | MUST      |
-| F14| DS v2 Premium se mantiene sin cambios visuales                                 | MUST      |
-| F15| El primer curso nuevo "ia-fundamentos" aparece en el catálogo                 | MUST (PR 3) |
-| F16| "ia-fundamentos" tiene un track semilla de 8-12 lecciones                      | MUST (PR 3) |
+| #   | Requerimiento                                                              | Prioridad   |
+| --- | -------------------------------------------------------------------------- | ----------- |
+| F1  | La home de academy-web muestra un catálogo de cursos disponibles           | MUST        |
+| F2  | Click en un curso → home del curso con sus tracks                          | MUST        |
+| F3  | Selector de curso en topbar permite cambiar de curso sin pasar por la home | MUST        |
+| F4  | URLs modernas: `#/course/:cid/track/:tid`                                  | MUST        |
+| F5  | URLs legacy redirigen a su equivalente moderno sin error                   | MUST        |
+| F6  | Cada curso es autocontenido en `data/courses/<curso>/`                     | MUST        |
+| F7  | El manifest `course.json` describe metadata, orden y archivos del curso    | MUST        |
+| F8  | Agregar un curso nuevo no requiere modificar `app.js` ni `courses.js`      | MUST        |
+| F9  | Búsqueda solo busca en el curso activo                                     | MUST        |
+| F10 | Progreso (lesson completions) está scoped por curso                        | MUST        |
+| F11 | Glosario del curso activo está disponible en `#/course/:cid/glosario`      | MUST        |
+| F12 | i18n (es/en/pt) traduce los tracks del curso activo                        | MUST        |
+| F13 | Tema dark/light funciona igual que antes                                   | MUST        |
+| F14 | DS v2 Premium se mantiene sin cambios visuales                             | MUST        |
+| F15 | El primer curso nuevo "ia-fundamentos" aparece en el catálogo              | MUST (PR 3) |
+| F16 | "ia-fundamentos" tiene un track semilla de 8-12 lecciones                  | MUST (PR 3) |
 
 ## Non-functional requirements
 
-| # | Requerimiento                                                                  | Target    |
-| - | ------------------------------------------------------------------------------ | --------- |
-| N1 | Carga inicial de academy-web                                                    | < 500ms (local) |
-| N2 | Cambio de curso (sin recargar página)                                          | < 200ms  |
-| N3 | Tamaño JS total del shell                                                       | < 200KB  |
-| N4 | Sin warnings de DevTools console en navegación normal                          | 0        |
-| N5 | Accesibilidad: navegación por teclado, ARIA labels, contraste                  | WCAG 2.1 AA |
-| N6 | Compatibilidad navegadores                                                      | Chrome 120+, Firefox 120+, Safari 17+ |
-| N7 | Sin mock data: todo contenido proviene de archivos reales                      | 100%     |
-| N8 | Sin dependencias externas (mantener shell 0-deps)                              | 0        |
-| N9 | Sin frameworks (mantener vanilla JS)                                           | 0        |
-| N10| Auditoría de design-system del shell sigue clean (9→0 findings)                | mantener |
+| #   | Requerimiento                                                   | Target                                |
+| --- | --------------------------------------------------------------- | ------------------------------------- |
+| N1  | Carga inicial de academy-web                                    | < 500ms (local)                       |
+| N2  | Cambio de curso (sin recargar página)                           | < 200ms                               |
+| N3  | Tamaño JS total del shell                                       | < 200KB                               |
+| N4  | Sin warnings de DevTools console en navegación normal           | 0                                     |
+| N5  | Accesibilidad: navegación por teclado, ARIA labels, contraste   | WCAG 2.1 AA                           |
+| N6  | Compatibilidad navegadores                                      | Chrome 120+, Firefox 120+, Safari 17+ |
+| N7  | Sin mock data: todo contenido proviene de archivos reales       | 100%                                  |
+| N8  | Sin dependencias externas (mantener shell 0-deps)               | 0                                     |
+| N9  | Sin frameworks (mantener vanilla JS)                            | 0                                     |
+| N10 | Auditoría de design-system del shell sigue clean (9→0 findings) | mantener                              |
 
 ## Acceptance criteria
 
@@ -127,8 +126,7 @@ build, dependencias, ni backends (modelo LOCAL-FIRST / ADR-0017).
 
 ### AC6 — Progreso por curso
 
-- ✅ Marcar una lección como completada persiste en
-  `localStorage gv-academy-progress-<courseId>`.
+- ✅ Marcar una lección como completada persiste en `localStorage gv-academy-progress-<courseId>`.
 - ✅ Usuarios existentes (con keys legacy) tienen su progreso migrado la primera vez.
 - ✅ El progreso NO se comparte entre cursos (un curso no afecta al otro).
 
@@ -136,8 +134,8 @@ build, dependencias, ni backends (modelo LOCAL-FIRST / ADR-0017).
 
 - ✅ `#/course/gentle-vanguard/glosario` muestra el glosario de gentle-vanguard.
 - ✅ Filtro vivo funciona.
-- ✅ Términos del glosario están categorizados (`ia|tecnico|negocio|stack` u otros
-  válidos para el curso).
+- ✅ Términos del glosario están categorizados (`ia|tecnico|negocio|stack` u otros válidos para el
+  curso).
 
 ### AC8 — i18n
 
@@ -149,8 +147,7 @@ build, dependencias, ni backends (modelo LOCAL-FIRST / ADR-0017).
 ### AC9 — DS v2 sin cambios
 
 - ✅ `academy-tokens-v2.css`, `academy-atmosphere-v2.css`, `academy-style-v2.css`,
-  `academy-components-v2.css`, `academy-layout.css`, `academy-motion.css` no se
-  modifican.
+  `academy-components-v2.css`, `academy-layout.css`, `academy-motion.css` no se modifican.
 - ✅ Auditoría impecable: 0 nuevos findings.
 
 ### AC10 — Smoke test completo

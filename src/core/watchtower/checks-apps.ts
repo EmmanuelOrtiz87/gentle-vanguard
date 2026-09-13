@@ -85,13 +85,25 @@ export async function checkAppsRegistry() {
     );
     return;
   }
-  addResult('apps-registry', `command-center API (:${port})`, 'PASS', `${apps.length} apps registradas`, 'ok');
+  addResult(
+    'apps-registry',
+    `command-center API (:${port})`,
+    'PASS',
+    `${apps.length} apps registradas`,
+    'ok',
+  );
 
   const byId = new Map(apps.map((a) => [a.id, a]));
   for (const expected of EXPECTED_APPS) {
     const app = byId.get(expected.id);
     if (!app) {
-      addResult('apps-registry', `registro: ${expected.id}`, 'FAIL', 'Falta en APPS_REGISTRY de CC', 'verify');
+      addResult(
+        'apps-registry',
+        `registro: ${expected.id}`,
+        'FAIL',
+        'Falta en APPS_REGISTRY de CC',
+        'verify',
+      );
       continue;
     }
     addResult('apps-registry', `registro: ${expected.id}`, 'PASS', `status=${app.status}`, 'ok');
@@ -102,7 +114,13 @@ export async function checkAppsRegistry() {
       if (existsSync(join(dir, script))) {
         addResult('apps-registry', `${expected.id}:${script}`, 'PASS', 'presente', 'ok');
       } else {
-        addResult('apps-registry', `${expected.id}:${script}`, 'FAIL', 'falta el script nativo', 'verify');
+        addResult(
+          'apps-registry',
+          `${expected.id}:${script}`,
+          'FAIL',
+          'falta el script nativo',
+          'verify',
+        );
       }
     }
 

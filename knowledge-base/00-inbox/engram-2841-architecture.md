@@ -11,12 +11,12 @@ type: architecture
 
 **Why**: El plan file estaba referenciado pero no existía; executeSkillAndStream hacía streaming simulado y no parseaba ui_hints de respuestas MCP (AG-UI pattern 2 roto).
 
-**Where**: 
+**Where**:
 - docs/plans/COPILOTKIT-ANALYSIS-AND-ADOPTION-PLAN.md (nuevo)
 - apps/web-dashboard/server/websocket-server.ts — executeSkillAndStream (línea ~319): ahora parsea ui_hints/uiHint → msg.uiHints, broadcast agent_ui_hints, emite agent_stream_chunk por cada chunk de stream/chunks con delay 50ms antes del mensaje final. Helpers nuevos: extractUiHints(), extractChunks().
 - apps/web-dashboard/src/hooks/useAgentStream.ts — casos nuevos agent_ui_hints y agent_stream_chunk (acumula chunks en content, streaming:true).
 
-**Learned**: 
+**Learned**:
 - executeSkillAndStream usa broadcastToSession (no ws.send directo) — los mensajes van a suscriptores de la sesión.
 - El chunk handler del frontend reemplaza el content inicial "Ejecutando skill..." con startsWith() antes de acumular.
 - La decisión clave: NO integrar CopilotKit como dependencia (desajuste LangGraph/CrewAI vs MCP/TS, churn 1369 releases).

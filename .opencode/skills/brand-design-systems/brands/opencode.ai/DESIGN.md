@@ -242,11 +242,13 @@ The semantic palette is unusual for a brand-marketing site: it ships the full Ap
 > **Source pages:** `/` (home), `/zen`, `/enterprise`. The chrome palette is identical across all three.
 
 ### Brand & Accent
+
 - **Ink** (`{colors.primary}` / `{colors.ink}` — `#201d1d`): the brand's only "color." Headlines, body text, primary CTA fill, nav links, and every solid icon. Treats nearly-black as the brand color rather than pure black to keep type readable on the warm cream canvas.
 - **Ink Deep** (`{colors.ink-deep}` — `#0f0000`): pressed-state for the primary CTA. Carries a faint red undertone matching the canvas's warm cast.
 - **Cream** (`{colors.canvas}` — `#fdfcfc`): the brand's signature warm white. Used for every page body, every card surface, the on-primary text color, and the ASCII wordmark fill on dark.
 
 ### Surface
+
 - **Canvas Cream** (`{colors.canvas}` — `#fdfcfc`): every page body, every card.
 - **Soft Surface** (`{colors.surface-soft}` — `#f8f7f7`): text-input default background, testimonial row fill, alternating row tint.
 - **Surface Card** (`{colors.surface-card}` — `#f1eeee`): install-snippet pill, disabled button fill, slightly-elevated section row.
@@ -256,6 +258,7 @@ The semantic palette is unusual for a brand-marketing site: it ships the full Ap
 - **Hairline Strong** (`{colors.hairline-strong}` — `#646262`): tab strip's bottom rule and stronger inline divider.
 
 ### Text
+
 - **Ink** (`{colors.ink}` — `#201d1d`): headlines, body text, primary nav links, button text on light surfaces.
 - **Charcoal** (`{colors.charcoal}` — `#302c2c`): subtly softer body where pure ink is too heavy.
 - **Body** (`{colors.body}` — `#424245`): default paragraph text and FAQ answers.
@@ -264,6 +267,7 @@ The semantic palette is unusual for a brand-marketing site: it ships the full Ap
 - **Ash** (`{colors.ash}` — `#9a9898`): disabled text and secondary annotation in dark TUI mockup, also TUI mockup secondary color.
 
 ### Semantic
+
 The full Apple Human Interface Guidelines semantic ramp ships with the system. On marketing pages these colors appear primarily inside the hero TUI mockup as syntax-highlight stand-ins; in the in-product TUI they carry their conventional meaning.
 
 - **Accent** (`{colors.accent}` — `#007aff`): primary informational signal, in-product link color, TUI command highlight.
@@ -280,6 +284,7 @@ The full Apple Human Interface Guidelines semantic ramp ships with the system. O
 ## Typography
 
 ### Font Family
+
 **Berkeley Mono** is the proprietary monospaced face used across every text role in the system. It carries weights 400 (regular), 500 (medium), and 700 (bold) and falls back through a long monospace stack — IBM Plex Mono → ui-monospace → SFMono-Regular → Menlo → Monaco → Consolas → Liberation Mono → Courier New.
 
 The single-font decision is the brand. There is no display face, no body sans, no italic alternative, and no fallback to a proportional font anywhere — even the legal copyright row uses Berkeley Mono at 14px. This is the most aggressive typographic restraint of any site in the marketing-tools category: OpenCode's identity is "the marketing page is a man page."
@@ -298,9 +303,11 @@ The single-font decision is the brand. There is no display face, no body sans, n
 | `{typography.caption-md}` | 14px | 400 | 2 | 0 | Footer link text, badge label, copyright row, chart caption |
 
 ### Principles
+
 The hierarchy is built almost entirely from size and weight contrast on a single face. The display headline (38px / 700) and the heading-md label (16px / 700) share a weight; the difference is just size. Body and link share size, weight, and line-height — only context distinguishes them. Buttons get a deliberately tall line-height (2.0) so labels feel calmly spaced inside the 4px-radius rectangle.
 
 ### Note on Font Substitutes
+
 Berkeley Mono is a paid commercial font. Open-source substitutes that approximate its metrics within ~3% at body sizes:
 - **JetBrains Mono** — closest match for stroke contrast and x-height; pair at weights 400 / 500 / 700.
 - **IBM Plex Mono** — official secondary fallback in the documented font stack; slightly more open counters but matches line-height behavior.
@@ -311,17 +318,20 @@ When substituting, line-height behavior is preserved by keeping `lineHeight: 1.5
 ## Layout
 
 ### Spacing System
+
 - **Base unit:** 8px (with finer 1/2/4px steps available for tight inline gaps).
 - **Tokens (front matter):** `{spacing.xxs}` (1px) · `{spacing.xs}` (4px) · `{spacing.sm}` (8px) · `{spacing.md}` (12px) · `{spacing.lg}` (16px) · `{spacing.xl}` (24px) · `{spacing.xxl}` (32px) · `{spacing.section}` (96px).
 - **Universal section rhythm:** every page in the set uses `{spacing.section}` (96px) as the vertical gap between major content blocks. This is the largest spacing token in the system and is the dominant layout cue across the home, `/zen`, and `/enterprise` pages.
 - **Section internal padding:** content rows inside a section sit at `{spacing.lg}` (16px) vertical with no horizontal padding — text starts flush at the section's left edge.
 
 ### Grid & Container
+
 - **Max width:** ~960px content column for body sections; the dark hero TUI mockup is full-bleed within an outer ~1100px content frame.
 - **Two-column split:** `/enterprise` pairs a left text block (~360px wide) with a right-aligned form column (~480px wide). The home page is single-column reading.
 - **Footer:** 5-up horizontal link row (GitHub / Docs / Changelog / Discord / X) at desktop, collapsing to 2-up at tablet and 1-up at mobile.
 
 ### Whitespace Philosophy
+
 Whitespace is structural and generous. Sections sit 96px apart with no decorative dividers between them — the `{colors.hairline}` 1px rule is the only signal of separation. Inside a section, content is left-flush against the column edge with no internal indentation; bullets use ASCII bracket prefixes (`[+]` / `[-]`) instead of indent-based layout. The result is a page that feels like a printed code listing rather than a styled marketing layout.
 
 ## Elevation & Depth
@@ -336,6 +346,7 @@ Whitespace is structural and generous. Sections sit 96px apart with no decorativ
 There are no drop shadows in the system. Nothing lifts, nothing floats. The only way an element registers as "above" another is the dark surface used in the hero mockup.
 
 ### Decorative Depth
+
 Depth comes from typography density and the single dark TUI mockup, not from CSS effects:
 - **ASCII block-pixel wordmark** — the OpenCode brand name rendered as a 5-row block of monospaced character cells, used in the primary nav and as the centerpiece of the hero TUI mockup.
 - **Hero TUI mockup** — full-bleed `{colors.surface-dark}` rectangle containing a faux terminal interface: ASCII wordmark, a `tui-prompt-row` showing a Build command line, and `tab switch agent` / `ctrl-p commands` keybinding hints in `{colors.ash}` at the bottom edge.
@@ -354,6 +365,7 @@ Depth comes from typography density and the single dark TUI mockup, not from CSS
 The radius vocabulary is two values: 4px for interactive elements and 0px for everything else. Avatar circles in testimonial rows are the only fully-rounded element in the system.
 
 ### Photography Geometry
+
 There is no photography. Visual elements are limited to:
 - **ASCII block-pixel wordmark** in the nav and hero TUI mockup.
 - **Inline ASCII charts** inside the stat-block section — abstract sparse-line and dotted plots without specific data points.
@@ -458,6 +470,7 @@ There is no photography. Visual elements are limited to:
 ## Do's and Don'ts
 
 ### Do
+
 - Render every text role in Berkeley Mono. The single-font decision is the entire identity.
 - Keep `{colors.canvas}` (`#fdfcfc`) as the only body background. Don't introduce gray section bands.
 - Use ASCII bracket markers (`[+]`, `[-]`, `[x]`, `+`, `−`) as bullets, toggles, and section glyphs. They are the brand's only iconography.
@@ -467,6 +480,7 @@ There is no photography. Visual elements are limited to:
 - Stack content sections at `{spacing.section}` (96px) rhythm with only 1px `{colors.hairline}` rules between them.
 
 ### Don't
+
 - Don't introduce a sans-serif body font, a display face, or an italic style. Berkeley Mono carries everything.
 - Don't add drop shadows, gradients, or atmospheric backgrounds. The system is flat-on-cream.
 - Don't replace the ASCII bracket markers with SVG icons. The brackets are the icons.
@@ -488,9 +502,11 @@ There is no photography. Visual elements are limited to:
 | mobile | 640px | Single-column everything; hero display drops 38px → ~28px; section padding tightens |
 
 ### Touch Targets
+
 All interactive elements meet WCAG AA at the ~36–40px height range. `{component.button-primary}` sits at ~36px with 20px horizontal padding. `{component.text-input}` and `{component.textarea}` sit at ~40px. `{component.button-tab}` rows in the install-method strip sit at ~32–36px depending on label length but extend to a full 44px tappable cell via inline padding. Footer links use `{typography.caption-md}` (14px) but receive ~28px line-height (caption-md is 2.0) plus 8px vertical padding for a comfortable ~44px tappable row.
 
 ### Collapsing Strategy
+
 - **Primary nav:** desktop horizontal cluster → tablet-narrow hamburger drawer at 768px. The dark "Download" CTA stays visible at all widths.
 - **Hero TUI mockup:** maintains its full-bleed dark surface at every breakpoint; the ASCII wordmark scales proportionally and the keybinding-hint row may wrap to two lines on narrow screens.
 - **Install snippet + tab strip:** desktop fixed-width pill → mobile full-width pill with horizontal scroll on the tab strip if labels overflow.
@@ -500,6 +516,7 @@ All interactive elements meet WCAG AA at the ~36–40px height range. `{componen
 - **Hero headline:** `{typography.display-xl}` (38px) at desktop, scaling to ~28px at mobile, line-height holding at 1.5.
 
 ### Image Behavior
+
 There are no raster images in the system aside from the favicon and OG share image. Every visual element — wordmarks, charts, icons — is rendered as type or inline SVG and scales without aspect-ratio considerations.
 
 ## Iteration Guide

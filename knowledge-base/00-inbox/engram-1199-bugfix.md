@@ -13,7 +13,7 @@ type: bugfix
 
 **Where**: config/system-prompt-optimization.json, config/opencode.schema.json, config/session-autostart.config.json, scripts/utilities/SYSTEM/system-prompt-optimizer.ps1, scripts/utilities/CONFIG/validate-opencode-config.ps1, scripts/utilities/DIAGNOSIS/self-diagnosis-autonomous.ps1, scripts/utilities/DIAGNOSIS/self-diagnosis.ps1, scripts/utilities/PROMPT/*.ps1 (5 scripts updated to read centralized config)
 
-**Learned**: (1) NEVER add non-standard properties to tool config files (opencode.json, .cursorrules, etc.). Use config/*.json for custom config. (2) The refactor commit 2fb1939b deleted self-diagnosis scripts but the autostart pipeline still referenced them — need to validate pipeline steps after refactors. (3) Write-Host output is not captured by & capture (stream 6), use *>&1 to capture all streams in tests. (4) Added to AGENTS.md as Hard Rule.
+**Learned**: (1) NEVER add non-standard properties to tool config files (opencode.json, .cursorrules, etc.). Use config/*.json for custom config. (2) The refactor commit 2fb1939b deleted self-diagnosis scripts but the autostart pipeline still referenced them — need to validate pipeline steps after refactors. (3) Write-Host output is not captured by & capture (stream 6), use*>&1 to capture all streams in tests. (4) Added to AGENTS.md as Hard Rule.
 
 ---
 *Imported from Engram on 2026-09-06*

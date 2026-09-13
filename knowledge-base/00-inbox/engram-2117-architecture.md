@@ -11,7 +11,7 @@ type: architecture
 
 **Why**: User requested full stack verification with zero warnings, failures, or false positives. All components must be active, automated, and properly integrated.
 
-**Where**: 
+**Where**:
 - `src/token-budget-guard.ts` — Fixed `which`→`where` for Windows
 - `src/codegraph-mcp-server-start.ts` — NEW: auto-starts CodeGraph MCP server
 - `config/session-autostart.config.json` — Added codegraph-mcp-server-start step

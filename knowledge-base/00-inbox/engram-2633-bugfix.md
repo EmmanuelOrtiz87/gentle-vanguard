@@ -10,7 +10,7 @@ type: bugfix
 **What**: Las 11 presentaciones de docs/presentations tenían un tag `<script>` malformado: `<script src="assets/js/i18n-content.js?v=2.1"` sin `>` de cierre, con el siguiente `<script src="assets/js/i18n.js?v=2.1">` anidado DENTRO del atributo src del primero. Chrome lo ignoraba silenciosamente (sin errores en consola), por lo que i18n.js nunca se cargaba → window.__i18n nunca existía → el selector de idioma no traducía nada.
 **Why**: La traducción funcionaba en happy-dom (parser permisivo) pero no en Chrome real. El usuario reportó "click en idioma no traduce nada" sin errores visibles. El modal de la "i" sí funcionaba porque gv.js SÍ cargaba (tenía tag bien formado) y usa fallback al title estático.
 **Where**: docs/presentations/*.html (11 archivos) — bloque de scripts en <head>.
-**Learned**: 
+**Learned**:
 1. Los validadores HTML lenient (happy-dom, jsdom) NO detectan tags <script> anidados dentro de atributos src. Solo un parser real (Chrome) lo expone.
 2. Diagnóstico definitivo: Chrome DevTools Protocol (CDP) — `chrome --headless=new --remote-debugging-port=9225` + Node con ws + Runtime.evaluate para inspeccionar window.__i18n real, y `document.querySelectorAll('script[src]')` para ver qué scripts entraron al DOM. Esto reveló que i18n.js no estaba en la lista del DOM y que las respuestas HTTP no lo incluían.
 3. `--dump-dom` de Chrome devuelve vacío en este entorno Windows (no usar).

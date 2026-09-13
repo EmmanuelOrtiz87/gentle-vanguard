@@ -45,6 +45,7 @@ This skill provides access to 74 real-world design systems from top companies in
 ### 1. Browse Available Brands
 
 List all available brand design systems:
+
 ```
 Brand directory: .opencode/skills/brand-design-systems/brands/
 ```
@@ -54,12 +55,14 @@ Brand directory: .opencode/skills/brand-design-systems/brands/
 When designing for a specific aesthetic, reference the brand's DESIGN.md:
 
 **Example - Linear-style dark interface:**
+
 ```bash
 # Reference Linear's tokens for a dark productivity app
 # Use: colors.canvas = "#010102", accent = "#5e6ad2", typography from Linear Display
 ```
 
 **Example - Apple-inspired minimal interface:**
+
 ```bash
 # Reference Apple's design language
 # Focus on: subtle gradients, SF Pro typography, frosted glass, generous whitespace
@@ -76,6 +79,7 @@ Each brand's DESIGN.md contains:
 ## Featured Brands by Category
 
 ### Dark/Minimal (Enterprise SaaS)
+
 | Brand | Aesthetic |
 |-------|-----------|
 | Linear | Near-black (#010102) with lavender accent |
@@ -85,6 +89,7 @@ Each brand's DESIGN.md contains:
 | Figma | White with purple accents |
 
 ### Premium/Luxury
+
 | Brand | Aesthetic |
 |-------|-----------|
 | Ferrari | Racing red, performance-focused |
@@ -93,6 +98,7 @@ Each brand's DESIGN.md contains:
 | BMW M | Performance motorsport |
 
 ### Tech/Developer
+
 | Brand | Aesthetic |
 |-------|-----------|
 | HashiCorp | Infrastructure tooling |
@@ -101,6 +107,7 @@ Each brand's DESIGN.md contains:
 | Ollama | Local AI aesthetic |
 
 ### Finance/Crypto
+
 | Brand | Aesthetic |
 |-------|-----------|
 | Revolut | Modern fintech dark |

@@ -11,7 +11,7 @@ type: decision
 
 **Why**: Engram stores persistent memory — decisions, bugs, architecture, conventions, agent/skill performance, and stack historical context. Without it, the stack loses its "north" and cannot make informed decisions based on past actions. This is critical infrastructure, just like CodeGraph and Nexus.
 
-**Where**: 
+**Where**:
 - rules/RECOVERY-NORMATIVA.md — Engram marked SI (critical), Nexus listed as critical component
 - skills/SKILL_INDEX.md — nexus-database-skill entry added
 - src/Skills/skill-router.ts — 10 triggers for nexus-database routing

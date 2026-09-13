@@ -23,7 +23,8 @@ ingenieria de software de Gentle-Vanguard.
 ## Lote inicial
 
 - 4 perfiles: TikTok, Instagram, Facebook y WhatsApp Business.
-- 14 piezas sociales V2: dos por TikTok, Instagram, Facebook, WhatsApp Business, X, Reddit y LinkedIn.
+- 14 piezas sociales V2: dos por TikTok, Instagram, Facebook, WhatsApp Business, X, Reddit y
+  LinkedIn.
 - 12 piezas de lanzamiento: feeds, stories y promociones de workshops.
 - 3 videos verticales de 15 segundos para validar hooks y CTA.
 - Captions en espanol rioplatense, con hashtags y CTA por plataforma.

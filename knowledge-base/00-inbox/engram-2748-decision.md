@@ -15,6 +15,7 @@ type: decision
 ## PROBLEMAS IDENTIFICADOS:
 
 ### 1. Sin `id="overview"` en hero (7 páginas):
+
 - memory-knowledge.html
 - dashboard.html
 - health.html
@@ -23,18 +24,22 @@ type: decision
 - quickstart.html
 
 ### 2. Sin CTAs (botones) en hero (13 páginas):
+
 - memory-knowledge.html, security-governance.html, dashboard.html, patterns-conventions.html
 - quickstart.html, contract-viewer.html, image-studio.html, marketing.html
 - md-viewer.html, resources-index.html, social-post.html, video-studio.html
 
 ### 3. Sin stats (14 páginas secundarias):
+
 - autonomy (tiene carrusel), dashboard, health, operations-cloud, patterns-conventions
 - contract-viewer, image-studio, marketing, md-viewer, resources-index, social-post, video-studio
 
 ### 4. SIN HERO COMPLETO:
+
 - product-doc-gentle.html
 
 ### ESTRUCTURA DE REFERENCIA (index.html - COMPLETA):
+
 ```html
 <header class="hero" id="overview">
   <span class="hero-badge mb-3">✦ v4.0 — ...</span>
@@ -51,6 +56,7 @@ type: decision
 ## CORRECCIONES NECESARIAS:
 
 Para cada página que falta `id="overview"`:
+
 ```html
 <!-- ANTES -->
 <header class="hero">
@@ -60,6 +66,7 @@ Para cada página que falta `id="overview"`:
 ```
 
 ## PROBLEMA TÉCNICO:
+
 El sistema de archivos bloquea escritura en ciertos archivos (error UNKNOWN -4094).
 Las correcciones deben hacerse manualmente o con editor de texto.
 

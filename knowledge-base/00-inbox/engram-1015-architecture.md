@@ -21,6 +21,7 @@ type: architecture
 - scripts/validation/* (2 scripts fixed)
 
 **Learned**: Pattern for robust path resolution:
+
 ```powershell
 $scriptRoot = if ($PSScriptRoot) { $PSScriptRoot } elseif ($MyInvocation.MyCommand.Path) { 
     Split-Path -Parent $MyInvocation.MyCommand.Path 

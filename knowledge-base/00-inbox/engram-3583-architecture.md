@@ -33,7 +33,7 @@ type: architecture
 - El GV Design System v2 tiene 7 componentes React
 - La unificación de apps existentes es un proyecto separado
 
-**Status**: 
+**Status**:
 - GV Design Studio corriendo en puerto 5180 ✓
 - Build exitoso ✓
 - Todos los skills sincronizados a ZCode/Codex/MiniMax ✓

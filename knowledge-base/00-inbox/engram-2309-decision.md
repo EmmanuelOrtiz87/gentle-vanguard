@@ -14,13 +14,13 @@ type: decision
    - writeFileSync no usado
    - COLORS.dim faltaba
    - Type error en filter callback
-   
+
 2. Test FAIL en token-budget-guard.test.ts:
    - Edge cases con comportamiento indefinido
    - Tests esperaban comportamiento específico no implementado
 
 **Fixes Aplicados**:
-- coverage-analyzer.ts: 
+- coverage-analyzer.ts:
   - Removido writeFileSync import no usado
   - Agregado 'dim' a COLORS constant
   - Type cast (Object.values(s.s) as number[]).filter(...)

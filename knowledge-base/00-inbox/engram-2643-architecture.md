@@ -12,6 +12,7 @@ type: architecture
 ## What Was Built (6 Major Capabilities)
 
 ### 1. Firecrawl Web Research (Native)
+
 - **Files**: src/web-crawler.ts (644 lines), src/web-crawler-cli.ts, src/web-crawler-init.ts
 - **Features**: Search, Scrape, Crawl, Map, Health checks
 - **Integration**: SHA256 cache, structural compression, Nexus logging
@@ -19,6 +20,7 @@ type: architecture
 - **CLI**: npm run web:search, web:scrape, web:crawl, web:map, web:status
 
 ### 2. witr Process Debugging
+
 - **Files**: src/witr-wrapper.ts, src/witr-cli.ts, scripts/witr-installer.ps1
 - **Binary**: .runtime/tools/witr/witr.exe v0.3.3
 - **Features**: Process/port/file/container causal chain tracing
@@ -26,30 +28,35 @@ type: architecture
 - **CLI**: npm run process:trace, port:trace, file:trace
 
 ### 3. Superpowers Planning
+
 - **Files**: src/planning-templates.ts, .opencode/skills/planning-and-task-breakdown/SKILL.md (enhanced)
 - **Features**: Pre-write planning with decision gates
 - **Workflow**: Scope → Approach → Risk → Tasks → Gates
 - **CLI**: npm run plan:new, plan:template, plan:list, plan:show
 
 ### 4. UI-UX Design System
+
 - **Files**: src/design-tokens.ts, src/design-system-cli.ts, config/design-tokens.json
 - **Features**: Typography scales (7 ratios), color palettes, WCAG 2.1 AA/AAA
 - **Output**: CSS/SCSS/JSON tokens
 - **Tests**: 15/15 passing
 
 ### 5. Emil Animations
+
 - **Files**: src/animations/ (9 modules), styles/animations.css
 - **Features**: 9 presets (fade, slide, scale, shimmer, etc.), 5 React hooks
 - **Performance**: 60fps GPU-accelerated, prefers-reduced-motion support
 - **CLI**: npm run animation:create, animation:analyze
 
 ### 6. Humanizer Content Enhancement
+
 - **Files**: src/humanizer.ts (1100+ lines), src/humanizer-cli.ts
 - **Features**: AI-text detection (12 patterns), transformation engine
 - **Patterns**: Passive voice, generics, discourse adverbs, burstiness
 - **Tests**: 25/25 passing
 
 ### 7. Last30Days Trends Research
+
 - **Files**: src/research-trends.ts (1200 lines), src/research-trends-cli.ts
 - **Sources**: GitHub (trending + search), HN (Algolia), StackOverflow, Dev.to, Reddit
 - **Features**: 24h caching, theme aggregation, Firecrawl bridge
@@ -134,7 +141,7 @@ To activate full functionality:
 
 **Where**: .opencode/skills/, src/, config/, scripts/
 
-**Learned**: 
+**Learned**:
 - Firecrawl provides excellent token-efficient web extraction
 - witr's causal chain tracing enhances debugging significantly
 - Modular architecture enables rapid skill absorption

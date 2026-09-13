@@ -87,7 +87,12 @@ function estimateSteps(task: string, base: number): number {
  *   - standard → +8  (sdd-verify, 1 lens)
  *   - high     → +16 (rdd-4r-review, 4R)
  */
-function riskAwareStepBonus(): { bonus: number; tier: string; score: number; verification: string } {
+function riskAwareStepBonus(): {
+  bonus: number;
+  tier: string;
+  score: number;
+  verification: string;
+} {
   try {
     const c = classifyRisk(false);
     const tier = c.tier;

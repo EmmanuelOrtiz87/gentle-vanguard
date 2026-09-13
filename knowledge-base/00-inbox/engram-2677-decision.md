@@ -11,12 +11,12 @@ type: decision
 
 **Why**: The OpenCode framework passes literal string "inherit-from-session" as the model name to subagents instead of resolving the actual model from the orchestrator. This is a framework limitation, not a configuration issue.
 
-**Where**: 
+**Where**:
 - `.opencode/agents/sdd-*.md` - Reverted to explicit `model:` instead of `inherit_model:`
 - `opencode.json` - Removed `no_inherit_model: true` from sdd-apply (was incorrectly set)
 - All subagents now use explicit model: `opencode/deepseek-v4-flash-free`
 
-**Learned**: 
+**Learned**:
 - Model inheritance with `inherit_model: true` is NOT supported by OpenCode framework
 - Must use explicit `model:` in subagent frontmatter
 - Steps allocation via `adaptive-steps.ts` works correctly (38, 30, 52, 36 steps respectively)

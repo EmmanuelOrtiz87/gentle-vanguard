@@ -17,7 +17,7 @@ type: architecture
 - `scripts/metrics/collector.ps1` — added `Collect-MonthlyHistory()` (aggregates snapshot data by day/month), `Collect-Aggregates()` (builds per-response data from events.ndjson with input/output tokens, cost, savings)
 - `scripts/metrics/metrics-server.ps1` — added endpoints `/api/metrics/monthly` and `/api/metrics/per-response`
 
-**Learned**: 
+**Learned**:
 - Snapshot aggregation requires max-value dedup per day (multiple snapshots per day)
 - Per-response data from events.ndjson needs type inference (response/tool/llm events mapped to input/output tokens)
 - Chart hover tooltip requires manual canvas hit-testing since there's no chart library

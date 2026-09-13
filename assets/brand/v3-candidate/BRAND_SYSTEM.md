@@ -2,9 +2,11 @@
 
 ## Nueva identidad visual · SVG Master Pack
 
-Este paquete contiene la **versión vectorial SVG** del símbolo `GV` de Gentle Vanguard, trazado a partir de la nueva identidad visual suministrada.
+Este paquete contiene la **versión vectorial SVG** del símbolo `GV` de Gentle Vanguard, trazado a
+partir de la nueva identidad visual suministrada.
 
-> **Principio:** SVG es la fuente maestra para interfaces, web, PWA y sistemas que soporten vectores. No se incrustan PNG dentro de los SVG.
+> **Principio:** SVG es la fuente maestra para interfaces, web, PWA y sistemas que soporten
+> vectores. No se incrustan PNG dentro de los SVG.
 
 ---
 
@@ -21,14 +23,14 @@ Este paquete contiene la **versión vectorial SVG** del símbolo `GV` de Gentle 
 
 ### Paleta
 
-| Token | Hex | Uso |
-|---|---|---|
-| `gv-midnight` | `#0B1020` | fondos principales |
-| `gv-blue` | `#1E40AF` | azul tecnológico |
-| `gv-cyan` | `#06B6D4` | acentos / acciones |
-| `gv-violet` | `#8B5CF6` | identidad / acentos |
-| `gv-soft-white` | `#F8FAFC` | fondos claros |
-| `gv-black` | `#050A14` | versión monocromática |
+| Token           | Hex       | Uso                   |
+| --------------- | --------- | --------------------- |
+| `gv-midnight`   | `#0B1020` | fondos principales    |
+| `gv-blue`       | `#1E40AF` | azul tecnológico      |
+| `gv-cyan`       | `#06B6D4` | acentos / acciones    |
+| `gv-violet`     | `#8B5CF6` | identidad / acentos   |
+| `gv-soft-white` | `#F8FAFC` | fondos claros         |
+| `gv-black`      | `#050A14` | versión monocromática |
 
 ### Gradiente oficial
 
@@ -65,7 +67,8 @@ Para el icono principal de una aplicación:
 
 **Usar:** `gv-on-midnight.svg`
 
-La versión con fondo Midnight es preferible cuando el icono necesita funcionar como una pieza autónoma.
+La versión con fondo Midnight es preferible cuando el icono necesita funcionar como una pieza
+autónoma.
 
 ---
 
@@ -74,30 +77,20 @@ La versión con fondo Midnight es preferible cuando el icono necesita funcionar 
 ### HTML
 
 ```html
-<img
-  src="/assets/brand/gv-transparent.svg"
-  alt="Gentle Vanguard"
-  width="40"
-  height="40"
-/>
+<img src="/assets/brand/gv-transparent.svg" alt="Gentle Vanguard" width="40" height="40" />
 ```
 
 ### CSS
 
 ```css
 :root {
-  --gv-midnight: #0B1020;
-  --gv-blue: #1E40AF;
-  --gv-cyan: #06B6D4;
-  --gv-violet: #8B5CF6;
-  --gv-soft-white: #F8FAFC;
+  --gv-midnight: #0b1020;
+  --gv-blue: #1e40af;
+  --gv-cyan: #06b6d4;
+  --gv-violet: #8b5cf6;
+  --gv-soft-white: #f8fafc;
 
-  --gv-gradient: linear-gradient(
-    135deg,
-    #6E4DEB 0%,
-    #7B63E8 52%,
-    #06B6D4 100%
-  );
+  --gv-gradient: linear-gradient(135deg, #6e4deb 0%, #7b63e8 52%, #06b6d4 100%);
 }
 ```
 
@@ -112,7 +105,7 @@ Archivo recomendado:
 HTML:
 
 ```html
-<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
 ```
 
 Si el sistema requiere PNG, exportar el SVG a:
@@ -151,7 +144,8 @@ Ejemplo:
 }
 ```
 
-**Nota:** algunos navegadores/instaladores son más estrictos con SVG en manifest. Para máxima compatibilidad, mantener el SVG como fuente y generar adicionalmente PNG 192×192 y 512×512.
+**Nota:** algunos navegadores/instaladores son más estrictos con SVG en manifest. Para máxima
+compatibilidad, mantener el SVG como fuente y generar adicionalmente PNG 192×192 y 512×512.
 
 ---
 
@@ -164,7 +158,8 @@ Usar:
 - `android-foreground.svg`
 - `android-background.svg`
 
-El foreground debe conservar espacio de seguridad alrededor del monograma porque Android puede aplicar máscaras circulares, squircle u otras formas.
+El foreground debe conservar espacio de seguridad alrededor del monograma porque Android puede
+aplicar máscaras circulares, squircle u otras formas.
 
 Para Android nativo, el SVG puede importarse como **Vector Drawable** desde Android Studio.
 
@@ -190,7 +185,8 @@ No pegar el GV al borde del canvas. Mantener aproximadamente 15–20% de área d
 
 ## 8. iOS / iPadOS
 
-SVG funciona como fuente de diseño, pero el catálogo de iconos de Apple normalmente requiere los tamaños rasterizados correspondientes.
+SVG funciona como fuente de diseño, pero el catálogo de iconos de Apple normalmente requiere los
+tamaños rasterizados correspondientes.
 
 Flujo recomendado:
 
@@ -215,24 +211,17 @@ No modificar manualmente el SVG maestro para cada tamaño.
 Ejemplo:
 
 ```jsx
-import gvLogo from "./assets/brand/gv-transparent.svg";
+import gvLogo from './assets/brand/gv-transparent.svg';
 
 export function BrandMark() {
-  return (
-    <img
-      src={gvLogo}
-      alt="Gentle Vanguard"
-      width={40}
-      height={40}
-    />
-  );
+  return <img src={gvLogo} alt="Gentle Vanguard" width={40} height={40} />;
 }
 ```
 
 Si se utiliza SVGR:
 
 ```jsx
-import { ReactComponent as GV } from "./assets/brand/gv-transparent.svg";
+import { ReactComponent as GV } from './assets/brand/gv-transparent.svg';
 
 export function BrandMark() {
   return <GV aria-label="Gentle Vanguard" />;
@@ -244,19 +233,11 @@ export function BrandMark() {
 ## 10. Next.js
 
 ```jsx
-import Image from "next/image";
-import gvLogo from "@/assets/brand/gv-transparent.svg";
+import Image from 'next/image';
+import gvLogo from '@/assets/brand/gv-transparent.svg';
 
 export default function Brand() {
-  return (
-    <Image
-      src={gvLogo}
-      alt="Gentle Vanguard"
-      width={48}
-      height={48}
-      priority
-    />
-  );
+  return <Image src={gvLogo} alt="Gentle Vanguard" width={48} height={48} priority />;
 }
 ```
 
@@ -298,7 +279,8 @@ flutter:
 
 ## 13. React Native
 
-Con `react-native-svg`, se recomienda importar el SVG mediante el pipeline SVG configurado por el proyecto.
+Con `react-native-svg`, se recomienda importar el SVG mediante el pipeline SVG configurado por el
+proyecto.
 
 Ejemplo conceptual:
 
@@ -306,7 +288,8 @@ Ejemplo conceptual:
 <GVLogo width={48} height={48} />
 ```
 
-Para launcher icons, utilizar las herramientas específicas de Android/iOS para generar los tamaños requeridos a partir del SVG maestro.
+Para launcher icons, utilizar las herramientas específicas de Android/iOS para generar los tamaños
+requeridos a partir del SVG maestro.
 
 ---
 
@@ -390,16 +373,16 @@ El SVG no tiene una resolución nativa: es escalable.
 
 Referencias:
 
-| Uso | Tamaño recomendado |
-|---|---:|
-| favicon | 16–48 px |
-| navbar | 32–48 px |
-| avatar | 64–128 px |
-| app icon master | 1024×1024 |
-| PWA | 192×192 / 512×512 |
-| Android master | 1024×1024 |
-| iOS master | 1024×1024 |
-| splash / marketing | cualquier tamaño |
+| Uso                | Tamaño recomendado |
+| ------------------ | -----------------: |
+| favicon            |           16–48 px |
+| navbar             |           32–48 px |
+| avatar             |          64–128 px |
+| app icon master    |          1024×1024 |
+| PWA                |  192×192 / 512×512 |
+| Android master     |          1024×1024 |
+| iOS master         |          1024×1024 |
+| splash / marketing |   cualquier tamaño |
 
 ---
 
@@ -421,11 +404,7 @@ Referencias:
     "gradient": {
       "type": "linear",
       "angle": 135,
-      "stops": [
-        "#6E4DEB",
-        "#7B63E8",
-        "#06B6D4"
-      ]
+      "stops": ["#6E4DEB", "#7B63E8", "#06B6D4"]
     }
   }
 }
@@ -473,15 +452,20 @@ Gentle Vanguard Brand Master
  PWA   Android/iOS Electron/Tauri
 ```
 
-Esto garantiza que todas las aplicaciones de Gentle Vanguard mantengan exactamente la misma identidad.
+Esto garantiza que todas las aplicaciones de Gentle Vanguard mantengan exactamente la misma
+identidad.
 
 ---
 
 ## 21. Fuente de esta versión
 
-La geometría del símbolo de este paquete fue trazada a partir de la nueva referencia visual proporcionada en la conversación.
+La geometría del símbolo de este paquete fue trazada a partir de la nueva referencia visual
+proporcionada en la conversación.
 
-**Importante:** esta versión es un asset vectorial reconstruido desde la referencia visual. Si posteriormente aparece el archivo vectorial original del diseñador (`.AI`, `.SVG`, `.EPS`, `.PDF vectorial` o equivalente), ese archivo debe convertirse en el **master definitivo**, sustituyendo este trazado si existen diferencias geométricas.
+**Importante:** esta versión es un asset vectorial reconstruido desde la referencia visual. Si
+posteriormente aparece el archivo vectorial original del diseñador (`.AI`, `.SVG`, `.EPS`,
+`.PDF vectorial` o equivalente), ese archivo debe convertirse en el **master definitivo**,
+sustituyendo este trazado si existen diferencias geométricas.
 
 ---
 
@@ -491,4 +475,4 @@ La geometría del símbolo de este paquete fue trazada a partir de la nueva refe
 **Asset family:** GV New Identity  
 **Formato maestro:** SVG  
 **Uso:** Web · PWA · Android · iOS · Desktop · Marketing  
-**Versión:** NEW  
+**Versión:** NEW

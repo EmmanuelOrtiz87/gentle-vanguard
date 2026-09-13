@@ -13,7 +13,7 @@ type: architecture
 
 **Where**: apps/design-hub/ (vanilla HTML/CSS/JS, zero deps, port 8095), assets/ (official SVGs), packages/gv-design-system/ (tokens, components, CLI), docs/brand/ (decision records, guidelines).
 
-**Learned**: 
+**Learned**:
 - Current state is extremely well-structured: CRUD token editor with history, asset generator with canvas rendering, 4 official logos, v2/v3 candidates preserved for Labs.
 - Propagation is entirely manual today (copy SVG to public/assets/, assets/, root assets/).
 - Existing skills (image-to-code, brandkit, high-end-visual-design, impeccable) could provide AI/vision but require LLM with vision capability.

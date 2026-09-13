@@ -16,6 +16,7 @@ type: decision
 **Learned**:
 
 ## Session Summary
+
 - **Session ID**: session-20260727T1928
 - **Duración**: ~2 horas
 - **Commits**: 5+ commits
@@ -23,6 +24,7 @@ type: decision
 - **Health**: 100% (82/82 PASS)
 
 ## Métricas de la Sesión
+
 - Archivos modificados: 44
 - Líneas agregadas: +3,999
 - Líneas eliminadas: -1,798
@@ -30,6 +32,7 @@ type: decision
 - Repos sincronizados: 2 (privado + público)
 
 ## Estado Final
+
 - ✅ Repo privado: sincronizado
 - ✅ Repo público: sincronizado
 - ✅ Release v3.4.0: publicado con ejecutables
@@ -39,6 +42,7 @@ type: decision
 - ✅ Engram: lecciones guardadas
 
 ## Próxima Sesión
+
 - Implementar cierre automático con Engram
 - Considerar simplificación de ejecutables
 - Documentar proceso de release

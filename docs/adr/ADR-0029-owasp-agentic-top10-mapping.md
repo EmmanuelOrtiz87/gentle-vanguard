@@ -38,8 +38,8 @@ Crear un **mapeo OWASP Agentic AI Top 10** (`src/security/owasp/`) que:
 - **Visibilidad de riesgo**: saber qué categorías OWASP están cubiertas y cuáles no.
 - **CI gate**: el modo `--strict` impide regresiones de cobertura.
 - **Evidencia trazable**: cada categoría apunta a los archivos que implementan el control.
-- **Alineado con AGT**: el toolkit de Microsoft mapea su arquitectura a OWASP; replicamos ese
-  patrón de forma nativa.
+- **Alineado con AGT**: el toolkit de Microsoft mapea su arquitectura a OWASP; replicamos ese patrón
+  de forma nativa.
 
 ## Consecuencias
 

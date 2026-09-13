@@ -245,6 +245,7 @@ The product itself appears as composited UI screenshots on every page: dashboard
 > **Source pages:** home (`/`), `/database`, `/partners/integrations`, `/partners/integrations/powersync`, `/solutions/ai-builders`, `/pricing`.
 
 ### Brand & Accent
+
 - **Emerald** (`{colors.primary}` — `#3ecf8e`): The signature CTA color. Filled-button background, brand wordmark accent, dot indicator.
 - **Emerald Deep** (`{colors.primary-deep}` — `#24b47e`): Pressed-state lift of the primary.
 - **Emerald Soft** (`{colors.primary-soft}` — `#4ade80`): Lighter emerald used in chart accents and product UI.
@@ -254,6 +255,7 @@ The product itself appears as composited UI screenshots on every page: dashboard
 - **Accent Pink / Crimson / Indigo / Tomato**: Reserved for integration logos and rare chart highlights, never as system colors.
 
 ### Surface
+
 - **Canvas** (`{colors.canvas}` — `#ffffff`): Default page background.
 - **Canvas Soft** (`{colors.canvas-soft}` — `#fafafa`): Barely-tinted off-white for alternating section bands.
 - **Canvas Night** (`{colors.canvas-night}` — `#1c1c1c`): Deep near-black used in code blocks, dashboard mockups, featured pricing tier.
@@ -263,6 +265,7 @@ The product itself appears as composited UI screenshots on every page: dashboard
 - **Hairline Cool** (`{colors.hairline-cool}` — `#ededed`) / **Hairline Cool 2** (`#efefef`) / **Hairline Cool 3** (`#d4d4d4`): The brand's grey ladder for fine chrome work.
 
 ### Text
+
 - **Ink** (`{colors.ink}` — `#171717`): Default body text. Near-black, never pure.
 - **Ink Secondary** (`{colors.ink-secondary}` — `#212121`): Slightly cooler near-black for body emphasis.
 - **Ink Mute** (`{colors.ink-mute}` — `#707070`): Secondary text and helper copy.
@@ -299,27 +302,32 @@ Code blocks use **system mono** (`ui-monospace`, with Menlo / Monaco / Consolas 
 | `{typography.code}` | 14px | 400 | 1.5 | 0 | Code block content |
 
 ### Principles
+
 - **Weight 500 across display.** Mid-weight reads as engineered, not decorative.
 - **Negative tracking on display.** -1.92px at 64px scaling proportionally down — tightens the rounded humanist letterforms into editorial density.
 - **Mono for code.** System mono families (Menlo / Monaco) — no proprietary mono webfont.
 
 ### Note on Font Substitutes
+
 Circular is proprietary. Use **Inter** at weight 500 with `letter-spacing: -1.92px` for display tiers. **Geist Sans** (open-source from Vercel) is another close alternative for both display and body. Avoid Helvetica defaults — they're heavier and lack the geometric warmth.
 
 ## Layout
 
 ### Spacing System
+
 - **Base unit**: 8px (with 2 / 4 / 12 sub-tokens for fine work).
 - **Tokens**: `{spacing.xxs}` 2px · `{spacing.xs}` 4px · `{spacing.sm}` 8px · `{spacing.md}` 12px · `{spacing.lg}` 16px · `{spacing.xl}` 24px · `{spacing.xxl}` 32px · `{spacing.huge}` 64px.
 - **Section padding**: 64–96px on marketing surfaces.
 - **Card internal padding**: 32px on feature/pricing cards.
 
 ### Grid & Container
+
 - Marketing pages center in a ~1280px container with no edge-bleed; the brand keeps content inside the box.
 - Pricing collapses 4-up → 2-up → 1-up at 1024 / 768 breakpoints.
 - Product UI mockups stack 2-up or render as overlapping panes inside the same container.
 
 ### Whitespace Philosophy
+
 The brand uses generous 64–96px section padding without atmospheric gradients filling the space — the white canvas is the design. The composited product UI mockups break up sections without requiring decoration.
 
 ## Elevation & Depth
@@ -332,6 +340,7 @@ The brand uses generous 64–96px section padding without atmospheric gradients 
 | 3 | `box-shadow: 0 16px 48px rgba(0,0,0,0.12)` | Modal overlays, deep elevation |
 
 ### Decorative Depth
+
 The brand's depth is **product UI mockups** rather than gradients. Stacked dashboard / SQL editor / log panes composite together with subtle Level 2 shadows to suggest spatial hierarchy.
 
 ## Shapes
@@ -348,6 +357,7 @@ The brand's depth is **product UI mockups** rather than gradients. Stacked dashb
 | `{rounded.full}` | 9999px | Pill tags, avatars |
 
 ### Photography Geometry
+
 The brand uses minimal photography. Customer logo strips display wordmarks at uniform height (~24–32px) in greyscale; case-study cards (rare) use 4:3 photos inset in `{rounded.lg}` containers.
 
 ## Components
@@ -415,6 +425,7 @@ The brand uses minimal photography. Customer logo strips display wordmarks at un
 ## Do's and Don'ts
 
 ### Do
+
 - Reserve `{colors.primary}` emerald for filled CTAs and the wordmark accent — it should appear sparingly.
 - Render display tiers at weight 500 with negative letter-spacing — the engineered tightness is part of the brand.
 - Use `{rounded.sm}` 6px for buttons — square-ish radii, never pill-shaped.
@@ -423,6 +434,7 @@ The brand uses minimal photography. Customer logo strips display wordmarks at un
 - Apply system mono for every code block.
 
 ### Don't
+
 - Don't introduce additional accent colors as system colors — purples, yellows, and pinks belong inside chart points and integration logos only.
 - Don't bump display weight above 500 — the brand's calibrated mid-weight breaks at 600+.
 - Don't use pill-shaped buttons; the brand's button radius is square-ish 6px.
@@ -441,15 +453,18 @@ The brand uses minimal photography. Customer logo strips display wordmarks at un
 | Mobile | < 768px | Pricing 1-up; hamburger nav; display drops 64 → 36px |
 
 ### Touch Targets
+
 - Buttons hit ≥ 36×36px on mobile; vertical padding scales up to maintain WCAG AA minimum.
 - Form fields stay at 36px minimum height.
 
 ### Collapsing Strategy
+
 - Display tiers stair-step 64 → 48 → 36 → 28 → 22px.
 - Product UI mockups simplify to a single primary panel on mobile.
 - Pricing tiers stair-step 4-up → 2-up → 1-up; dark featured tier always distinguished.
 
 ### Image Behavior
+
 Product UI mockups use `srcset` with desktop / mobile crops; mobile crops focus on the most actionable inner panel.
 
 ## Iteration Guide

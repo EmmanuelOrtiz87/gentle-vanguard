@@ -36,6 +36,7 @@ type: architecture
 - Token savings: 76.3% reduction achieved in tests
 
 **Commands**:
+
 ```bash
 npm run optimize:output -- --input "text" --profile ultra
 npm run optimize:chat -- --level chat-compact --input "text"

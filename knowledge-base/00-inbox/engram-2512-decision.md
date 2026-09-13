@@ -18,7 +18,7 @@ type: decision
 - config/ps1-ts-migration.json: trackeo de migración
 - 227 referencias rotas a PS1 detectadas
 
-**Learned**: 
+**Learned**:
 - Sistema adaptive-steps implementado pero NO aplicado a subagentes (todos siguen con steps:6)
 - watchtower: 81/85 PASS, 3 FAILs (dashboard-ws watchdog caído)
 - Migración PS1→TS: 912 líneas de migración completada (Waves 1-24), quedan 227 referencias funcionales rotas

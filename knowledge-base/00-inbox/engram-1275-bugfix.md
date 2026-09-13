@@ -13,7 +13,7 @@ type: bugfix
 
 **Where**: .lefthook.yml (line 44), scripts/security/scan-skill-hook.ps1 (new), scripts/security/scan-skill.ps1
 
-**Learned**: 
+**Learned**:
 - `pwsh -File "script.ps1" -Param "{staged_files}"` — quotes don't survive lefthook's shell (PowerShell) on Windows
 - `pwsh -Command "& 'script.ps1' -Param '{staged_files}'"` — single quotes inside -Command protect spaces AND don't expand variables
 - Wrapper script avoids `$PSScriptRoot` (not available in -Command mode), uses relative paths

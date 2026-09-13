@@ -21,22 +21,26 @@ Typography is rendered entirely in **MarkForMC**, Mastercard's proprietary geome
 ## 2. Color Palette & Roles
 
 ### Primary
+
 - **Mastercard Red** (`#EB001B`): The left circle of the Mastercard mark — used only in the brand logo, never as a UI color.
 - **Mastercard Yellow** (`#F79E1B`): The right circle of the Mastercard mark — used only in the brand logo, never as a UI color.
 - **Ink Black** (`#141413`): The warm near-black used for primary CTAs, headline text on cream, and the footer surface. Slightly warm (the `13` blue value pulls toward the cream) so it never feels jet-black on the warm canvas.
 
 ### Secondary & Accent
+
 - **Signal Orange** (`#CF4500`): The burnt/rust CTA orange used on consent actions and eyebrow dots. Deeper than the brand yellow, brighter than ink — it's the page's single aggressive color and must be used sparingly.
 - **Light Signal Orange** (`#F37338`): A lighter carroty orange used for carousel active indicators and decorative orbital arcs. Always acts as an attention cue, never as body color.
 - **Clay Brown** (`#9A3A0A`): The deep rust used for secondary link-style buttons (e.g., cookie details). Sits between ink and signal orange.
 
 ### Surface & Background
+
 - **Canvas Cream** (`#F3F0EE`): The page canvas. Warm, putty-toned, the default body background. All editorial sections sit on this.
 - **Lifted Cream** (`#FCFBFA`): One step lighter than canvas — used for nested "raised" sections that want to feel like paper laid on paper.
 - **White** (`#FFFFFF`): Reserved for the floating navigation pill, modal cards, secondary button fills, and small satellite-CTA circles attached to image portraits.
 - **Soft Bone** (`#F4F4F4`): A cool-gray alternative surface used inside a handful of component subregions.
 
 ### Neutrals & Text
+
 - **Ink Black** (`#141413`): Primary headline and body text color.
 - **Charcoal** (`#262627`): A slightly softer black used for some text alternates.
 - **Slate Gray** (`#696969`): Muted secondary text — eyebrow label alternative, disabled states, "Privacy Choices" bottom-row text.
@@ -44,10 +48,12 @@ Typography is rendered entirely in **MarkForMC**, Mastercard's proprietary geome
 - **Dust Taupe** (`#D1CDC7`): Very muted cream-gray used for disabled or "whisper" text (e.g., placeholder-like empty state labels). Low contrast on cream; use only for subdued content.
 
 ### Semantic & Accent
+
 - **Link Blue** (`#3860BE`): A deep, slightly dusty blue used for inline links and informational callouts. Saturated enough to read as a link without being neon.
 - **Priceless Red + Yellow**: The full-color Mastercard logo mark is the only place the brand's red and yellow appear together; they lock the identity to the page without acting as a UI palette.
 
 ### Gradient System
+
 Mastercard uses no programmatic gradients in the core UI. The visual impression of "gradient" comes from two places:
 - **Circular image portraits** where a warm-orange photo subject (a card, a sunflower, a beverage) fades to the cream canvas at its edge
 - **Deep card shadows** on elevated content (`rgba(0,0,0,0.08) 0px 24px 48px`) that create a soft halo beneath pill-shaped media
@@ -55,6 +61,7 @@ Mastercard uses no programmatic gradients in the core UI. The visual impression 
 ## 3. Typography Rules
 
 ### Font Family
+
 - **Primary**: `MarkForMC` — Mastercard's proprietary geometric sans. Every headline, body paragraph, button, nav link, and footer link on the page.
 - **Secondary**: `MarkOffcForMC` — an "Official" cut used in a minority of contexts (legal text, some forms).
 - **Fallback stack**: `SofiaSans, Arial, sans-serif` — Sofia Sans is a reasonable open-source stand-in; Arial is the final web-safe fallback.
@@ -74,6 +81,7 @@ Mastercard uses no programmatic gradients in the core UI. The visual impression 
 | Footer column header | 12–14px | 700 | 14px | 0.56px (+4%) | Uppercase, muted gray, short tracking |
 
 ### Principles
+
 - **Weight 450 is load-bearing**. Most brands use 400/500/700; Mastercard uses 450 for body copy, which creates an unusually soft reading tone. Replacing it with 400 flattens the identity.
 - **Tight negative tracking on headlines** (-2%) gives display text its editorial density — the words lock together rather than breathe.
 - **Uppercase tracking only on the eyebrow scale** (14px / 700 / +4% tracking). Don't use uppercase anywhere else; no shouty section titles.
@@ -81,6 +89,7 @@ Mastercard uses no programmatic gradients in the core UI. The visual impression 
 - **Line-height ratio drops with size**. H1 is 1:1, H3 is 1.2, body is 1.4. Tight display, comfortable reading.
 
 ### Note on Font Substitutes
+
 MarkForMC is proprietary and licensed. When rebuilding a matching aesthetic without access to the original:
 - **Sofia Sans** (Google Fonts) is the closest open-source match — it's already in Mastercard's declared fallback stack.
 - **Inter** at weights 450/500/700 works as a generic stand-in; expect slightly taller x-height and looser letter shapes.
@@ -175,6 +184,7 @@ MarkForMC is proprietary and licensed. When rebuilding a matching aesthetic with
 - Purpose: sets section theme without competing with foreground copy
 
 ### Inputs & Forms
+
 Minimal form surface on the marketing page. The search input in the nav header is:
 - Initial state: a 48px circular button with a magnifier icon
 - Expanded state: horizontal input field, border `1px solid` Ink Black at ~50% opacity, radius 999px, padding 12px 24px, white background
@@ -230,6 +240,7 @@ A signature motif: thin (~1–1.5px) single-weight curved lines in Light Signal 
 ## 5. Layout Principles
 
 ### Spacing System
+
 - **Base unit**: 8px (confirmed by dembrandt extraction and computed styles)
 - **Scale**: 8 / 16 / 24 / 32 / 48 / 64 / 96 / 128 (powers of 8)
 - **Section vertical padding**: ~96–128px between major sections on desktop; ~48–64px on mobile
@@ -237,11 +248,13 @@ A signature motif: thin (~1–1.5px) single-weight curved lines in Light Signal 
 - **Nav top margin**: ~24px from viewport top (the pill floats, doesn't touch)
 
 ### Grid & Container
+
 - **Max content width**: ~1200–1280px centered, with ~48–100px horizontal gutter
 - **Column pattern**: 12-column implied, but practical layouts use 2-up asymmetric (large headline left, supporting text right), 1-up full-bleed (hero, video), or staggered single-portrait placement (service cards sit in varying grid positions creating the "constellation" feel)
 - **Footer grid**: 4 equal columns on desktop, collapses to single column accordion on mobile
 
 ### Whitespace Philosophy
+
 Mastercard treats whitespace as structure, not absence. A typical service section has:
 - A ghost headline occupying the top ~40% of the section (mostly empty cream)
 - A single circular portrait positioned ~60% down, asymmetric to left or right
@@ -271,9 +284,11 @@ The scale is unusual: most systems use 4/8/12/16. Mastercard skips those and com
 | 3 | `rgba(0, 0, 0, 0.25) 0px 70px 110px 0px` | Rare; dramatic elevation on a feature tile |
 
 ### Shadow Philosophy
+
 Mastercard uses shadows as **atmospheric cushioning**, not directional light. The Level 2 shadow has a 48px spread and only 8% opacity — it barely exists as dark pixels but creates a "the card is breathing above the canvas" feel. There are almost no hard-edged, tight shadows anywhere in the system. Border lines are preferred over shadows for functional delineation (form inputs, footer divider).
 
 ### Decorative Depth
+
 - **Orbital arcs** (Light Signal Orange, ~1px): trace connective paths across sections
 - **Ghost watermark headlines**: cream-on-cream text gives sections an almost-pressed-paper quality
 - **Circle-image fade**: warm-toned photography at the edge of circular portraits dissolves into the canvas, implying soft atmospheric depth
@@ -281,6 +296,7 @@ Mastercard uses shadows as **atmospheric cushioning**, not directional light. Th
 ## 7. Do's and Don'ts
 
 ### Do
+
 - Use Canvas Cream (`#F3F0EE`) as the default body background — never pure white
 - Mask service/feature imagery as perfect circles, not rectangles or rounded rectangles
 - Attach a white satellite CTA to the bottom-right of each circular portrait
@@ -293,6 +309,7 @@ Mastercard uses shadows as **atmospheric cushioning**, not directional light. Th
 - Use thin Light Signal Orange arcs between service cards to imply connection
 
 ### Don't
+
 - Don't use pure white as a page background — it breaks the warm editorial tone
 - Don't round image frames at 8–16px — Mastercard either uses full-pill, 40px, or full-circle. In-between radii look generic
 - Don't use Signal Orange for marketing CTAs — it reads as cookie-consent orange and dilutes the legal color signal
@@ -315,9 +332,11 @@ Mastercard uses shadows as **atmospheric cushioning**, not directional light. Th
 | Wide | ≥ 1440px | Content max-width caps at ~1280px; gutters grow symmetrically; orbital lines extend further |
 
 ### Touch Targets
+
 All interactive elements comfortably exceed 44×44px. The satellite CTA (circle + arrow) is ~50–60px. The nav pill buttons are ~48px tall. Mobile hamburger and search are 48×48px. No link or button drops below 40px in any breakpoint.
 
 ### Collapsing Strategy
+
 - **Nav**: full pill → compact pill with hamburger. Pill shape is preserved across breakpoints — always rounded, always floating.
 - **Service grid**: asymmetric constellation → 2-up → 1-up stack. Orbital arcs are removed on mobile (they only work with asymmetric placement).
 - **Spacing**: section vertical padding compresses from 128px to 48px on mobile.
@@ -325,11 +344,13 @@ All interactive elements comfortably exceed 44×44px. The satellite CTA (circle 
 - **Footer**: 4 columns → 1 column accordion with chevron toggles per section.
 
 ### Image Behavior
+
 Circular portraits scale proportionally (maintaining the perfect circle at every size). Hero video frames maintain their 40px radius at every breakpoint, but the frame itself shrinks with the viewport. Lazy loading is standard with a cream-tinted blur-up placeholder, preserving the palette during load.
 
 ## 9. Agent Prompt Guide
 
 ### Quick Color Reference
+
 - Primary CTA: "Ink Black (`#141413`) — the warm near-black used for primary pill buttons and footer"
 - Background: "Canvas Cream (`#F3F0EE`) — warm putty body canvas, never pure white"
 - Lifted surface: "Lifted Cream (`#FCFBFA`) — one step lighter than canvas for nested sections"
@@ -342,6 +363,7 @@ Circular portraits scale proportionally (maintaining the perfect circle at every
 - Footer: "Ink Black (`#141413`) with White text"
 
 ### Example Component Prompts
+
 - "Create a circular portrait card 300px in diameter, with a square photograph cropped to a perfect circle. Attach a 56px white satellite button with a dark arrow icon at the bottom-right, so it protrudes ~40% outside the portrait. Below the portrait, add an eyebrow label with a Light Signal Orange dot and uppercase 'SERVICES' text in MarkForMC weight 700 at 14px. Below the eyebrow, set a 24px / weight 500 title in Ink Black."
 - "Design a primary CTA button: Ink Black (`#141413`) background, Canvas Cream (`#F3F0EE`) text, 20px border-radius, 6px vertical and 24px horizontal padding, MarkForMC font at 16px weight 500 with -2% letter-spacing."
 - "Build a floating navigation pill: white background with `rgba(0, 0, 0, 0.04) 0px 4px 24px 0px` shadow, 999px border-radius, ~16px vertical and 40px horizontal internal padding. Position it 24px below the viewport top, centered, with the Mastercard logo at the left, five primary links centered with 48px gap, and a circular 48px search button at the right."
@@ -349,6 +371,7 @@ Circular portraits scale proportionally (maintaining the perfect circle at every
 - "Design a footer: Ink Black (`#141413`) background, white text, 4-column link grid with uppercase muted column headers at 14px weight 700 +4% tracking. Include a large conversational H2 above the grid, a 1px white-at-30%-opacity horizontal divider below, and a bottom row with copyright, legal small-print links, a pill-shaped country selector, and four social icons."
 
 ### Iteration Guide
+
 When refining existing screens generated with this design system:
 1. Focus on ONE component at a time — don't redesign multiple surfaces in parallel
 2. Reference specific color names AND hex codes from this document
@@ -358,6 +381,7 @@ When refining existing screens generated with this design system:
 6. Default backgrounds to Canvas Cream (`#F3F0EE`), not white — this single change shifts the entire mood toward Mastercard
 
 ### Known Gaps
+
 - The live page uses MarkForMC, a proprietary licensed typeface. Sofia Sans is the closest open-source substitute and is listed in Mastercard's own fallback stack.
 - Tablet breakpoint specifics (768–1023px) were inferred from desktop and mobile captures; intermediate layouts may vary per section.
 - The exact "whisper" cream tone used for ghost-watermark headlines behind circular portraits reads between `#E8E2DA` and `#D1CDC7` in captures; the precise value varies per section.

@@ -11,7 +11,7 @@ type: architecture
 
 **Why**: User requested real-time metrics visibility, automated reporting, and full deployment pipeline (private + public repos).
 
-**Where**: 
+**Where**:
 - scripts/metrics/collector.ps1 — ETL pipeline with 6 collectors
 - scripts/metrics/live-feed.ps1 — continuous loop, 15s cycle
 - scripts/metrics/dashboard-render.ps1 — 6-section HTML + Canvas charts
@@ -19,7 +19,7 @@ type: architecture
 - build/create-installer.ps1 — rebuilt Gentle-Vanguard.exe v2.19.0
 - scripts/utilities/sync-public-repo.ps1 — public repo sync mechanism
 
-**Learned**: 
+**Learned**:
 - Public remote at gentle-vanguard-public was ahead of local (auto-sync commits), required force-push via sync script
 - NSIS (makensis.exe) and ps2exe both available for .exe builds
 - Git filters in .gitattributes handle CRLF→LF normalization

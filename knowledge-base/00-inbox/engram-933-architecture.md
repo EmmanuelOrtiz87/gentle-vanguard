@@ -9,7 +9,7 @@ type: architecture
 
 **What**: Implementacion completa de Continue.dev Best Practices con 5 checks modulares + comando Cursor para ejecutarlos
 **Why**: Alinear nuestro stack con docs.continue.dev/checks/best-practices (scope narrow, be specific, checks vs tests vs lint)
-**Where**: 
+**Where**:
 - .continue/checks/ (security-review.md, test-coverage.md, documentation-freshness.md, dependency-audit.md, migration-safety.md)
 - .continue/config.json v2.0.0 (checks.paths + autoRunOnPR)
 - adaptive-continue-copilot-profile.ps1 (backup/restore de checks)

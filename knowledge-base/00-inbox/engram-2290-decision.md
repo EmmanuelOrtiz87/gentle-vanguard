@@ -25,6 +25,7 @@ type: decision
 - src/core/health-check-optimized.ts (nuevo)
 
 **Comparativa**:
+
 | Version | Tiempo | Estado |
 |---------|--------|--------|
 | Original | 28.7s | Secuencial |

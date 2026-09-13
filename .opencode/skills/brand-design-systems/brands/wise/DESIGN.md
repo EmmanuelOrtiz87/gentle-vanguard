@@ -308,22 +308,26 @@ Cards are universally pill-rounded — `{rounded.xl}` 24 px is the brand's signa
 ## Colors
 
 ### Brand & Accent
+
 - **Wise Green** (`{colors.primary}` — `#9fe870`): The brand's universal CTA color. Every primary button, every "Send money" pill, the brand's logo accent.
 - **Wise Green Hover** (`{colors.primary-active}` — `#cdffad`): The lighter green for active state.
 - **Wise Green Neutral** (`{colors.primary-neutral}` — `#c5edab`): A mid-saturation green used as a neutral active fill.
 - **Wise Green Pale** (`{colors.primary-pale}` — `#e2f6d5`): The lightest green for soft surface tints / badge backgrounds.
 
 ### Surface
+
 - **Canvas** (`{colors.canvas}` — `#ffffff`): Pure white for card interiors.
 - **Canvas Soft** (`{colors.canvas-soft}` — `#e8ebe6`): The sage-tinted page background. Defining mood of the brand.
 
 ### Text
+
 - **Ink** (`{colors.ink}` — `#0e0f0c`): Near-black with a hint of olive warmth — the brand's default text and headings color.
 - **Ink Deep** (`{colors.ink-deep}` — `#163300`): A deep forest-green ink used on positive-state surfaces.
 - **Body** (`{colors.body}` — `#454745`): Secondary body text.
 - **Mute** (`{colors.mute}` — `#868685`): Lowest-priority text — captions, placeholder, fine print.
 
 ### Semantic
+
 - **Positive** (`{colors.positive}` — `#2ead4b`): Success indicator.
 - **Positive Deep** (`{colors.positive-deep}` — `#054d28`): Pressed positive state.
 - **Warning** (`{colors.warning}` — `#ffd11a`): Caution indicator.
@@ -335,12 +339,14 @@ Cards are universally pill-rounded — `{rounded.xl}` 24 px is the brand's signa
 - **Negative Bg** (`{colors.negative-bg}` — `#320707`): Dark maroon for destructive callout backgrounds.
 
 ### Brand Accent — Tertiary
+
 - **Accent Orange** (`{colors.accent-orange}` — `#ffc091`): Bright peach used inside illustrative content / pricing cards.
 - **Accent Cyan** (`{colors.accent-cyan}` — `#38c8ff`): Bright sky-blue used as a tertiary illustration accent.
 
 ## Typography
 
 ### Font Family
+
 Two faces ladder the system:
 1. **Wise Sans** — proprietary geometric sans with an unusually heavy weight 900 used for all hero displays. The face is the brand's typographic signature. Always at weight 900, never lighter on the marketing surface.
 2. **Inter** — used for sub-displays (weight 600), all body, and form labels. Loaded with `font-feature-settings: "calt"` for contextual alternates.
@@ -365,10 +371,12 @@ Two faces ladder the system:
 | `{typography.button-md}` | 16px | 600 | 24px | 0 | Button label. |
 
 ### Principles
+
 - **Weight 900 for hero, weight 600 for everything else.** The brand's display ceiling is full-black weight; everything below is semibold.
 - **Wise Sans for the brand voice, Inter for utility.** Strict role separation.
 
 ### Note on Font Substitutes
+
 Wise Sans is proprietary. Open-source substitutes:
 - **Display** — *Inter* at weight 900 or *Manrope* at weight 800 / 900 captures the geometric heaviness. *Geist* weight 800 is a passable second choice.
 - **Sub-display + body** — *Inter* is the brand's actual second face.
@@ -376,12 +384,14 @@ Wise Sans is proprietary. Open-source substitutes:
 ## Layout
 
 ### Spacing System
+
 - **Base unit**: 4 px.
 - **Tokens**: `{spacing.xxs}` 2 px · `{spacing.xs}` 4 px · `{spacing.sm}` 8 px · `{spacing.md}` 12 px · `{spacing.lg}` 16 px · `{spacing.xl}` 24 px · `{spacing.2xl}` 32 px · `{spacing.3xl}` 48 px.
 - **Section padding**: bands use `{spacing.3xl}` 48 px top/bottom on desktop.
 - **Card interior**: cards at `{spacing.xl}` 24 px.
 
 ### Grid & Container
+
 - Marketing container centres at ~1200 px.
 - Hero: split layout (headline left, currency-converter card right) at desktop; stacked at mobile.
 - Feature grids: 2-up / 3-up at desktop.
@@ -397,9 +407,11 @@ Wise Sans is proprietary. Open-source substitutes:
 | Desktop | ≥ 1024px | Hero split; full grids. |
 
 #### Touch Targets
+
 Buttons render ~48 px tall (12 vertical padding + 24 line). WCAG AAA at all widths.
 
 #### Image Behavior
+
 Photography is sparse; the brand prefers illustrative SVGs and product mockups inside cards. Country flag thumbnails appear inside currency rows.
 
 ## Elevation & Depth
@@ -526,10 +538,10 @@ The brand uses surface contrast (`{colors.canvas-soft}` background vs `{colors.c
 **`ex-toast`** — Toast notification surface — feature-card shape + medium shadow.
 - Properties: `backgroundColor`, `rounded`, `padding`, `typography`
 
-
 ## Do's and Don'ts
 
 ### Do
+
 - Reserve `{colors.primary}` Wise green for every primary CTA. The lime-green pill IS the brand's conversion signature.
 - Set hero headlines in `{typography.display-mega}` / `{typography.display-xl}` Wise Sans weight 900. Never lighter.
 - Use `{rounded.xl}` 24 px for buttons and cards. The generous radius is the brand's friendliness signature.
@@ -537,6 +549,7 @@ The brand uses surface contrast (`{colors.canvas-soft}` background vs `{colors.c
 - Use the full semantic palette (positive / warning / negative) for in-product status — never repurpose Wise green as success indicator since it IS the brand CTA.
 
 ### Don't
+
 - Don't introduce a second brand accent. Wise green is the sole identity colour.
 - Don't render the hero in weight 700 or lighter. The brand's display weight is 900.
 - Don't render CTAs as sharp rectangles. The 24 px pill geometry is non-negotiable.

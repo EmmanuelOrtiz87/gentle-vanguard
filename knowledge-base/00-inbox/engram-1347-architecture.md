@@ -11,7 +11,7 @@ type: architecture
 
 **Why**: Repo had massive corruption in key scripts (metrics-server.ps1: 4 nested copies, ft-evaluator.ps1: 8 concatenated copies), deprecated directories still tracked, flat uppercase scripts directory hard to navigate, skill-server.ts execute_skill was non-functional (empty Promise), dashboard had simulated/mock data, InteractiveDocs was 2 trivial tutorials
 
-**Where**: 
+**Where**:
 - scripts/metrics/metrics-server.ps1: ~2000→229 lines
 - scripts/utilities/FINE-TUNING/ft-evaluator.ps1: 427→82 lines  
 - scripts/mcp/skill-server.ts: functional SKILL.md YAML frontmatter parsing + execSync
@@ -22,7 +22,7 @@ type: architecture
 - .lefthook.yml: YAML fixed, configs consolidated
 - hooks/: 5 broken paths fixed (karpathy-enforcer, normative-audit, pre-commit, validate-readme)
 
-**Learned**: 
+**Learned**:
 - lefthook pre-commit hooks (karpathy-enforcer, normative-audit) blocked commit due to broken paths from script reorganization → had to fix hooks/ files with updated paths
 - PowerShell `& 'scripts/utilities/resilience-handler.ps1'` was the entry point for both hooks
 - validate-readme.ps1 ended up in `scripts/utilities/validate/` (not `utils/`)

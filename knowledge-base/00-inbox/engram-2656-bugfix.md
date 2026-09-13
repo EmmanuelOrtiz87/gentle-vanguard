@@ -17,6 +17,7 @@ type: bugfix
 ## Cambios Aplicados
 
 ### Parte 1: Orchestrator
+
 ```json
 "orchestrator": {
   "model": "kimi-2-5",
@@ -26,6 +27,7 @@ type: bugfix
 ```
 
 ### Parte 2: Subagentes (20)
+
 - Borrado campo `model` de todos los subagentes SDD
 - Inyectado `kimi-2-5` + `variant: ""` vía fix-models.ts
 

@@ -9,7 +9,7 @@ type: architecture
 
 **What**: Implemented 6 ECC-inspired stack enhancements for Gentle-Vanguard
 
-**Where**: 
+**Where**:
 - Created: `scripts/instinct/scoring-instinct.ps1`, `scripts/gateguard/gateguard-mcp.ps1`, `scripts/optimization/context-budget-audit.ps1`
 - Modified: `config/model-routing.json` (v1.1.0), `config/behavior-prompts.json`, `scripts/health-check/health-check.ps1`
 

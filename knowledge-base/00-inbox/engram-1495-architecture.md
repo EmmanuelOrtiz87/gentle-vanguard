@@ -11,7 +11,7 @@ type: architecture
 
 **Why**: Close v7.1 roadmap items: UX refinement, live updates, engram source integration in Knowledge Panel.
 
-**Where**: 
+**Where**:
 - modified: apps/web-dashboard/src/components/KnowledgePanel.tsx (added engram source with Braces icon/red badge, relevance color bar, Ctrl+Enter shortcut, auto-search on source toggle, error state with retry, Refresh button, loading skeleton)
 - modified: apps/web-dashboard/src/components/MultiRepoView.tsx (auto-refresh 30s with setInterval + silent polling, last checked Clock timestamp, error state with retry)
 - modified: CHANGELOG.md, docs/ROADMAP.md (v7.1.0 entries, header update, milestones)

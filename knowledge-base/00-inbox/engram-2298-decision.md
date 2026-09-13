@@ -25,7 +25,7 @@ type: decision
 - 0 errores TypeScript
 - 66 lazy steps running en background
 
-**Where**: 
+**Where**:
 - src/core/health-check-optimized.ts
 - src/core/maintenance-watchtower-optimized.ts
 - src/proactive-intelligence-engine.ts

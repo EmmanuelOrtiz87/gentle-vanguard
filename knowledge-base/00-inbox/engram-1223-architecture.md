@@ -11,14 +11,14 @@ type: architecture
 
 **Why**: Costos elevados (miles de USD/semana) por crecimiento acumulativo de contexto mensaje a mensaje y sistema prompt inflado
 
-**Where**: 
+**Where**:
 - CLAUDE.md (system prompt): 117→58 líneas (~50% reducción)
 - scripts/utilities/pre-process-input.ps1: agregado cache SHA256 + token tracking + pre-compact hook
 - scripts/utilities/PERFORMANCE-OPTIMIZATION/pre-compact-hook.ps1: corregido hardcoded → lectura real de token-usage.json
 - scripts/hooks/pre-task-compress.ps1: nuevo hook para comprimir prompts de subagentes (~30% reducción)
 - scripts/utilities/DETECT/, SESSION/, TOKEN/, HANDOFF/: scripts movidos a subdirectorios con forwarders
 
-**Learned**: 
+**Learned**:
 1. El costo principal viene de: (a) modelo premium (claude-sonnet-4 / glm-5), (b) historial completo reenviado cada turno, (c) sistema prompt de 117 líneas (~900 tokens) reenviado sin cambios
 2. OpenCode no compacta automáticamente el historial — depende de configuración externa
 3. Cache de respuestas (SHA256, TTL 30min) nunca se poblaba — corregido

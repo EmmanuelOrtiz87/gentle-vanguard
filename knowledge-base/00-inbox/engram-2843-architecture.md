@@ -9,12 +9,12 @@ type: architecture
 
 **What**: FF-019 Fase 1 implementada: AG-UI hints + streaming real por chunks sobre MCP en el dashboard. Commits 4f1ce19e + 23793ea5.
 **Why**: El usuario pidió avanzar con todo lo pendiente del plan; FF-019 era el único item backlog accionable (patrones CopilotKit nativos sobre MCP).
-**Where**: 
+**Where**:
 - `docs/plans/COPILOTKIT-ANALYSIS-AND-ADOPTION-PLAN.md` (nuevo, 193 líneas): 5 patrones con qué existe/qué falta, matriz de decisiones, riesgos, roadmap 4 fases
 - `apps/web-dashboard/server/websocket-server.ts`: helpers extractUiHints()/extractChunks(); executeSkillAndStream parsea ui_hints → msg.uiHints + broadcast agent_ui_hints; emite agent_stream_chunk por chunk (delay 50ms escalonado) antes del mensaje final
 - `apps/web-dashboard/src/hooks/useAgentStream.ts`: cases agent_ui_hints (adjunta hints) + agent_stream_chunk (acumula content, quita placeholder "Ejecutando skill")
 - `docs/backlog/items.json`: FF-019 con phase_1_status=done + commit ref
-**Learned**: 
+**Learned**:
 1. La infraestructura de FF-019 estaba ~60% lista: mcp-bridge.ts (JSON-RPC spawn), shared-state-bridge.ts (poll event-bus), AgentChat.tsx, HitlModal.tsx, tipos UIHint/AgentStreamChunk/AgentCommand ya existían. Faltaba: parseo de ui_hints en respuestas MCP + streaming incremental real + plan file.
 2. El streaming anterior era request/response simulado (streaming:true pero sin chunks). Ahora emite chunks reales si el skill devuelve {stream:[...]} o {chunks:[...]}.
 3. GOTCHA QA: el tsconfig raíz NO incluye apps/web-dashboard/** — el único guard TS real del dashboard es `npm run build` en apps/web-dashboard. CI debe usar dashboard:build.

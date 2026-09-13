@@ -18,7 +18,7 @@ type: architecture
 - scripts/validation/verify-optimization-stack.ps1 — 8 checks automatizados con -Quiet y -AsJson
 - scripts/utilities/BACKUP-RESTORE/backup-engram.ps1 — 4 modos: backup (NDJSON), verify, restore, status. Git commit automático
 - scripts/health-check/health-check.ps1 — nuevo componente Check-OptimizationStack integrado
-- .codegraph/config.json — agregado **/*.ps1, **/*.psm1, **/*.psd1 al include
+- .codegraph/config.json — agregado **/*.ps1, **/*.psm1,**/*.psd1 al include
 - docs/RESEARCH-SYNTHESIS.md — 345 líneas de investigación en 6 dominios
 
 **Learned**:

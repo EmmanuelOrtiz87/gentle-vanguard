@@ -13,7 +13,7 @@ type: decision
 
 **Where**: opencode.json — all agent model fields changed
 
-**Learned**: 
+**Learned**:
 1. The opencode.json model config may not be respected by the task tool — the platform has its own model resolution
 2. For guaranteed execution, the orchestrator should run verification commands directly rather than delegating
 3. All 21 agents now reference opencode/big-pickle (verified: 21 occurrences, 0 of old model)

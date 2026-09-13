@@ -17,7 +17,7 @@ type: bugfix
 
 **Where**: src/dashboard-common.ts, src/dashboard-ws-autostart.ts, src/core/maintenance-watchtower.ts, src/dashboard-ws-service.ts
 
-**Learned**: 
+**Learned**:
 - tasklist /FI en Windows NO es fiable para comprobar existencia de proceso (exit code 0 siempre) — parsear output CSV.
 - En Windows, al spawnear .cmd vía child_process, el child.pid es el PID del cmd.exe wrapper, no del proceso node hijo. Resolver el PID real por puerto (netstat) es la única forma fiable.
 - La watchtower debe usar HTTP como fuente de verdad para el dashboard, no archivos PID (que pueden estar stale).

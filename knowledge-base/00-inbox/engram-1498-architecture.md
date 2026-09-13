@@ -14,43 +14,52 @@ type: architecture
 ## Plan de 8 Fases
 
 ### Fase 1 — CRÍTICO: API Key Security
+
 - Mover API key de littellmott de `opencode.json` a `.env` file
 - Usar variable de entorno en lugar de hardcode
 - Archivos: opencode.json, .env.example
 
 ### Fase 2 — ALTA: Consolidar Config Files
+
 - Unificar `config/model-router.json` + `config/model-routing.json`
 - Unificar configs de seguridad duplicados
 - Crear schema registry con Zod
 
 ### Fase 3 — ALTA: Limpiar Scripts Duplicados
+
 - Consolidar github_search.py → github_search5.py en un solo script parametrizable
 - Eliminar skills-archive/ (skills obsoletos)
 - Eliminar deprecated/presentation-v6/
 - Limpiar scripts root Python duplicados
 
 ### Fase 4 — ALTA: Sincronizar TypeScript
+
 - Dashboard TS 5.2 → 6.0 (como el root)
 - Unificar tsconfig en todo el proyecto
 
 ### Fase 5 — MEDIA: Mejorar Tests
+
 - Agregar tests para scripts PS1 core
 - Aumentar cobertura general
 
 ### Fase 6 — MEDIA: CI/CD Pipeline
+
 - GitHub Actions: lint → typecheck → test → build
 - Docker build automático
 
 ### Fase 7 — ALTA: Migrar PS1 Core a TypeScript
+
 - maintenance-watchtower.ps1 → TypeScript
 - session-autostart.ps1 → TypeScript
 - health-check.ps1 → TypeScript
 
 ### Fase 8 — BAJA: Unificar Engram + CodeGraph
+
 - Evaluar overlap entre sistemas de indexación
 - Decidir si consolidar
 
 ## Progreso
+
 - Fase 1: PENDING
 - Fase 2: PENDING
 - Fase 3: PENDING

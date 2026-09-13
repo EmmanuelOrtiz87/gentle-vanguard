@@ -11,7 +11,7 @@ type: bugfix
 
 **Why**: Post-cleanup audit found 44 issues (3 HIGH, 5 MEDIUM, 36 LOW). Fixed all HIGH and MEDIUM.
 
-**Where**: 
+**Where**:
 - src/architecture/resilience/ResilienceManager.ts: setInterval async callbacks wrapped in try/catch
 - src/maintenance-watchtower.ts: engram MCP server deadlock detection (skip doctor when MCP running), fire-and-forget loop() error handler, stale PID files fixed
 - src/token-budget-guard.ts: `any` → `Record<string, unknown>`

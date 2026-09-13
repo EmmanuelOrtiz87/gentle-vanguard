@@ -276,6 +276,7 @@ The page rhythm is heavy on **product mockups**: every section's payload is a hi
 > Source pages: intercom.com (home), /pricing, /helpdesk, /customers, /helpdesk/inbox.
 
 ### Brand & Accent
+
 - **Charcoal** ({colors.ink}): The system primary surface. Headlines, body type, primary CTA pill background — all charcoal.
 - **White** ({colors.on-primary}): Text on charcoal CTAs; canvas of floating cards.
 - **Fin Orange** ({colors.fin-orange}): The AI-product accent. Used on the Fin CTA, Fin badge, and a small set of inline emphasis moments.
@@ -283,6 +284,7 @@ The page rhythm is heavy on **product mockups**: every section's payload is a hi
 - **Brand Blue** ({colors.brand-blue}): Saturated brand blue (#0007cb) — used on a small set of marketing illustrations.
 
 ### Surface
+
 - **Canvas** ({colors.canvas}): Default page background — soft cream-white #f5f1ec.
 - **Surface 1** ({colors.surface-1}): Pure white — used for floating cards (pricing, feature, product-mockup).
 - **Surface 2** ({colors.surface-2}): Slightly darker cream — startup-discount banner, alt-row stripes.
@@ -292,6 +294,7 @@ The page rhythm is heavy on **product mockups**: every section's payload is a hi
 - **Inverse Surface 1** ({colors.inverse-surface-1}): One step lighter — hovered footer items in dark contexts.
 
 ### Text
+
 - **Ink** ({colors.ink}): All headlines, body type, button labels — charcoal #111111.
 - **Ink Muted** ({colors.ink-muted}): Secondary type at #626260 — meta info, deselected pricing tabs.
 - **Ink Subtle** ({colors.ink-subtle}): Tertiary type at #7b7b78 — footer columns, helper text.
@@ -300,6 +303,7 @@ The page rhythm is heavy on **product mockups**: every section's payload is a hi
 - **Inverse Ink Muted** ({colors.inverse-ink-muted}): Light gray on black — quote-strip meta.
 
 ### Semantic & Report Palette (in-product mockups)
+
 - **Error Red** ({colors.semantic-error}): Form validation, destructive states.
 - **Success Green** ({colors.semantic-success}): Positive states (also `{colors.report-green}`).
 - **Report Blue** ({colors.report-blue}): Analytics chart blue.

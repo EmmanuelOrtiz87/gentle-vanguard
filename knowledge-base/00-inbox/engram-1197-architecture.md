@@ -23,7 +23,7 @@ type: architecture
 - scripts/utilities/GUARD/pre-close-validator.ps1 — Stub (CREATED)
 - scripts/utilities/PROMPT/semantic-compression.ps1 — Stub (CREATED)
 
-**Learned**: 
+**Learned**:
 - Pester v5 rejects file-level $PSScriptRoot — MUST use BeforeAll {}
 - Register-Plugin leaks hashtable output — wrap with $null =
 - session-autostart.cmd was 85+ references but never existed — created CMD shims

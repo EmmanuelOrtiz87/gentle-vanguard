@@ -470,6 +470,7 @@ The brand's signature mint green ({colors.brand-green}) appears sparingly but de
 > Source pages: mintlify.com/ (homepage), /startups (program page), /pricing (comparison), /docs/components/tabs (live documentation). Token coverage was identical across all four pages.
 
 ### Brand & Accent
+
 - **Mintlify Mint** ({colors.brand-green}): Signature accent — used on hero "Get started" pill button, green checkmarks in feature lists, featured pricing tier border accent, sidebar active indicator dots.
 - **Deep Mint** ({colors.brand-green-deep}): Pressed/active variant of the mint accent.
 - **Soft Mint** ({colors.brand-green-soft}): Subtle background tint for success states and confirmation surfaces.
@@ -480,6 +481,7 @@ The brand's signature mint green ({colors.brand-green}) appears sparingly but de
 - **Testimonial Orange** ({colors.testimonial-orange}): Warm coral-orange used on the "Cursor" testimonial card and warm callout surfaces.
 
 ### Surface
+
 - **Canvas White** ({colors.canvas}): Primary page and card background.
 - **Canvas Dark** ({colors.canvas-dark}): Promo banner, dark inversion surfaces, code editor wrapper.
 - **Surface** ({colors.surface}): Subtle section backgrounds, search-pill rest, code-inline background, sidebar active state.
@@ -489,10 +491,12 @@ The brand's signature mint green ({colors.brand-green}) appears sparingly but de
 - **Hairline Soft** ({colors.hairline-soft}): Quieter table-row dividers and secondary section breaks.
 
 ### Hero Atmospheric
+
 - **Hero Sky From / To** ({colors.hero-sky-from}, {colors.hero-sky-to}): Atmospheric sky-blue to soft cream gradient on the homepage hero.
 - **Hero Dark From / To** ({colors.hero-dark-from}, {colors.hero-dark-to}): Dark teal to mint gradient on the startups hero.
 
 ### Text
+
 - **Ink** ({colors.ink}): Primary headlines and CTA text.
 - **Charcoal** ({colors.charcoal}): Body text, code-inline foreground.
 - **Slate** ({colors.slate}): Secondary text and metadata.
@@ -503,11 +507,13 @@ The brand's signature mint green ({colors.brand-green}) appears sparingly but de
 - **On Dark Muted** ({colors.on-dark-muted}): Reduced-opacity white for code-block headers and metadata on dark.
 
 ### Semantic
+
 - Error tones derive from `{colors.brand-error}` for input borders, required-field labels, and validation messaging.
 
 ## Typography
 
 ### Font Family
+
 **Inter** (primary): Variable typeface optimized for UI legibility. Used across every UI surface — body, headings, navigation, button labels, captions. Fallbacks: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif.
 
 **Geist Mono** (code): Monospace typeface used inside code blocks, inline code references, type signatures (e.g. `string`, `number`, `boolean`), and property names in API documentation. Fallbacks: 'SF Mono', Menlo, Consolas, 'Geist Mono Fallback', monospace.
@@ -540,6 +546,7 @@ The brand uses no italic variants of either face — emphasis comes from weight 
 | `{typography.code-inline}` | 13px | 500 | 1.30 | 0 | Inline `<Tabs>` references in body |
 
 ### Principles
+
 - **Tight hero leading** (1.05) creates magazine-grade display headlines on the 72px hero
 - **Negative letter-spacing** progresses inversely with size — display sizes use -2px to -1.5px; smaller headings relax to 0
 - **Documentation-grade body** (1.50 line-height on 14–16px) ensures comfortable long-form reading in dense docs surfaces
@@ -549,12 +556,14 @@ The brand uses no italic variants of either face — emphasis comes from weight 
 ## Layout
 
 ### Spacing System
+
 - **Base unit**: 4px (8px primary increment)
 - **Tokens**: `{spacing.xxs}` (4px) · `{spacing.xs}` (8px) · `{spacing.sm}` (12px) · `{spacing.md}` (16px) · `{spacing.lg}` (20px) · `{spacing.xl}` (24px) · `{spacing.xxl}` (32px) · `{spacing.xxxl}` (40px) · `{spacing.section-sm}` (48px) · `{spacing.section}` (64px) · `{spacing.section-lg}` (96px) · `{spacing.hero}` (120px)
 - **Section rhythm**: Marketing pages use `{spacing.section-lg}` (96px) between major bands; pricing comparison tightens to `{spacing.section}` (64px); documentation surfaces use `{spacing.xxl}` (32px) between subsections
 - **Card internal padding**: Standard `{spacing.xl}` (24px) for compact cards; `{spacing.xxl}` (32px) for pricing cards and feature panels; testimonial card pushes to `{spacing.section}` (64px) for hero-card presence
 
 ### Grid & Container
+
 - Marketing pages use a 1280px max-width with 32px gutters
 - Hero and feature bands often use 2-column splits (text left, illustration/mockup right)
 - Pricing page renders 3 tier cards in a row at desktop (FREE / Lift Off / Custom), then a comprehensive feature comparison table below
@@ -562,6 +571,7 @@ The brand uses no italic variants of either face — emphasis comes from weight 
 - Logo walls use 6-up rows of customer logos at 80–100px height each
 
 ### Whitespace Philosophy
+
 Marketing surfaces give content generous breathing room — `{spacing.hero}` (120px) above-the-fold creates space for atmospheric gradient backdrops to read clearly. Documentation tightens dramatically: section gaps drop to `{spacing.xxl}` (32px), table rows pack to `{spacing.md}` (16px), sidebar nav compresses to `{spacing.xs}` (8px) vertical rhythm.
 
 ## Elevation & Depth
@@ -577,6 +587,7 @@ The system runs predominantly flat with strategic atmospheric depth.
 | 4 (brand-tinted) | `rgba(0, 212, 164, 0.08) 0px 8px 24px` | Featured pricing tier glow |
 
 ### Decorative Depth
+
 - The homepage hero uses an atmospheric photographic backdrop (cloud illustration on sky-gradient) for depth — no shadow needed; the imagery does the work
 - The startups hero uses a similar treatment with a rocket-launch illustration cutting across the dark teal gradient
 - Code blocks carry their own internal depth via syntax-highlighting color hierarchy on the dark surface; no shadow used
@@ -598,6 +609,7 @@ The system runs predominantly flat with strategic atmospheric depth.
 The radius scale is tightly disciplined — the brand never uses a corner softening between `{rounded.md}` (8px) and `{rounded.lg}` (12px) for the same component family. Pill buttons (`{rounded.full}`) are used universally; rectangular cards use `{rounded.lg}` (12px) consistently.
 
 ### Photography Geometry
+
 - Hero illustrations (cloud, rocket) sit on full-bleed gradient backdrops with no internal framing
 - Customer logo walls use 1:1 ratio cells without rounding (logos are presented inline as wordmarks)
 - Testimonial photos use 1:1 aspect with `{rounded.md}` (8px) softening
@@ -785,6 +797,7 @@ The radius scale is tightly disciplined — the brand never uses a corner soften
 ## Do's and Don'ts
 
 ### Do
+
 - Reserve `{colors.brand-green}` (Mintlify mint) for accent CTAs and active state indicators only — even one accent button per viewport carries weight
 - Use `{colors.primary}` (black) as the dominant CTA on light backgrounds; switch to `button-on-dark` (white pill) on dark hero bands
 - Apply `{rounded.full}` to every button and pill; never soften pill corners
@@ -794,6 +807,7 @@ The radius scale is tightly disciplined — the brand never uses a corner soften
 - Keep documentation prose at `{typography.body-md}` (16px) with 1.50 line-height — never compress
 
 ### Don't
+
 - Don't use `{colors.brand-green}` on body text or large surfaces — it loses signal
 - Don't introduce additional accent colors beyond mint, tag-blue, error-red, and the testimonial orange
 - Don't apply heavy shadows on flat documentation cards; reserve elevation for the hero product mockup
@@ -804,6 +818,7 @@ The radius scale is tightly disciplined — the brand never uses a corner soften
 ## Responsive Behavior
 
 ### Breakpoints
+
 | Name | Width | Key Changes |
 |---|---|---|
 | Mobile (small) | < 480px | Single column. Hero scales to 36px. Pill nav collapses to hamburger. Pricing tiers stack 1-up. Footer 1-column accordion. |
@@ -813,12 +828,14 @@ The radius scale is tightly disciplined — the brand never uses a corner soften
 | Wide Desktop | ≥ 1280px | Wider hero gutters, larger product mockup, fixed 240px sidebar. |
 
 ### Touch Targets
+
 - Pill buttons render at 36–40px effective height — bumps to 44px on mobile via padding override
 - Circular icon buttons: 32×32px desktop → 44×44px mobile
 - Form inputs render at 40px height; bumps to 44px mobile
 - Sidebar nav items render at ~32px tall — bump to 44px mobile drawers
 
 ### Collapsing Strategy
+
 - **Promo banner** stays full-width; truncates at < 480px
 - **Top nav** below 1024px collapses to hamburger; horizontal links move into drawer
 - **Hero band**: 2-column hero (text + mockup) collapses to stacked at < 1024px; mockup rendered below text on mobile
@@ -829,6 +846,7 @@ The radius scale is tightly disciplined — the brand never uses a corner soften
 - **Footer**: 5-column desktop → 2-column tablet → accordion at mobile
 
 ### Image Behavior
+
 - Hero illustrations (cloud, rocket) lazy-load with the hero band; remain crisp at all breakpoints (SVG-based)
 - Product mockup retains its aspect ratio across breakpoints; scales proportionally
 - Customer logos use SVG wordmarks; remain crisp on retina displays

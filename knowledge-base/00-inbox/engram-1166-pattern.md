@@ -11,7 +11,7 @@ type: pattern
 
 **Why**: El error JSON recurrente es causado por el agente no verificando balance de quotes/braces/brackets antes de enviar. Esta normativa establece reglas CRÍTICAS que el agente debe seguir.
 
-**Where**: 
+**Where**:
 - `rules/NORMATIVAS-JSON-CONSTRUCTION.md` - Normativa completa
 - `CLAUDE.md` - Agregada como Core Rule #11
 - `docs/AGENTS.md` - Referencia en Key References

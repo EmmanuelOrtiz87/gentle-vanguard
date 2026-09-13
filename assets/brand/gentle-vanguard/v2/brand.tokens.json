@@ -13,9 +13,9 @@
     "type": "linear",
     "direction": "135deg",
     "stops": [
-      {"offset": 0, "color": "#6E4DEB"},
-      {"offset": 0.52, "color": "#7B63E8"},
-      {"offset": 1, "color": "#06B6D4"}
+      { "offset": 0, "color": "#6E4DEB" },
+      { "offset": 0.52, "color": "#7B63E8" },
+      { "offset": 1, "color": "#06B6D4" }
     ]
   },
   "typography": {

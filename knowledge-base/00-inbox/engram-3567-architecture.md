@@ -11,7 +11,7 @@ type: architecture
 
 **Why**: El stack no tenía una app dedicada de diagramación/visualización de arquitectura interactiva (solo CLI diagram-renderer y diagram-design skill estático). Archify aporta visor interactivo + delta/PR-proof + exports.
 
-**Where**: 
+**Where**:
 - `apps/archify/engine/` — motor Archify absorbido (renderers/schemas/delta/assets/bin/migrations/recipes/references/brand-marks/examples), zero-dep JS .mjs
 - `apps/archify/server/server.ts` — API REST (tsx, puerto 4790): /api/health, /api/render, /api/validate, /api/delta, /api/examples
 - `apps/archify/server/smoke.mjs` — smoke test end-to-end

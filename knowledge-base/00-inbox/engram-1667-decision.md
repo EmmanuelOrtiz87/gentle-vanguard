@@ -13,7 +13,7 @@ type: decision
 
 **Where**: Entire Gentle-Vanguard v8.0.1 stack
 
-**Learned**: 
+**Learned**:
 - 3 commits: PS1→TS Wave5 + tracing fixes (9bc132eb), agent profiles + adaptive fixes (2ceb21d4), WS duplicate detection + RAG reindex (b9fd7d1f)
 - 20 TypeScript files in src/ — all compile clean
 - 80 eval tests + 21 config tests — all passing

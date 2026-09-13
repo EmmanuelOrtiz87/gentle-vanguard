@@ -11,7 +11,7 @@ type: architecture
 
 **Why**: Multiple cascading corruption bugs in PS1 files (catch blocks embedding entire files as string literals), stack overflow in checkpoint-manager.ts, and invalid ValidateSet arguments in config
 
-**Where**: 
+**Where**:
 - checkpoint-manager.ts — added maxDepth=10 to collectSessionFiles()
 - session-autostart.config.json — changed token-notification-init from '-Action status' to '-Action init'
 - skill-recommender.ps1 — reconstructed from 2331→155 lines (82 param( duplications removed)

@@ -13,7 +13,7 @@ type: bugfix
 
 **Where**: src/tracing-instrument.ts:283 (added getPrometheusMetrics call to start action), src/session-cleanup-start.ts:154-179 (check spawnSync result, pass startTimeUnixNano attribute, added warn() function)
 
-**Learned**: 
+**Learned**:
 - The start action only wrote spans to file but not Prometheus metrics — now it does
 - Session cleanup was missing startTimeUnixNano attribute in end call, so duration would calculate from epoch 0
 - The Docker OTel stack (gv-otel, gv-prometheus, gv-jaeger) is not running — .prom file is the only export path

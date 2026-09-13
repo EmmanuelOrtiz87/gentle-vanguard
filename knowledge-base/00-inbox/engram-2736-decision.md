@@ -13,7 +13,7 @@ type: decision
 
 **Where**: src/gga.ts, src/orchestrator-task-wrapper.ts (drop-in replacement de task()), src/universal-task-wrapper.ts, src/model-fallback-orchestrator.ts, tests/gga-comprehensive.test.ts, docs/gga-system.md, scripts npm: gga:delegate / gga:status / gga:reset / delegate.
 
-**Learned**: 
+**Learned**:
 1. NO crear nuevos sistemas de fallback de modelos — GGA ya es la solución definitiva y está production-ready.
 2. La cadena de fallback de GGA: modelo preferido → modelo del orquestador (auto-detectado) → kimi-2-5 → claude-haiku-4-5 → opencode/deepseek-v4-flash-free → ollama/qwen2.5-coder:14b.
 3. El model-enforcer (paso 1 de autostart) cambia el primary a opencode/deepseek-v4-flash-free cuando kimi-2-5 tiene estado 'unknown' en model-health-registry.json — esto es comportamiento normal, no un bug.

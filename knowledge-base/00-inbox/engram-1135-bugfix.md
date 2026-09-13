@@ -19,7 +19,7 @@ type: bugfix
 
 **Where**: scripts/utilities/toggle-token-display.ps1, scripts/utilities/token-usage-notifier.ps1:120-138
 
-**Learned**: 
+**Learned**:
 - The notifier's Toggle-Display was independently toggling AND saving $config.enabled — a dual source of bugs. Rule: only one script should own toggle logic; the other should only display.
 - The `return $value` pattern in PowerShell functions leaks to stdout when the caller uses `&` instead of `$null = &`.
 - Compact mode is stored at top level in config ($config.compactMode), NOT in individualToggles — it's display format, not content type. Any toggle logic must handle it separately.

@@ -23,8 +23,8 @@ identidad visual** para el monograma GV de Gentle-Vanguard. Este set incluye:
   `#F8FAFC` (soft-white), `#050A14` (black).
 - **Nuevo gradiente oficial**: `#6E4DEB → #7B63E8 → #06B6D4` (diagonal inferior-izquierda →
   superior-derecha).
-- **BRAND_SYSTEM.md** con documentación completa de uso en Web, PWA, Android, iOS, Desktop,
-  React, Next.js, Flutter, React Native, Electron/Tauri.
+- **BRAND_SYSTEM.md** con documentación completa de uso en Web, PWA, Android, iOS, Desktop, React,
+  Next.js, Flutter, React Native, Electron/Tauri.
 - **asset-manifest.json** con metadatos de trazado (viewBox 0 0 1000 1000, trace_source:
   logo_crop2.png).
 
@@ -50,18 +50,18 @@ anterior** como la versión candidata vigente:
 **Decisión**: La v2.0 APPLICATION FINAL es la **candidata vigente** para validación. El set anterior
 (`assets/brand/v3-candidate/`) queda como histórico. La v2.0 se aplicó ya a: favicon canónico
 (`docs/brand/assets/favicon.svg`), 5 banners sociales (`docs/brand/assets/banner-*.svg`), el v3
-Editor (path centrado 1024×1024), el Asset Generator (canvas con monograma GV) y las referencias
-de favicon del Design Hub.
+Editor (path centrado 1024×1024), el Asset Generator (canvas con monograma GV) y las referencias de
+favicon del Design Hub.
 
 ### Actualización 2026-09-08 (feedback del usuario): fixes de favicon, ancho y edición permanente
 
 El usuario validó la identidad v2.0 y reportó 3 mejoras, todas aplicadas:
 
-1. **Favicon con gradiente**: El generador dibujaba el monograma con gradiente sobre fondo
-   gradiente (mala legibilidad). **Fix**: cuando el estilo es "gradient", se usa el monograma
-   **blanco** (`gv-white.svg`) sobre fondo gradiente 2-stop (`#6E4DEB → #06B6D4`), replicando el
-   diseño oficial de `app-icon-gradient.svg`. Verificado por muestreo de píxeles (centro del
-   monograma = `#FFFFFF`).
+1. **Favicon con gradiente**: El generador dibujaba el monograma con gradiente sobre fondo gradiente
+   (mala legibilidad). **Fix**: cuando el estilo es "gradient", se usa el monograma **blanco**
+   (`gv-white.svg`) sobre fondo gradiente 2-stop (`#6E4DEB → #06B6D4`), replicando el diseño oficial
+   de `app-icon-gradient.svg`. Verificado por muestreo de píxeles (centro del monograma =
+   `#FFFFFF`).
 
 2. **Homologación del ancho**: El `.gv-main` del Design Hub era 1400px mientras el topbar canónico
    es 1180px. **Fix**: `.gv-header-inner`, `.gv-main` y `.gv-footer-inner` ahora usan **1180px**,
@@ -69,10 +69,10 @@ El usuario validó la identidad v2.0 y reportó 3 mejoras, todas aplicadas:
    topbar y contenido miden ambos 1180px.
 
 3. **Edición permanente (no solo v3)**: El "v3 Editor" se renombró a **"Brand Editor"** — la
-   herramienta de edición de identidad (gradiente + paleta + preview en vivo) es ahora permanente
-   y general, aplicable a cualquier versión de marca (v2 Premium oficial, v2.0 candidata, o
-   uploads propios). El flujo de Proposals (upload → análisis → propuesta → versionado →
-   aprobación) queda como el workflow permanente de gestión de cambios de diseño.
+   herramienta de edición de identidad (gradiente + paleta + preview en vivo) es ahora permanente y
+   general, aplicable a cualquier versión de marca (v2 Premium oficial, v2.0 candidata, o uploads
+   propios). El flujo de Proposals (upload → análisis → propuesta → versionado → aprobación) queda
+   como el workflow permanente de gestión de cambios de diseño.
 
 ### Formalización 2026-09-08: v2.0 APPLICATION FINAL = OFICIAL
 
@@ -87,10 +87,10 @@ El usuario validó la identidad v2.0 y ordenó formalizarla como **oficial y pro
 3. **BRAND-KIT.md actualizado**: v2.0 APPLICATION FINAL = ✅ OFICIAL; v2 Premium = 🗄 SUPERSEDED.
 4. **Este ADR pasa a status `accepted`**.
 
-Además, el usuario expresó la necesidad de **poder operar con todas las herramientas a disposición**:
-subir imágenes (PNG/JPG), analizarlas, crear propuestas de diseño, versionarlas, y decidir qué
-versión se vuelve oficial e implementarla en todo el stack. Esto requiere una **funcionalidad de
-upload/análisis/propuestas** en el Design Hub.
+Además, el usuario expresó la necesidad de **poder operar con todas las herramientas a
+disposición**: subir imágenes (PNG/JPG), analizarlas, crear propuestas de diseño, versionarlas, y
+decidir qué versión se vuelve oficial e implementarla en todo el stack. Esto requiere una
+**funcionalidad de upload/análisis/propuestas** en el Design Hub.
 
 ## Decision
 
@@ -102,8 +102,8 @@ upload/análisis/propuestas** en el Design Hub.
    - `docs/brand/assets/v3/` (documentación)
 2. **NO reemplazar los oficiales** (`assets/logo.svg`, etc.) hasta que el usuario decida
    explícitamente promover la v3 a oficial.
-3. **Documentar la nueva identidad** en `docs/brand/BRAND-KIT.md` como candidata v3, con su paleta
-   y gradiente propios.
+3. **Documentar la nueva identidad** en `docs/brand/BRAND-KIT.md` como candidata v3, con su paleta y
+   gradiente propios.
 4. **Crear registro de decisión** (este ADR) para que la decisión de promoción sea trazable.
 
 ### 2. Design Hub Proposals (funcionalidad de ciclo de vida)
@@ -147,8 +147,8 @@ upload/análisis/propuestas** en el Design Hub.
 
 ### Negativas / Trade-offs
 
-- **La nueva identidad es un cambio significativo** del logo actual. Requiere decisión explícita
-  del usuario para promoverla a oficial.
+- **La nueva identidad es un cambio significativo** del logo actual. Requiere decisión explícita del
+  usuario para promoverla a oficial.
 - **El Design Hub Proposals** es una funcionalidad nueva que necesita testing end-to-end.
 - **La propagación** a `packages/gv-design-system/` requiere confirmación explícita (no auto-write).
 - **Token budget**: este ADR + implementación consumen tokens. Aplicar `review-workload-guard`.
@@ -165,7 +165,8 @@ upload/análisis/propuestas** en el Design Hub.
 Fase 1 (esta sesión):
 
 - [x] Revisar y validar los nuevos assets SVG (geometría, paleta, gradiente)
-- [x] Integrar nuevos assets SVG en `assets/brand/v3-candidate/`, `apps/design-hub/public/assets/v3-candidate/`, `docs/brand/assets/v3/`
+- [x] Integrar nuevos assets SVG en `assets/brand/v3-candidate/`,
+      `apps/design-hub/public/assets/v3-candidate/`, `docs/brand/assets/v3/`
 - [x] Construir funcionalidad de upload de imágenes en Design Hub (drag-drop, análisis client-side)
 - [x] Construir sistema de propuestas con versionado y flujo de aprobación en Design Hub
 - [x] Construir CLI de propagación para implementar assets oficiales en todo el stack
@@ -187,8 +188,8 @@ Fase 2 (próximas sesiones):
 
 ## Métricas de éxito
 
-- **Proposals**: el usuario puede subir una imagen, ver el análisis, crear una propuesta, versionarla
-  y aprobarla.
+- **Proposals**: el usuario puede subir una imagen, ver el análisis, crear una propuesta,
+  versionarla y aprobarla.
 - **Propagación**: `node tools/propagate.js --dry-run` muestra los archivos a copiar; `--live` los
   copia.
 - **Validación**: `node tools/validate.js` pasa con 0 failures.
@@ -196,12 +197,12 @@ Fase 2 (próximas sesiones):
 
 ## Riesgos y mitigaciones
 
-| Riesgo | Probabilidad | Impacto | Mitigación |
-| ------ | ------------ | ------- | ---------- |
-| La nueva identidad no es la deseada | Media | Alto | Mantener oficiales hasta decisión explícita |
-| Proposals no funciona en todos los navegadores | Baja | Medio | IndexedDB + Canvas API son universales |
-| Propagación rompe referencias | Baja | Medio | `--dry-run` primero, `validate.js` después |
-| Token budget excedido | Media | Medio | Aplicar `review-workload-guard` |
+| Riesgo                                         | Probabilidad | Impacto | Mitigación                                  |
+| ---------------------------------------------- | ------------ | ------- | ------------------------------------------- |
+| La nueva identidad no es la deseada            | Media        | Alto    | Mantener oficiales hasta decisión explícita |
+| Proposals no funciona en todos los navegadores | Baja         | Medio   | IndexedDB + Canvas API son universales      |
+| Propagación rompe referencias                  | Baja         | Medio   | `--dry-run` primero, `validate.js` después  |
+| Token budget excedido                          | Media        | Medio   | Aplicar `review-workload-guard`             |
 
 ## Referencias
 
@@ -211,6 +212,7 @@ Fase 2 (próximas sesiones):
 - `apps/design-hub/README.md` (Design Hub)
 - `apps/design-hub/src/proposals/` (nueva sección Proposals)
 - `apps/design-hub/tools/propagate.js` (herramienta de propagación)
-- `C:\Users\emman\Downloads\Gentle_Vanguard_App_Assets_SVG_NEW_FINAL\BRAND_SYSTEM.md` (nueva identidad)
+- `C:\Users\emman\Downloads\Gentle_Vanguard_App_Assets_SVG_NEW_FINAL\BRAND_SYSTEM.md` (nueva
+  identidad)
 - ADR-0017 (local-first)
 - ADR-0026 (gv-design-system v2)

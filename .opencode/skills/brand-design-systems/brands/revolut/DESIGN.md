@@ -335,12 +335,14 @@ inside product mockups and feature illustrations — never as button surfaces.
 ## Colors
 
 ### Brand & Accent
+
 - **Cobalt Violet** (`{colors.primary}` — `#494fdf`): the brand accent. Reserved for featured plan cards (`{component.plan-card-featured}`), the brand wordmark icon, and secondary CTAs in white-canvas regions.
 - **Cobalt Bright** (`{colors.primary-bright}` — `#4f55f1`): a one-step-up bright variant used in inline link colour and accent-photo headers.
 - **Cobalt Deep** (`{colors.primary-deep}` — `#3a40c4`): the active/pressed state of cobalt elements.
 - **On-Primary** (`{colors.on-primary}` — `#ffffff`): label colour on top of `{colors.primary}` surfaces.
 
 ### Surface
+
 - **Canvas Light** (`{colors.canvas-light}` — `#ffffff`): the white catalogue mode for FAQ, download tiles, comparison tables.
 - **Canvas Dark** (`{colors.canvas-dark}` — `#000000`): the storytelling canvas — true black, never near-black.
 - **Surface Soft** (`{colors.surface-soft}` — `#f4f4f4`): a subtle off-white used on download tiles, soft buttons, and inset card groups inside white bands.
@@ -352,6 +354,7 @@ inside product mockups and feature illustrations — never as button surfaces.
 - **Hairline Strong** (`{colors.hairline-strong}` — `#191c1f`): structural full-strength dividers and the outline of light cards.
 
 ### Text
+
 - **Ink** (`{colors.ink}` — `#191c1f`): primary text colour. Notably warmer than pure black, paired with the white canvas for body legibility.
 - **Body** (`{colors.body}` — `#1f2226`): long-form body where `{colors.ink}` would feel slightly too sharp.
 - **Charcoal** (`{colors.charcoal}` — `#3a3d40`): captions, secondary nav.
@@ -363,6 +366,7 @@ inside product mockups and feature illustrations — never as button surfaces.
 - **On-Dark Mute** (`{colors.on-dark-mute}` — `rgba(255,255,255,0.72)`): secondary text in dark regions.
 
 ### Semantic
+
 - **Accent Teal** (`{colors.accent-teal}` — `#00a87e`): used in product mockup illustrations.
 - **Accent Light Blue** (`{colors.accent-light-blue}` — `#007bc2`): inline link colour in dark photo headers.
 - **Accent Blue Link** (`{colors.accent-blue-link}` — `#376cd5`): default inline link colour on white surfaces.
@@ -409,6 +413,7 @@ When Aeonik Pro cannot be licensed, **Inter Display**, **General Sans**, or **S�
 | `{typography.link-emph}` | 16px | 700 | 1.5 | 0.24px | Emphatic inline link in dark mode. |
 
 ### Principles
+
 - Display sizes always run at weight 500 with `lineHeight: 1.0` (or 1.19–1.21 below 48px). The negative letter-spacing scales with size — bigger types tighten more.
 - Body Inter sits at weight 400 with positive tracking (`0.24px`) — the small spacing nudge makes UI labels feel slightly mechanical, fitting fintech precision.
 - Hero CTAs use the Aeonik Pro `{typography.button-lg}` variant; everything below the hero uses the Inter `{typography.button-md}`.
@@ -421,18 +426,21 @@ When Aeonik Pro is unavailable, clamp display `lineHeight` to 1.0 explicitly and
 ## Layout
 
 ### Spacing System
+
 - **Base unit**: 4px, with the working scale on multiples of 4 / 8 / 16.
 - **Tokens**: `{spacing.xxs}` 4px · `{spacing.xs}` 6px · `{spacing.sm}` 8px · `{spacing.md}` 14px · `{spacing.lg}` 16px · `{spacing.xl}` 24px · `{spacing.xxl}` 32px · `{spacing.xxxl}` 48px · `{spacing.block}` 80px · `{spacing.section}` 88px · `{spacing.band}` 120px.
 - Section padding: `{spacing.section}` (88px) vertical between bands; `{spacing.band}` (120px) on the hero band and the closing planning section.
 - Card internal padding: `{spacing.xxl}` (32px) on `{component.feature-card-light}`, `{component.plan-card}`, `{component.feature-card-dark}`.
 
 ### Grid & Container
+
 - **Max content width** ≈ 1200px on body sections; hero bands run full-bleed.
 - **Plan grid**: 4-up plan cards on the home page, stacking 2-up at tablet and 1-up at small mobile.
 - **Feature grid**: 3-up at desktop, 2-up at tablet, 1-up at mobile.
 - **Product mockup bands**: a single full-width hero photo of a phone or card mockup, no surrounding chrome — the asset itself is the section.
 
 ### Whitespace Philosophy
+
 - Whitespace is generous and editorial — sections breathe at 88–120px so display headlines have room to register at 80–136px without feeling cramped.
 - Inside cards, padding stays at 32px so feature copy and plan tiers have a consistent rhythm.
 - Hairline `{colors.hairline-light}` dividers replace shadow on white surfaces; `{colors.hairline-dark}` carries the corresponding role in dark regions.
@@ -450,6 +458,7 @@ When Aeonik Pro is unavailable, clamp display `lineHeight` to 1.0 explicitly and
 The system has **no traditional drop-shadow language**. Surfaces register depth via colour-blocking (light → dark band switches) and surface-luminance shifts (`{colors.canvas-dark}` → `{colors.surface-elevated}`). Photography mockups carry their own depth from the asset itself.
 
 ### Decorative Depth
+
 - **Product mockup hero bands** — the home page features a phone mockup full-bleed against `{colors.canvas-dark}`, with the device's own glow providing the only atmospheric depth. No additional gradients, no shadows.
 - **Featured plan card** — the cobalt-violet `{component.plan-card-featured}` sits inside the otherwise dark planning grid as a single saturated colour block, marking the recommended tier visually.
 - **Card metals tier** — the brand uses `{colors.accent-brown}` and a deep gradient on metals card mockups to signal premium without resorting to gold-on-black metallic effects.
@@ -468,6 +477,7 @@ The system has **no traditional drop-shadow language**. Surfaces register depth 
 | `{rounded.full}` | 9999px | Buttons, pills, badges, tabs. |
 
 ### Photography Geometry
+
 - Phone mockups: 9:19.5 (vertical) with `{rounded.xl}` corners on the device chrome.
 - Card mockups: 1.586:1 (credit-card aspect) with `{rounded.lg}` corners.
 - Terminal/POS mockups: 4:3 with `{rounded.xl}` corners and substantial padding around the device.
@@ -571,6 +581,7 @@ The system has **no traditional drop-shadow language**. Surfaces register depth 
 ## Do's and Don'ts
 
 ### Do
+
 - Switch full bands between `{colors.canvas-dark}` (storytelling) and `{colors.canvas-light}` (catalogue). The two-mode rhythm is core.
 - Use `{component.button-primary}` (white pill on dark) as the primary CTA on every dark hero band. It's the brand's loudest action.
 - Reserve `{colors.primary}` for the featured plan card and the brand wordmark — the cobalt should feel like a deliberate stamp, not a colour theme.
@@ -581,6 +592,7 @@ The system has **no traditional drop-shadow language**. Surfaces register depth 
 - Use the wide accent palette (`{colors.accent-teal}`, `{colors.accent-pink}`, `{colors.accent-light-green}`, etc.) inside product illustrations and iconography only.
 
 ### Don't
+
 - Don't use accent colours (`{colors.accent-teal}`, `{colors.accent-pink}`, etc.) as button surfaces. They live inside illustrations only.
 - Don't use a near-black canvas. The brand is `#000000`, not `#0a0a0a`.
 - Don't pair white text with cobalt violet inside body content — `{colors.primary}` is for the featured plan card surface, not large prose.
@@ -604,11 +616,13 @@ The system has **no traditional drop-shadow language**. Surfaces register depth 
 | Mobile | ≤ 425px | All grids 1-up; hero clamps to 48px; section padding `{spacing.section}` collapses to 64px. |
 
 ### Touch Targets
+
 - All buttons ship at minimum 48px tall — comfortably exceeds WCAG AAA (44px). Default `{component.button-primary}` is 48px.
 - `{component.text-input}` is 56px tall — fintech-grade accessibility.
 - `{component.button-pill-sm}` (36px) is bumped to 44px on mobile via padding adjustment.
 
 ### Collapsing Strategy
+
 - Top-level nav collapses to hamburger at < 1024px; the wordmark and `{component.button-primary}` stay anchored.
 - Hero `{typography.display-xxl}` clamps: 136px → 80px → 64px → 48px across the breakpoint ladder.
 - Plan grid steps from 4-up to 2-up at < 1024px to 1-up at < 768px.
@@ -616,6 +630,7 @@ The system has **no traditional drop-shadow language**. Surfaces register depth 
 - Sub-nav pills convert from a wrap row to a horizontal scroll-rail at < 768px.
 
 ### Image Behavior
+
 - Phone and card mockups are served at 1.5× and 2× DPR; below 768px the system swaps to a smaller hero crop.
 - Product photography retains its own atmospheric lighting at every breakpoint — no responsive variant assets.
 

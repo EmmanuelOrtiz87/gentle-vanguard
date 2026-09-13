@@ -297,17 +297,20 @@ Type stays calm. Hero display sits at 60 px in regular weight with `-0.65 px` tr
 ## Colors
 
 ### Brand & Accent
+
 - **Electric Green** (`{colors.primary}` — `#00d992`): The single brand accent. Every primary CTA, every status pill, every "live" indicator, the brand's lightning glyph itself. Reserved.
 - **Primary Soft** (`{colors.primary-soft}` — `#2fd6a1`): A slightly more muted green used inside button-ghost variants and tooltip / focus indicators.
 - **Primary Deep** (`{colors.primary-deep}` — `#10b981`): The darker green used for inline link colour in body copy.
 
 ### Surface
+
 - **Canvas** (`{colors.canvas}` — `#101010`): The default near-black page background. The only surface mode in the brand's marketing system.
 - **Canvas Soft** (`{colors.canvas-soft}` — `#1a1a1a`): A slightly lighter dark fill used inside code blocks and form inputs to mark them visually distinct against the canvas.
 - **Hairline** (`{colors.hairline}` — `#3d3a39`): 1 px solid borders — feature cards, buttons, dividers between rows. The brand's universal "edge" colour.
 - **Hairline Soft** (`{colors.hairline-soft}` — `#b8b3b0`): A lighter divider tint used in rare on-light secondary contexts.
 
 ### Text
+
 - **Ink** (`{colors.ink}` — `#f2f2f2`): Default text colour on the dark canvas — slightly off-white to reduce contrast strain.
 - **Ink Strong** (`{colors.ink-strong}` — `#ffffff`): Pure-white text for hero headlines and high-emphasis copy.
 - **Body** (`{colors.body}` — `#bdbdbd`): Secondary text — supporting copy, body paragraphs in long-form sections.
@@ -315,11 +318,13 @@ Type stays calm. Hero display sits at 60 px in regular weight with `-0.65 px` tr
 - **Canvas Text Soft** (`{colors.canvas-text-soft}` — `#f5f6f7`): Used inside code mockups to keep code colour just slightly cooler than the surrounding body text.
 
 ### Semantic
+
 The brand doesn't surface a separate error / warning palette in its public marketing pages — the underlying Docusaurus default semantic palette exists in the design system but is reserved for in-product / docs contexts. Validation cues on the marketing surface use the primary green for success and a muted body grey for missing states.
 
 ## Typography
 
 ### Font Family
+
 Two faces carry the system:
 1. **Inter** for every display, body, button, and link role. Weights 400 / 500 / 600 / 700 are the working set. Used with OpenType features `"calt"` and `"rlig"` enabled across the page so the geometric Inter ligatures and contextual alternates render correctly.
 2. **SF Mono** (`SFMono-Regular` with Menlo / Monaco / Consolas / Liberation Mono fallbacks) for inline code, command snippets, terminal mockups, and the brand's numeric counters. Weights 400 / 549 / 550 / 700 are present — the unusual 549 / 550 sub-bold weight gives the mono a "slightly heavier than regular" voice for emphasis.
@@ -346,23 +351,27 @@ Two faces carry the system:
 | `{typography.button-md}` | 16px | 600 | 24px | 0 | Button labels. |
 
 ### Principles
+
 - **Inter regular at 60 px display** is the brand's calming counter to AI marketing's tendency to shout. The light tracking and modest weight read like documentation.
 - **Two-face contrast carries the technical voice.** Inter for narrative; SF Mono for anything that could be typed at a terminal.
 - **Uppercase eyebrow with tracking is the brand's signature label style.** `2.52 px` at 14 px is the documented value.
 
 ### Note on Font Substitutes
+
 - **Sans** — *Inter* is the brand's actual face; substitute is the brand itself when self-hosting is not available.
 - **Mono** — *SF Mono* is Apple-system; *JetBrains Mono* or *Geist Mono* are the best free substitutes.
 
 ## Layout
 
 ### Spacing System
+
 - **Base unit**: 4 px; small 5 / 6.4 px values appear inside code-mockup line-height compensation.
 - **Tokens**: `{spacing.xxs}` 2 px · `{spacing.xs}` 4 px · `{spacing.sm}` 8 px · `{spacing.md}` 12 px · `{spacing.lg}` 16 px · `{spacing.xl}` 20 px · `{spacing.2xl}` 24 px · `{spacing.3xl}` 32 px · `{spacing.4xl}` 40 px · `{spacing.5xl}` 48 px · `{spacing.6xl}` 64 px.
 - **Section padding**: hero + content bands use `{spacing.5xl}` 48 px top/bottom.
 - **Card interior padding**: feature cards sit at `{spacing.2xl}` 24 px.
 
 ### Grid & Container
+
 - Marketing container centres at roughly 1200 – 1400 px; content stays edge-to-edge in colour with horizontal gutters of `{spacing.3xl}` on desktop.
 - Feature-card grids: 2-up to 3-up at desktop, 1-up at mobile.
 
@@ -377,12 +386,15 @@ Two faces carry the system:
 | Desktop | ≥ 1024px | Full 3-up card grids. |
 
 #### Touch Targets
+
 Buttons render at ~44 px tall (12 px vertical padding + 24 px line-height). Meet WCAG AAA at all breakpoints.
 
 #### Collapsing Strategy
+
 Nav collapses to hamburger at mobile; the menu overlay keeps the same green CTA pinned at the bottom. Feature-card grids drop to 1-up; hero typography scales fluidly.
 
 #### Image Behavior
+
 Code-editor mockups render as image-like cards with copy-to-clipboard affordances. No photography in the brand's marketing surface.
 
 ## Elevation & Depth
@@ -395,6 +407,7 @@ Code-editor mockups render as image-like cards with copy-to-clipboard affordance
 | Level 3 — Modal Stack | `0 20px 60px rgba(0,0,0,0.7), 0 0 0 1px rgba(148,163,184,0.1) inset` heavy drop + inset ring. | Modal / dialog surfaces in-product. |
 
 ### Decorative Depth
+
 - Hairline cards on dark canvas — the brand's only true elevation mode.
 - A 2 px solid `{colors.primary}` green border occasionally marks "featured" or "active" status on a card.
 - A 1 px dashed `rgba(79, 93, 117, 0.4)` divider sits between section bands as a quiet rhythm cue.
@@ -503,10 +516,10 @@ Code-editor mockups render as image-like cards with copy-to-clipboard affordance
 **`ex-toast`** — Toast notification surface — feature-card shape + medium shadow.
 - Properties: `backgroundColor`, `rounded`, `padding`, `typography`
 
-
 ## Do's and Don'ts
 
 ### Do
+
 - Reserve `{colors.primary}` (`#00d992`) for every primary CTA, the lightning logo glyph, and live-status indicators. The green is the brand's centre of gravity.
 - Use the dark `{colors.canvas}` (`#101010`) as the only page surface. There is no light-mode rhythm.
 - Build cards with 1 px `{colors.hairline}` borders, not shadows. Hairlines on dark IS the brand's elevation system.
@@ -514,6 +527,7 @@ Code-editor mockups render as image-like cards with copy-to-clipboard affordance
 - Use `{rounded.sm}` 6 px for buttons, `{rounded.md}` 8 px for cards, `{rounded.pill}` 9999 px only for inline status tags.
 
 ### Don't
+
 - Don't introduce a light-mode counterpart. The brand is dark-canvas only.
 - Don't use the primary green as a body-text fill. It's CTA-only.
 - Don't drop a soft drop-shadow on cards. The brand uses hairlines + occasional glow, never material shadows.

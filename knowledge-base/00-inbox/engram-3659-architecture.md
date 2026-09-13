@@ -11,14 +11,14 @@ type: architecture
 
 **Why**: El usuario necesita configurar el LLM desde la UI sin depender de archivos de configuración manuales.
 
-**Where**: 
+**Where**:
 - `apps/gv-analytics/src/components/LLMConfigPanel.tsx` - Componente React
 - `apps/gv-analytics/src/components/LLMConfigPanel.css` - Estilos
 - `apps/gv-analytics/src/types/llm-config.ts` - Tipos y constants
 - `apps/gv-analytics/server/routes/llm-config.ts` - Endpoints `/api/llm/test` y `/api/llm/detect`
 - `apps/gv-analytics/src/App.tsx` - Integración (botón 🧠 en header, state showLLMConfig, render condicional)
 
-**Learned**: 
+**Learned**:
 - El panel guarda config en localStorage bajo `gv-analytics-llm-config`
 - El endpoint `/api/llm/detect` busca config en `config/cloud-agents.local.json`, `config/cloud-agents.json` y variables de entorno (OPENAI_API_KEY, ANTHROPIC_API_KEY)
 - Si no encuentra nada, devuelve agent-delegator como fallback

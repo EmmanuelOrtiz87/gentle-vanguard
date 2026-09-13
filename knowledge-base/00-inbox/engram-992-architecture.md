@@ -13,7 +13,7 @@ type: architecture
 
 **Where**: 19 files modified, 3 created across the entire stack. Key: config/auto-delegation.json (SESSION-CLOSE removed), config/model-routing.json (+12 agents), config/orchestrator.json (per_agent_budget), config/session-autostart.config.json (+size-check step), scripts/utilities/check-skill-sizes.ps1 (NEW), rules/NORMATIVAS-SESSION.md (0 manual steps), .atl/skill-registry.md (phantoms removed).
 
-**Learned**: 
+**Learned**:
 1. Shadow functions (Write-Error/Write-Warning redefined as Write-Host) are the most dangerous pattern — they hide errors from every downstream caller.
 2. PowerShell iterates JSON properties in non-deterministic order — dual keyword routing always has a bug.
 3. 56% of skills exceed size limits but no one noticed because there was no auditor. Now check-skill-sizes.ps1 runs at every session start.

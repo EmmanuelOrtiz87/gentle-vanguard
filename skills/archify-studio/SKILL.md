@@ -182,6 +182,7 @@ npx archify:api examples
 | `archify.delta` | `{ok}` | Auditoría de PR gates, compliance |
 
 **Consulta**:
+
 ```sql
 SELECT type, payload, created_at FROM events WHERE type LIKE 'archify.%' ORDER BY id DESC LIMIT 10;
 ```

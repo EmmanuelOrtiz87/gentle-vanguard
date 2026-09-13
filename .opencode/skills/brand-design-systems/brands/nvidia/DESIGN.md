@@ -326,11 +326,13 @@ The black-canvas hero and footer chapters are the system's "headline moments" �
 > **Source pages:** `/tr-tr/` (primary homepage), `/en-eu/industries/healthcare-life-sciences/`, `/en-eu/solutions/ai/`, `/en-eu/ai/foundry/`. The chrome palette is identical across all four — only photography and copy vary.
 
 ### Brand & Accent
+
 - **NVIDIA Green** (`{colors.primary}` — `#76b900`): the brand. Every primary CTA, every active state, every link affordance on dark surfaces, every corner square, and the brand wordmark itself.
 - **NVIDIA Green Dark** (`{colors.primary-dark}` — `#5a8d00`): pressed state for the primary button — a single notch deeper than the brand green.
 - **Accent Green Pale** (`{colors.accent-green-pale}` — `#bff230`): rare highlight tint used in editorial callouts and decorative micro-blocks; never on chrome.
 
 ### Surface
+
 - **Page Canvas** (`{colors.canvas}` — `#ffffff`): the body of every page. Cards sit directly on it with hairline rules.
 - **Soft Surface** (`{colors.surface-soft}` — `#f7f7f7`): breadcrumb strip, sub-nav, side-by-side comparison panels, alternating row backgrounds.
 - **Black Canvas** (`{colors.surface-dark}` — `#000000`): hero chapter, dark CTA strips, footer, primary nav. The system's "frame" color.
@@ -339,6 +341,7 @@ The black-canvas hero and footer chapters are the system's "headline moments" �
 - **Hairline Strong** (`{colors.hairline-strong}` — `#5e5e5e`): 1px divider on dark surfaces (footer column rules, dark-mode card edges).
 
 ### Text
+
 - **Ink** (`{colors.ink}` — `#000000`): headlines and body text on `{colors.canvas}`.
 - **Body** (`{colors.body}` — `#1a1a1a`): long-form paragraph text where pure black is too heavy.
 - **Mute** (`{colors.mute}` — `#757575`): metadata, breadcrumb separators, footer copyright.
@@ -348,6 +351,7 @@ The black-canvas hero and footer chapters are the system's "headline moments" �
 - **On Dark Mute** (`{colors.on-dark-mute}` — `rgba(255,255,255,0.7)`): secondary footer link text and dark-canvas body copy.
 
 ### Semantic
+
 - **Error** (`{colors.error}` — `#e52020`): validation messages, destructive confirmation.
 - **Error Deep** (`{colors.error-deep}` — `#650b0b`): pressed state for error buttons; hover-pressed validation icons.
 - **Warning** (`{colors.warning}` — `#df6500`): caution callouts, deprecated documentation banners.
@@ -356,6 +360,7 @@ The black-canvas hero and footer chapters are the system's "headline moments" �
 - **Link Blue** (`{colors.link-blue}` — `#0046a4`): inline anchor link color on light canvas — the only blue in the system, reserved for prose-embedded hyperlinks.
 
 ### Editorial Accents (used sparingly inside long-form content)
+
 - **Accent Purple** (`{colors.accent-purple}` — `#952fc6`): research / scientific computing editorial accent.
 - **Accent Purple Deep** (`{colors.accent-purple-deep}` — `#4d1368`): paired dark for purple lockups.
 - **Accent Purple Pale** (`{colors.accent-purple-pale}` — `#f9d4ff`): wash background for editorial callouts.
@@ -364,6 +369,7 @@ The black-canvas hero and footer chapters are the system's "headline moments" �
 ## Typography
 
 ### Font Family
+
 - **NVIDIA-EMEA** is the proprietary brand sans-serif used across every text role on the site. It carries weights 400 (regular) and 700 (bold) and falls back to Arial → Helvetica.
 - **Font Awesome 6 Pro** and **Font Awesome 6 Sharp** are used exclusively for iconography (chevrons, social glyphs, breadcrumb separators, search/menu icons) at sizes 14–22px.
 
@@ -393,20 +399,24 @@ NVIDIA's type system is unusually flat: most chrome and body roles render at the
 | `{typography.utility-xs}` | 10px | 700 | 1.5 | 0 | Legal fine-print bar at the very bottom (uppercase) |
 
 ### Principles
+
 The typography is brand-locked: NVIDIA-EMEA is used at every level, no serif, no display variant, no monospace, no italic. Hierarchy is built almost entirely from size and weight — color is reserved for emphasis (`{colors.primary}` on links over dark, `{colors.link-blue}` on light) and never used to separate type tiers.
 
 ### Note on Font Substitutes
+
 NVIDIA-EMEA is proprietary. The closest open-source pairing is **Inter** (weights 400/700) — its x-height and stroke contrast match NVIDIA-EMEA's optical metrics within ~2% at body sizes. **Arial** is the official documented fallback and is acceptable for any system where Inter is unavailable. Avoid Helvetica Now or Helvetica Neue substitutes; their slightly tighter cap heights drift away from the brand's geometry.
 
 ## Layout
 
 ### Spacing System
+
 - **Base unit:** 8px
 - **Tokens (front matter):** `{spacing.xxs}` (2px) · `{spacing.xs}` (4px) · `{spacing.sm}` (8px) · `{spacing.md}` (12px) · `{spacing.lg}` (16px) · `{spacing.xl}` (24px) · `{spacing.xxl}` (32px) · `{spacing.section}` (64px)
 - **Universal section rhythm:** every page in the set uses `{spacing.section}` (64px) as the vertical gap between major content blocks. Card grids use `{spacing.xl}` (24px) gutters; in-card padding sits at `{spacing.xl}` to `{spacing.xxl}` depending on density.
 - **Hero chapter padding:** 80px vertical / 48px horizontal — the largest spacing in the system, reserved for `{component.hero-card-dark}`.
 
 ### Grid & Container
+
 - **Max width:** ~1280px content area at desktop, with 24px gutters that grow to ~48px at ultrawide.
 - **Column patterns:**
   - Card grids: 4-up at desktop, 3-up at 1024px, 2-up at 768px, 1-up at 480px.
@@ -415,6 +425,7 @@ NVIDIA-EMEA is proprietary. The closest open-source pairing is **Inter** (weight
 - **Card aspect:** product cards lean to 1:1 or 4:3 with 16:9 imagery on top + 1–2 lines of metadata below. Resource cards are 3:2 imagery with a longer description block.
 
 ### Whitespace Philosophy
+
 Whitespace is structural, not atmospheric. Sections butt against each other with `{spacing.section}` rhythm — there are no decorative dividers, no empty "breathing room" bands, no gradient transitions between sections. The sense of air comes from `{colors.canvas}` body sections sandwiched between `{colors.surface-dark}` chapter blocks, not from generous padding inside any one component.
 
 ## Elevation & Depth
@@ -429,6 +440,7 @@ Whitespace is structural, not atmospheric. Sections butt against each other with
 NVIDIA's system has effectively no drop-shadow elevation in card or content surfaces. The only "shadow" in the extracted tokens is a subtle 5px ambient on sticky chrome bars. Cards do not lift; cards are flat rectangles with hairline borders.
 
 ### Decorative Depth
+
 Depth in NVIDIA's system comes from photography and 3D-rendered hero imagery rather than from CSS effects:
 - **Hero imagery:** full-bleed photographic or rendered scenes (data-center hardware, neural-net visualizations, life-sciences microscopy) sit behind hero copy with a dark gradient overlay for legibility.
 - **Decorative corner squares:** the small `{component.corner-square}` (~12px solid `{colors.primary}` square) anchored to the top-left or bottom-right corner of resource and feature cards — the system's only consistent ornamental device.
@@ -448,6 +460,7 @@ Depth in NVIDIA's system comes from photography and 3D-rendered hero imagery rat
 The system is aggressively angular. Outside of avatar/icon circles, no element exceeds 2px radius. The 2px is enough to soften the optical aliasing on a sharp edge but small enough that the system reads as engineering-grade rather than consumer-friendly.
 
 ### Photography Geometry
+
 - **Hero imagery:** full-bleed 16:9 (desktop) cropping to 4:5 portrait on mobile.
 - **Card imagery:** 16:9 thumbnail at the top of resource cards; 1:1 square for product/SKU cards; 3:2 for editorial article cards.
 - **Decorative corner squares:** 12×12px on standard cards, scaled to 16×16 on hero callouts.
@@ -573,6 +586,7 @@ The system is aggressively angular. Outside of avatar/icon circles, no element e
 ## Do's and Don'ts
 
 ### Do
+
 - Reserve `{colors.primary}` for primary CTAs, active states, decorative corner squares, and the NVIDIA wordmark itself. Treat it as a precious resource.
 - Stack hero/footer chapters in `{colors.surface-dark}` and body sections in `{colors.canvas}` — alternate them in a predictable rhythm down the page.
 - Anchor a `{component.corner-square}` to one corner of every reusable card. It is the system's identity tag.
@@ -582,6 +596,7 @@ The system is aggressively angular. Outside of avatar/icon circles, no element e
 - Pair `{component.button-primary}` (green fill) with `{component.button-outline}` (green border) for primary + secondary action pairs.
 
 ### Don't
+
 - Don't introduce drop shadows on cards or content surfaces. The only allowed shadow is the 5px ambient on sticky chrome.
 - Don't substitute `{colors.success-deep}`, `{colors.accent-green-pale}`, or any other green for `{colors.primary}` in CTAs. The brand green is precise.
 - Don't use `{colors.link-blue}` outside of inline body-prose links. It is not a button color, not a chrome color.
@@ -605,9 +620,11 @@ The system is aggressively angular. Outside of avatar/icon circles, no element e
 | mobile-narrow | 320px | Hero `{typography.display-xl}` scales from 48px → 32px |
 
 ### Touch Targets
+
 All interactive elements meet WCAG AA (≥ 44×44px). `{component.button-primary}` sits at 44px height with 24px horizontal padding. `{component.text-input}` sits at 44px. `{component.pill-tab}` sits at ~40px height with extended hit-target padding to 44px. `{component.button-outline}` matches the 44px standard. Footer links are 18–20px line-height with 8–12px vertical padding to keep tap targets at ~36–44px depending on link length.
 
 ### Collapsing Strategy
+
 - **Primary nav:** desktop center cluster → tablet hamburger drawer at 768px.
 - **Card grid:** 4-up → 3-up → 2-up → 1-up at 1024, 768, and 480px; gutters drop from 24px to 16px on mobile.
 - **Footer:** 6-up link columns → 2-up at tablet → full accordion at mobile (each column header becomes a tap-to-expand row).
@@ -617,6 +634,7 @@ All interactive elements meet WCAG AA (≥ 44×44px). `{component.button-primary
 - **Long-form text:** desktop 60/40 body+sidebar → tablet/mobile single-column with sidebar pushed to the bottom.
 
 ### Image Behavior
+
 - Hero imagery uses art-direction crops: 16:9 wide hero on desktop swaps to 4:5 portrait on mobile so the subject stays centered and headline text still has overlay space.
 - Card imagery is a fixed aspect (16:9 for resource, 1:1 for product) that scales rather than re-crops between breakpoints.
 - All non-critical imagery is lazy-loaded as the user scrolls into the next grid row.

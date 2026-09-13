@@ -335,6 +335,7 @@ The typography is the system's most distinctive choice. PlayStation SST renders 
 > **Source pages:** `/en-tr/` (home), `/en-tr/ps5/games/` (PS5 games listing), `/en-tr/games/marathon/` (single game page), `/tr-tr/support/account/` (support center). The chrome palette is identical across all four pages; the support page uses the light-canvas mode exclusively while marketing pages alternate.
 
 ### Brand & Accent
+
 - **PlayStation Blue** (`{colors.primary}` — `#0070d1`): the brand's universal primary. Every primary CTA pill, the active filter chip, the footer surface, badge fills, and inline link color on dark surfaces.
 - **PlayStation Blue Pressed** (`{colors.primary-pressed}` — `#0064b7`): pressed state for the primary pill — also doubles as the inline link color on light surfaces.
 - **PlayStation Blue Active** (`{colors.primary-active}` — `#004d8d`): deeply-pressed state for the primary button.
@@ -343,6 +344,7 @@ The typography is the system's most distinctive choice. PlayStation SST renders 
 - **Marathon Yellow** (`{colors.marathon-yellow}` — `#deff20`): a single high-saturation game-page accent extracted from Marathon's product palette — used only inside the dedicated `/marathon/` game page chrome and not part of the system's general accent vocabulary.
 
 ### Surface
+
 - **Canvas Dark** (`{colors.canvas-dark}` — `#000000`): pure black hero band, primary nav background, footer base. The dominant surface for editorial product moments.
 - **Surface Dark Elevated** (`{colors.surface-dark-elevated}` — `#121314`): inset dark panels, PS Plus tier banner background, "ON PLAYSTATION" gradient end.
 - **Surface Dark Card** (`{colors.surface-dark-card}` — `#181818`): game tile fill, dark product card background.
@@ -354,6 +356,7 @@ The typography is the system's most distinctive choice. PlayStation SST renders 
 - **Hairline Dark** (`{colors.hairline-dark}` — `rgba(229,229,229,0.2)`): translucent 1px divider on dark canvas.
 
 ### Text
+
 - **Ink** (`{colors.ink}` — `#000000`): primary text on `{colors.canvas-light}`. Headlines, button text, support body.
 - **Ink Deep** (`{colors.ink-deep}` — `#121314`): warmer near-black for in-card titles on dark surfaces and deep-shadow gradients.
 - **Ink Elevated** (`{colors.ink-elevated}` — `#181818`): the lightest of the dark-canvas inks, used for elevated card backgrounds.
@@ -366,16 +369,19 @@ The typography is the system's most distinctive choice. PlayStation SST renders 
 - **Mute Dark** (`{colors.mute-dark}` — `rgba(229,229,229,0.55)`): captions and metadata on dark canvas.
 
 ### Semantic
+
 - **Warning** (`{colors.warning}` — `#c81b3a`): validation errors and destructive confirmation copy.
 - **Link Light** (`{colors.link-light}` — `#0064b7`): inline body-prose anchor link on light canvas — same hex as `{colors.primary-pressed}`.
 - **Link Dark** (`{colors.link-dark}` — `#53b1ff`): inline body-prose anchor link on dark canvas — a brightened blue for dark-mode legibility.
 
 ### Brand Gradient
+
 - **PlayStation Plus Gold Gradient** — a horizontal three-stop gold gradient `{colors.ps-plus-gold-start}` (`#ffce21`) → `{colors.ps-plus-gold-mid}` (`#f5a623`) → `{colors.ps-plus-gold-end}` (`#ee8e00`) that anchors the PS Plus banner on the home page. The only gradient in the system; reserved exclusively for PS Plus chrome.
 
 ## Typography
 
 ### Font Family
+
 - **PlayStation SST** is the proprietary brand sans-serif used across every text role on the site. It carries weights 300 (light), 400 (regular), 500 (medium), 600 (semibold), and 700 (bold), and falls back through `sst` → `Arial` → `Helvetica`. The brand's distinctive choice is using **weight 300 (light) for display headlines** — unusual for a gaming brand and the source of the system's editorial, airy character.
 - **SST** appears as a secondary cut for in-product surfaces, falling back to Helvetica → Arial.
 
@@ -399,9 +405,11 @@ The typography is the system's most distinctive choice. PlayStation SST renders 
 | `{typography.button-md}` | 14px | 700 | 1.25 | 0.324px | Compact pill, filter chip, secondary CTA |
 
 ### Principles
+
 The hierarchy works on a 1.25-line-height ladder almost exclusively — even body sits at 1.5 instead of the typical 1.6 — which keeps long-form support pages tight and console showcases efficient. The weight contrast between display (300) and button (700) is dramatic: a single 18px chrome line might host a heavyweight CTA next to a feather-light 22px headline, giving the system its editorial gaming-magazine feel.
 
 ### Note on Font Substitutes
+
 PlayStation SST is proprietary. The closest open-source substitutes:
 - **Roboto Light (300)** for the display tier — its slightly looser letter-spacing matches SST's display optical fit.
 - **Inter** at weights 400/500/600 for body and chrome — the closest geometric sans match for SST's body cut.
@@ -412,12 +420,14 @@ When substituting, preserve the +0.1px to +0.45px tracking on display and button
 ## Layout
 
 ### Spacing System
+
 - **Base unit:** 8px (with finer 4/12px steps for tight inline gaps).
 - **Tokens (front matter):** `{spacing.xxs}` (4px) · `{spacing.xs}` (8px) · `{spacing.sm}` (12px) · `{spacing.md}` (16px) · `{spacing.lg}` (24px) · `{spacing.xl}` (32px) · `{spacing.xxl}` (48px) · `{spacing.section}` (96px).
 - **Universal section rhythm:** every page in the set uses `{spacing.section}` (96px) as the vertical gap between major content blocks. Card grids use `{spacing.lg}` (24px) gutters; in-card padding sits at `{spacing.lg}` to `{spacing.xl}` depending on density.
 - **Hero band padding:** 96px vertical / 48px horizontal — the largest spacing in the system, reserved for full-bleed surface chapters.
 
 ### Grid & Container
+
 - **Max width:** ~1280px content area for body text on desktop with 24px gutters that expand to ~48px at ultrawide. Hero bands and game-tile rails go full-bleed with no max-width constraint on imagery.
 - **Game tile carousel:** 4-up at desktop with horizontal scroll on the same row, collapsing to 3-up at 1024px and 2-up at 768px. Each tile uses 16:9 cover art at `{rounded.md}`.
 - **Console showcase grid:** desktop 5-column thumbnail strip below the main hero render, collapsing to 3-up + horizontal scroll at tablet.
@@ -425,6 +435,7 @@ When substituting, preserve the +0.1px to +0.45px tracking on display and button
 - **News strip:** 3-up card grid at desktop, 2-up at tablet, 1-up at mobile.
 
 ### Whitespace Philosophy
+
 Whitespace is structural and band-defined. The 96px `{spacing.section}` between chapters reads as silence between trailer cuts — there's no decorative wash, no gradient transition, no mid-section divider. Inside a section, content is left-aligned in a tight column with the imagery breathing in the right 60-70% of the band. Paragraph text is comfortable at 1.5 line-height but column widths stay narrow (~520px at desktop) to keep long-form copy readable.
 
 ## Elevation & Depth
@@ -439,6 +450,7 @@ Whitespace is structural and band-defined. The 96px `{spacing.section}` between 
 The system has effectively no resting shadow on cards; depth is built from surface-color contrast across band chapters. Cards lift only on press.
 
 ### Decorative Depth
+
 Depth comes from the alternating-band rhythm and from the imagery itself:
 - **Console product photography** — DualSense controller and PS5 console renders shot on neutral white with crisp edge lighting, full-bleed inside the light-canvas band.
 - **Game key art** — full-bleed cinematic stills (Marathon, the latest blockbuster releases) inside dark-canvas bands with title lockup overlaid in the lower-left.
@@ -460,6 +472,7 @@ Depth comes from the alternating-band rhythm and from the imagery itself:
 The radius vocabulary works on a 4 / 8 / pill rhythm for chrome with structural surfaces staying flat at 0px.
 
 ### Photography Geometry
+
 - **Hero console render:** large centered console + DualSense composition on white, ~70% width of the band, with copy slot to the left.
 - **Game tiles:** 16:9 key art at `{rounded.md}` (8px), 4-up rail at desktop with horizontal carousel.
 - **Marathon game page hero:** full-bleed cinematic 16:9 still with the "MARATHON" wordmark in the lower-left at light weight, brand yellow `{colors.marathon-yellow}` accent on a few small UI tags.
@@ -591,6 +604,7 @@ The radius vocabulary works on a 4 / 8 / pill rhythm for chrome with structural 
 ## Do's and Don'ts
 
 ### Do
+
 - Reserve `{colors.primary}` (PlayStation Blue) for primary CTAs and the footer surface only. The blue band is precious — at most one full-bleed blue band per page.
 - Reserve `{colors.commerce}` (orange) for store/buy/pre-order CTAs only. It is never used on marketing chrome or hero pills.
 - Use PlayStation SST at weight 300 for display headings (54 / 44 / 35 / 28 / 22). The light weight is the brand voice.
@@ -600,6 +614,7 @@ The radius vocabulary works on a 4 / 8 / pill rhythm for chrome with structural 
 - Use `{component.ps-plus-banner}` with the gold gradient exclusively for the PlayStation Plus tier callout — never decorate other components with the gold.
 
 ### Don't
+
 - Don't introduce drop shadows on resting cards. The system is flat-on-canvas; cards lift only on press.
 - Don't replace `{colors.primary}` with another shade of blue. The brand blue is precise — `#0070d1` for default and `#0064b7` for pressed.
 - Don't use `{colors.commerce}` (orange) on marketing/hero CTAs. It's reserved exclusively for store actions.
@@ -623,9 +638,11 @@ The radius vocabulary works on a 4 / 8 / pill rhythm for chrome with structural 
 | mobile-narrow | 320px | Section padding tightens to 32px; hero further scales to ~28px |
 
 ### Touch Targets
+
 All interactive elements meet WCAG AAA (≥ 44×44px). `{component.button-primary}` and `{component.button-commerce}` sit at 48px height with 28px horizontal padding (effective ~48×100px tappable). `{component.text-input}` sits at 48px. `{component.support-search-bar}` sits at 56px. `{component.filter-pill}` is ~36–40px height with 16px padding extending to 44px tappable via inline padding. `{component.carousel-paddle}` is exactly 48×48 circular.
 
 ### Collapsing Strategy
+
 - **Primary nav:** desktop horizontal cluster → tablet hamburger drawer at 768px. The right-cluster icons (search, cart, account) stay visible at every breakpoint.
 - **Sub-nav:** desktop horizontal anchor row → tablet horizontal scroll → mobile select dropdown.
 - **Game tile carousel:** 4-up → 3-up → 2-up at 1024 and 768px; carousel paddles stay visible at every desktop breakpoint, hide on mobile in favor of touch-swipe.
@@ -636,6 +653,7 @@ All interactive elements meet WCAG AAA (≥ 44×44px). `{component.button-primar
 - **Hero headline:** `{typography.display-xl}` (54px) at desktop, scaling 44px / 32px / 28px down the breakpoint stack.
 
 ### Image Behavior
+
 - Hero imagery (console renders, game key art) uses art-direction crops on mobile so the central subject stays centered when the band collapses to single-column.
 - Game tile cover art preserves 16:9 ratio at every breakpoint; only the column count changes.
 - Console showcase thumbnails maintain their natural aspect (~1:1 product render) across breakpoints.

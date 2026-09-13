@@ -13,7 +13,7 @@ type: architecture
 
 **Where**: src/post-autostart-summary.ts (56→~95 lines), src/engram-auto-sync.ts (203→~160 lines), src/skill-recommender.ts (155→~195 lines), config/session-autostart.config.json (5 entries updated), config/ps1-ts-migration.json (wave5 added)
 
-**Learned**: 
+**Learned**:
 - engram-auto-sync.ts: file-locking maps to lock file age check + unlinkSync in finally block; setInterval replaces Start-Sleep loop
 - skill-recommender.ts: tokenization + branch-hint regex translated directly; getContextKeywords was unused and removed
 - post-autostart-summary.ts: uses child_process.execSync for git commands

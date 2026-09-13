@@ -13,7 +13,7 @@ type: pattern
 
 **Where**: config/token-budget-guard.json (v2.0.0+), config/token-budget-limits.json (DEPRECATED)
 
-**Learned**: 
+**Learned**:
 - NO crear nuevos archivos de budget. Siempre editar token-budget-guard.json.
 - token-budget-guard.ts SIEMPRE debe leer de token-budget-guard.json primero (Priority 1), con fallback a orchestrator.json (Priority 2).
 - Cualquier nuevo agente en opencode.json#agent debe reflejarse en token-budget-guard.json#agentLimits.

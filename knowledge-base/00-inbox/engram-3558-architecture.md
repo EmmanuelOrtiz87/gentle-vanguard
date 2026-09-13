@@ -36,9 +36,9 @@ Declare N custom providers in ~/.config/opencode/opencode.json with unique IDs (
 1. ig-pickle (default)
 2. mimo-v2.5-free
 3. ling-3.0-flash-fin-free
-4. 
+4.
 emotron-3-ultra-free
-5. 
+5.
 emotron-3.5-lightning-free
 6. muse-spark-1.2-contributor-free — uses @ai-sdk/openai (override per model), all others use @ai-sdk/openai-compatible
 

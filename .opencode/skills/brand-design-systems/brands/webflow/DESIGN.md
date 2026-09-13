@@ -335,6 +335,7 @@ The shape system is restrained. Buttons take a tight `{rounded.sm}` 4 px radius 
 ## Colors
 
 ### Brand & Accent
+
 - **Ink Black** (`{colors.primary}` — `#080808`): The brand's primary conversion colour. Every primary CTA, every heading, every wordmark. Deeper than pure black to read as branded.
 - **Accent Purple** (`{colors.accent-purple}` — `#7a3dff`): One of the five chromatic category accents — used for design / build product surfaces.
 - **Accent Pink** (`{colors.accent-pink}` — `#ed52cb`): Magenta accent — used for animation / interaction product surfaces.
@@ -347,10 +348,12 @@ The shape system is restrained. Buttons take a tight `{rounded.sm}` 4 px radius 
 - **Accent Red** (`{colors.accent-red}` — `#ee1d36`): Used for error / destructive states.
 
 ### Surface
+
 - **Canvas** (`{colors.canvas}` — `#ffffff`): The default page background.
 - **Hairline** (`{colors.hairline}` — `#d8d8d8`): 1 px solid borders — input borders, card chrome, divider lines.
 
 ### Text
+
 - **Ink** (`{colors.ink}` — `#080808`): Default text and headings.
 - **Ink Strong** (`{colors.ink-strong}` — `#222222`): Near-black emphasis.
 - **Body** (`{colors.body}` — `#363636`): Default body paragraph color.
@@ -359,6 +362,7 @@ The shape system is restrained. Buttons take a tight `{rounded.sm}` 4 px radius 
 - **Mute Soft** (`{colors.mute-soft}` — `#ababab`): The lightest text role — placeholder text, fine print.
 
 ### Semantic
+
 - **Info Blue** (`{colors.accent-blue-info}` — `#146ef5`): Info badge / notification.
 - **Success Green** (`{colors.accent-green}` — `#00d722`): Success indicators.
 - **Warning Yellow** (`{colors.accent-yellow}` — `#ffae13`): Warning states.
@@ -367,6 +371,7 @@ The shape system is restrained. Buttons take a tight `{rounded.sm}` 4 px radius 
 ## Typography
 
 ### Font Family
+
 A single proprietary family carries every typographic role: **WF Visual Sans Variable** (with `Arial` system fallback). Weights 400 / 500 / 550 / 600 are present; the brand never uses 700 / 800 / 900. A monospace variant — **WFVisualSans-Mono** with `Inconsolata` fallback — handles rare technical caption moments and code-style labels. OpenType features `"ss02"`, `"ss10"`, `"zero"` are enabled in the mono variant for the styled zero glyph.
 
 ### Hierarchy
@@ -391,12 +396,14 @@ A single proprietary family carries every typographic role: **WF Visual Sans Var
 | `{typography.button-md}` | 16px | 500 | 25.6px | -0.16px | Button labels. |
 
 ### Principles
+
 - **Weight ceiling at 600.** The brand never uses 700+. Confident, not loud.
 - **Negative tracking at display sizes.** `-0.8 px` at 80 px, scaling through. Tight kerning is part of the voice.
 - **Uppercase eyebrows mark every section.** 15 px / weight 500 / `1.5 px` positive tracking is the brand's signature label style.
 - **Single family across the system.** No separate display vs body face. The variable axes do the work.
 
 ### Note on Font Substitutes
+
 WF Visual Sans Variable is proprietary. Open-source substitutes:
 - **Display + body** — *Inter* weights 400 / 500 / 600 with `font-feature-settings: "ss01"` enabled is the closest stylistic match.
 - **Mono** — *Inconsolata* (the documented fallback) or *DM Mono*.
@@ -404,12 +411,14 @@ WF Visual Sans Variable is proprietary. Open-source substitutes:
 ## Layout
 
 ### Spacing System
+
 - **Base unit**: 4 px (with frequent 0.4 / 0.8 sub-multiples for fine padding).
 - **Tokens**: `{spacing.xxs}` 2 px · `{spacing.xs}` 4 px · `{spacing.sm}` 8 px · `{spacing.md}` 12 px · `{spacing.lg}` 16 px · `{spacing.xl}` 20 px · `{spacing.2xl}` 24 px · `{spacing.3xl}` 32 px.
 - **Section padding**: hero / content bands use `{spacing.3xl}` 32 px gutters with generous vertical spacing.
 - **Card interior padding**: feature and pricing cards sit at `{spacing.3xl}` 32 px.
 
 ### Grid & Container
+
 - Marketing container is wide (effectively edge-to-edge with `{spacing.3xl}` gutters).
 - Category card grid: 2 / 3-up at desktop with mixed sizing (some larger feature cards span 2 columns).
 - Pricing tier grid: 3-up at desktop, 1-up at mobile.
@@ -426,14 +435,17 @@ WF Visual Sans Variable is proprietary. Open-source substitutes:
 | Desktop | ≥ 992px | Full multi-up grids. |
 
 #### Touch Targets
+
 Buttons render at ~44 px (12 px vertical padding + 25.6 px line-height). WCAG AAA met.
 
 #### Collapsing Strategy
+
 - Nav: full link row at desktop. Hamburger at mobile.
 - Category card grid: 2 / 3 / 4-up at desktop, drops to 1-up at mobile.
 - Pricing tier: 3 / 4-up at desktop, 1-up at mobile.
 
 #### Image Behavior
+
 - Category cards: full-bleed solid colour fills (no photography).
 - Product screenshots: 16:9 inside `{rounded.md}` card chrome.
 - No portrait imagery in the marketing surface.
@@ -449,6 +461,7 @@ Buttons render at ~44 px (12 px vertical padding + 25.6 px line-height). WCAG AA
 | Level 4 — Heavy Modal | Extremely heavy multi-stop — `0 24px 24px rgba(0,0,0,0.26), 0 6px 13px rgba(0,0,0,0.29)` final stops. | Modal / dialog surfaces. |
 
 ### Decorative Depth
+
 - The chromatic category cards (full-saturation purple / pink / blue / orange / green fills) provide visual depth through pure colour contrast against the white canvas.
 - Layered shadow recipes are the brand's only true atmospheric effect — they're 5-stop drop-shadow stacks with very low individual opacities.
 
@@ -570,10 +583,10 @@ Buttons render at ~44 px (12 px vertical padding + 25.6 px line-height). WCAG AA
 **`ex-toast`** — Toast notification surface — feature-card shape + medium shadow.
 - Properties: `backgroundColor`, `rounded`, `padding`, `typography`
 
-
 ## Do's and Don'ts
 
 ### Do
+
 - Reserve `{colors.primary}` (`#080808`) for every primary CTA, every heading, and every wordmark. Near-black is the conversion colour.
 - Use the five chromatic accents (purple / pink / blue / orange / green) as full-fill category cards, NOT as button backgrounds.
 - Set hero headlines in `{typography.display-xxl}` weight 600 with `-0.8 px` tracking.
@@ -582,6 +595,7 @@ Buttons render at ~44 px (12 px vertical padding + 25.6 px line-height). WCAG AA
 - Use layered multi-stop drop-shadows on featured cards — the brand's distinctive elevation recipe.
 
 ### Don't
+
 - Don't promote button-medium weight to 700+. The brand's weight ceiling is 600.
 - Don't use chromatic accents as button backgrounds. They're surface fills, not actions.
 - Don't render CTAs as pills. The brand's button geometry is tight 4 px rectangle.

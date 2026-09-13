@@ -10,7 +10,7 @@ type: decision
 **What**: Differentiated README.md (private repo) from README-PUBLIC.md (public repo) per README-GOVERNANCE.md policy
 **Why**: Both repos had identical content when governance doc requires different structure and depth for each
 **Where**: README.md, README-PUBLIC.md, docs/brand/assets/banner-github.svg
-**Learned**: 
+**Learned**:
 - Private README must have: What is GV (6 bullets + Mermaid flowchart), Work Routing Ladder, Delegation Rules table, Model Routing Mermaid, 5-Layer Architecture table, Agent Ecosystem with Delegates-to column, Key Capabilities (SDD/OpenSpec, Preflight, Review Guard, Skill Registry, Chain-Delivery, Cross-Tool), Quick Start, Development commands table, CI/CD, Project Status gates, Key Documentation links
 - Public README must have: What It Solves table, Skill Catalog, Quick Install, Requirements, Defensive Patterns, Security
 - validate-readme.ps1 requires exact patterns: "Routes work", "Persists memory", "Enforces SDD" in What is GV section; Invoke-Pester in Development section

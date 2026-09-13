@@ -8,12 +8,15 @@ type: decision
 # Session-Based Fallback COMPLETADO - Stack 100% funcional
 
 ## Objetivo
+
 Implementar herencia dinámica de modelo del orquestador a subagentes con Session-Based Fallback completo.
 
 ## Estado Final
+
 ✅ **STACK 100% FUNCIONAL** - Verificado exhaustivamente
 
 ## Verificaciones Pasadas
+
 - Typecheck: exit 0 (0 errores)
 - Lint: exit 0 (0 errores, 0 warnings)
 - GGA Status: Current Provider kimi-2-5, Exhausted Providers none
@@ -24,6 +27,7 @@ Implementar herencia dinámica de modelo del orquestador a subagentes con Sessio
 - Documentación: ADR-026 creado en docs/adr/
 
 ## Archivos Creados/Modificados
+
 1. src/gga.ts - Session-Based Fallback core
 2. src/model-enforcer.ts - Herencia dinámica desde opencode.json
 3. src/direct-execution.ts - Ejecución directa sin delegación
@@ -33,6 +37,7 @@ Implementar herencia dinámica de modelo del orquestador a subagentes con Sessio
 7. AGENTS.md - Documentación del sistema Direct Execution
 
 ## Comportamiento Implementado
+
 1. Al delegar: se asigna automáticamente el modelo del orquestador (kimi-2-5)
 2. Si falla: intenta fallback chain (claude → deepseek → ollama)
 3. Si todos fallan: orquestador ejecuta directamente con su modelo
@@ -40,6 +45,7 @@ Implementar herencia dinámica de modelo del orquestador a subagentes con Sessio
 5. Reset: al nueva sesión, todo vuelve a normalidad automáticamente
 
 ## Stack Operativo
+
 - Sin gaps
 - Sin errores
 - Sin warnings
@@ -48,9 +54,11 @@ Implementar herencia dinámica de modelo del orquestador a subagentes con Sessio
 - Todo integrado y automatizado
 
 ## Fecha
+
 2026-08-11
 
 ## Estado del Repo
+
 Listo para subir a main y develop
 
 ---

@@ -279,12 +279,14 @@ The page rhythm is **dense product screenshots** — Linear's marketing leads wi
 > Source pages: linear.app (home), /intake, /pricing, /contact/sales, /build.
 
 ### Brand & Accent
+
 - **Lavender-Blue** ({colors.primary}): The signature Linear accent — primary CTA, brand mark, link emphasis.
 - **Lavender Hover** ({colors.primary-hover}): Lighter lavender (#828fff) — hovered state of the primary CTA.
 - **Lavender Focus** ({colors.primary-focus}): Focus-ring tint (#5e69d1) — focused inputs, focused buttons.
 - **Brand Secure** ({colors.brand-secure}): Muted lavender-gray (#7a7fad) — used in "Linear Security" surfaces.
 
 ### Surface
+
 - **Canvas** ({colors.canvas}): Default page background — #010102, near-pure black with a faint blue tint.
 - **Surface 1** ({colors.surface-1}): One step above canvas — feature cards, pricing cards, product screenshot panels.
 - **Surface 2** ({colors.surface-2}): Two steps above — featured pricing card, hovered cards.
@@ -298,12 +300,14 @@ The page rhythm is **dense product screenshots** — Linear's marketing leads wi
 - **Inverse Surface 2** ({colors.inverse-surface-2}): Two steps above inverse canvas.
 
 ### Text
+
 - **Ink** ({colors.ink}): All headlines and emphasized body type — light gray #f7f8f8.
 - **Ink Muted** ({colors.ink-muted}): Secondary type at #d0d6e0 — meta info on hero panels.
 - **Ink Subtle** ({colors.ink-subtle}): Tertiary type at #8a8f98 — deselected pricing tabs, footer columns.
 - **Ink Tertiary** ({colors.ink-tertiary}): Quaternary at #62666d — disabled, footnotes.
 
 ### Semantic
+
 - **Success Green** ({colors.semantic-success}): Status pills, success indicators. The only semantic color on marketing.
 - **Overlay** ({colors.semantic-overlay}): Pure black overlay scrim for modals.
 

@@ -9,9 +9,11 @@
 
 ## 1. Propósito
 
-Esta normativa establece los procedimientos automáticos y manuales para mantener la documentación del stack (Academy, docs/, presentaciones) sincronizada con las implementaciones de código.
+Esta normativa establece los procedimientos automáticos y manuales para mantener la documentación
+del stack (Academy, docs/, presentaciones) sincronizada con las implementaciones de código.
 
-**Principio**: *"La documentación nunca debe quedar desactualizada más de 24 horas respecto al código."*
+**Principio**: _"La documentación nunca debe quedar desactualizada más de 24 horas respecto al
+código."_
 
 ---
 
@@ -65,7 +67,7 @@ pre-commit:
   commands:
     docs-check:
       run: npm run academy:sync:check
-      fail_text: "Documentación desactualizada. Ejecuta: npm run academy:sync"
+      fail_text: 'Documentación desactualizada. Ejecuta: npm run academy:sync'
 ```
 
 ### 3.3 Nightly Sync
@@ -86,6 +88,7 @@ npm run docs:validate-links
 ### 4.1 Nueva Feature Significativa
 
 Cuando se implementa una feature del nivel de:
+
 - Intelligent Delegator
 - Policy Engine
 - Componente de arquitectura
@@ -198,6 +201,7 @@ npm run script:action
 ### 5.3 Doc-Agent
 
 Revisa y mejora:
+
 - Claridad de explicaciones
 - Calidad de ejemplos
 - Completitud de referencias
@@ -219,12 +223,12 @@ Toda documentación debe cumplir:
 
 ### 6.2 Métricas
 
-| Métrica | Objetivo | Dashboard |
-|---------|----------|-----------|
-| Doc Coverage | >90% | ✅ Currently: 95% |
-| Sync Delay | <24h | ✅ Currently: <2h |
-| Broken Links | 0 | ✅ Currently: 0 |
-| Outdated Lessons | <5% | ✅ Currently: 3% |
+| Métrica          | Objetivo | Dashboard         |
+| ---------------- | -------- | ----------------- |
+| Doc Coverage     | >90%     | ✅ Currently: 95% |
+| Sync Delay       | <24h     | ✅ Currently: <2h |
+| Broken Links     | 0        | ✅ Currently: 0   |
+| Outdated Lessons | <5%      | ✅ Currently: 3%  |
 
 ---
 
@@ -305,10 +309,12 @@ npm run docs:generate-slides
 ### 9.1 Feature: Intelligent Delegator v2.0
 
 **Implementación**:
+
 - Código: `src/orchestration/intelligent-delegator.ts`
 - Wrapper: `src/orchestration/task-wrapper.ts`
 
 **Documentación**:
+
 - Docs: `docs/INTELLIGENT-DELEGATOR.md`
 - Academy: `content-agentes.js` → lessons[1]: 'intelligent-delegator-v2'
 - Slides: `docs/presentations/2026-09-03-intelligent-delegator.md`
@@ -318,10 +324,12 @@ npm run docs:generate-slides
 ### 9.2 Feature: Policy Engine @govern
 
 **Implementación**:
+
 - Código: `src/security/policy-engine/policy-engine.ts`
 - Policies: `policies/shell-commands.yaml`
 
 **Documentación**:
+
 - Docs: `src/security/policy-engine/README.md`
 - Academy: `content-arquitectura.js` → lessons[2]: 'policy-engine-govern'
 - Slides: `docs/presentations/2026-09-03-policy-engine.md`
@@ -343,9 +351,9 @@ npm run docs:generate-slides
 
 ## 11. Historial
 
-| Versión | Fecha | Cambios | Autor |
-|---------|-------|---------|-------|
-| 1.0 | 2026-09-03 | Normativa inicial | Stack v4.0-BLACKCAT |
+| Versión | Fecha      | Cambios           | Autor               |
+| ------- | ---------- | ----------------- | ------------------- |
+| 1.0     | 2026-09-03 | Normativa inicial | Stack v4.0-BLACKCAT |
 
 ---
 
@@ -355,4 +363,4 @@ npm run docs:generate-slides
 
 ---
 
-*"La documentación es código que se lee humanos. Trátalo con el mismo respeto."*
+_"La documentación es código que se lee humanos. Trátalo con el mismo respeto."_

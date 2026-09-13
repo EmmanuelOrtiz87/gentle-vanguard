@@ -285,12 +285,14 @@ The signature device is the **product-card** family — each HashiCorp product g
 > Source pages: hashicorp.com/en (home), /en/infrastructure-cloud, /en/products/terraform, /en/pricing, /en/resources?contentType=PDF.
 
 ### Brand & Accent
+
 - **Black** ({colors.primary}): The system primary surface. Canvas, footer, comparison tables, hero — all black.
 - **White** ({colors.on-primary}): Inverse text on black; canvas of `button-primary`.
 - **Accent Blue** ({colors.accent-blue}): Hyperlinks across the marketing surface.
 - **Visited Purple** ({colors.semantic-visited}): Visited-link state.
 
 ### Surface
+
 - **Canvas** ({colors.canvas}): Default page background.
 - **Surface 1** ({colors.surface-1}): Charcoal one step above canvas — feature cards, pricing cards, resource tiles.
 - **Surface 2** ({colors.surface-2}): Two steps above — featured pricing card, secondary buttons, hovered product chrome.
@@ -300,11 +302,13 @@ The signature device is the **product-card** family — each HashiCorp product g
 - **Inverse Canvas** ({colors.inverse-canvas}): Pure white — used as the surface of `button-primary` only.
 
 ### Text
+
 - **Ink** ({colors.ink}): All headline and emphasized body type — pure white.
 - **Ink Muted** ({colors.ink-muted}): Secondary type at #b2b6bd — meta info, footer columns.
 - **Ink Subtle** ({colors.ink-subtle}): Tertiary type at #656a76 — form helper text, timestamps, footnotes.
 
 ### Per-Product Identity (signature)
+
 HashiCorp's marketing isn't held together by a single accent color — it's held together by a system of product-specific accents, each used to mark which tool a section represents.
 
 - **Terraform Purple** ({colors.product-terraform}): Terraform sections, terraform CTAs, the violet 3D cube on the home hero.
@@ -317,6 +321,7 @@ HashiCorp's marketing isn't held together by a single accent color — it's held
 - **Boundary Coral** ({colors.product-boundary}): Boundary sections.
 
 ### Semantic
+
 - **Success** ({colors.semantic-success}): Positive states (also reused as Nomad green).
 - **Warning** ({colors.semantic-warning}): Warning states (also Vault yellow).
 - **Error** ({colors.semantic-error}): Error states (also Consul red).

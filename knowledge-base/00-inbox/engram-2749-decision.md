@@ -11,7 +11,7 @@ type: decision
 
 **Why**: Los subagentes no heredaban el modelo del orquestador (kimi-2-5) y opencode asignaba modelo free (deepseek-v4-flash-free) sin crédito. Cuando la delegación fallaba, el orquestador ahora ejecuta directamente la tarea.
 
-**Where**: 
+**Where**:
 - src/gga.ts - Funciones getCurrentSessionId(), detectNewSession(), activateSessionFallbackMode(), loadGGAState() modificada, GuardianAngel() con fallback final al orquestador
 - src/model-enforcer.ts - detectOrchestratorModel() herencia dinámica desde opencode.json
 - src/agent-delegator.ts - Corregido error de destructuring
@@ -23,7 +23,7 @@ type: decision
 - Fallback final: si todos los modelos fallan, orquestador ejecuta con getDetectedModel()
 - Trade-off: Se pierde paralelización pero se garantiza ejecución
 
-**Verification**: 
+**Verification**:
 - Typecheck: exit 0 ✅
 - Lint: exit 0 ✅
 - Delegación test: ✓ Success with provider: kimi-2-5 ✅

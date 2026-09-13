@@ -11,7 +11,7 @@ type: architecture
 
 **Why**: Dashboard always showed OFFLINE in Live section, static 12000 tokens, and TV mode had no visual indicator and the data never changed.
 
-**Where**: 
+**Where**:
 - reports/dashboard-v2/server.js: serverMetrics auto-tracker, auto-tick every 5s, getLiveSession() virtual fallback, generateMetrics() fallback
 - reports/dashboard-v2/app.js: refresh 10s→5s, trace poll 5s→3s, TV rotation 30s→15s, toggleTV() active state on button, countdown 10s→3s
 - reports/dashboard-v2/styles.css: gv-nav__btn--tv.active glow, tvFadeIn animation, gv-card__value--live pulse

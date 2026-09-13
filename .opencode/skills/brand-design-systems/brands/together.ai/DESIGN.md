@@ -347,6 +347,7 @@ Surfaces alternate aggressively: a `{colors.canvas-dark}` (`#010120`) band for h
 ## Colors
 
 ### Brand & Accent
+
 - **Ink Black** (`{colors.primary}` — `#000000`): The single primary CTA color. Black pill carries "Sign in", "Contact sales", "Get started now", every footer CTA.
 - **Brand Orange** (`{colors.accent-orange}` — `#fc4c02`): One leg of the three-color brand gradient. Appears in the hero ribbon graphic; never used as a UI fill on its own.
 - **Brand Magenta** (`{colors.accent-magenta}` — `#ef2cc1`): The second leg of the gradient.
@@ -354,6 +355,7 @@ Surfaces alternate aggressively: a `{colors.canvas-dark}` (`#010120`) band for h
 - **Brand Mint** (`{colors.accent-mint}` — `#c8f6f9`): A pastel cyan that lives outside the gradient — used for hero secondary-CTA pills and `stats-card-tinted` tiles.
 
 ### Surface
+
 - **Canvas** (`{colors.canvas}` — `#ffffff`): The default product / pricing / docs background.
 - **Hairline / Canvas Soft** (`{colors.hairline}` — `#ebebeb`): The brand's single soft surface tone — used for data-table header rows, toggle-pill rails, and 1 px dividers between table rows.
 - **Canvas Dark** (`{colors.canvas-dark}` — `#010120`): The brand's dark hero surface; appears on `hero-band-dark` and `research-band-dark`.
@@ -362,20 +364,24 @@ Surfaces alternate aggressively: a `{colors.canvas-dark}` (`#010120`) band for h
 - **Surface Dark Soft** (`{colors.surface-dark-soft}` — `#313641`): A slightly lighter dark fill used inside dark-band cards.
 
 ### Text
+
 - **Ink** (`{colors.ink}` — `#000000`): Every heading and body paragraph on light surfaces.
 - **Body** (`{colors.body}` — `#999999`): Secondary text — captions, table cell secondary values, footer link text. Pre-blended from the brand's translucent-black 40 % body color.
 - **Body Muted** (`{colors.body}` — `#999999`): The all-caps mono-eyebrow text color on light surfaces also rides on this token — there is no separate "mute" tone, the brand keeps secondary text consistent with caption text.
 - **On Dark** (`{colors.on-dark}` — `#ffffff`): All text on `{colors.canvas-dark}` surfaces.
 
 ### Semantic
+
 The brand does not maintain a separate error / success palette in its public surface; validation cues use the primary black or the brand gradient depending on context. No explicit error red, success green, or warning yellow is documented here — adopting framework defaults is appropriate.
 
 ### Brand Gradient
+
 The brand's signature decoration is a three-stop gradient drawn from `{colors.accent-orange}` → `{colors.accent-magenta}` → `{colors.accent-periwinkle}`, applied as the only piece of decorative chrome (the hero ribbon graphic). Treat the gradient as one unified object — do not crop it down to a single colour, do not reorder the stops, and do not add a fourth stop. Used at large scale; never miniaturised to icon size.
 
 ## Typography
 
 ### Font Family
+
 Two families carry the entire system:
 
 1. **A custom geometric display sans** (extracted as `The Future`) for every headline, lead paragraph, body, button label that is not uppercase, and inline link. Weights 400 and 500 are the working pair; the face never appears in bold (700) or heavier. Tight negative letter-spacing (`-1.92 px` at 64 px display, `-0.16 px` at 16 px body) gives the face its slightly-condensed, poured-on-the-page feel.
@@ -401,11 +407,13 @@ Two families carry the entire system:
 | `{typography.mono-caption}` | 10px | 400 | 14px | 0.05px | Mono fine print (inside code editor mockup). |
 
 ### Principles
+
 - **Two-face contrast is the voice.** Display sans for narrative; uppercase mono for technical labels. Never let the mono carry a paragraph; never let the display sans carry a button label.
 - **Negative letter-spacing only on the display sans.** The mono face uses small positive tracking; reversing this is wrong.
 - **Headlines stay sentence-case.** Every uppercase moment belongs to the mono face. Mixing all-caps display would muddy the contrast.
 
 ### Note on Font Substitutes
+
 The two primary faces are proprietary. Open-source substitutes:
 - **Display sans** — *Inter* (400 / 500) with `font-feature-settings: "ss01"` enabled comes closest; tighten letter-spacing by ~0.6 % at display sizes to land on the brand's compressed feel. *Geist* is the second-best option but reads slightly wider.
 - **Uppercase mono eyebrow** — *JetBrains Mono* or *Geist Mono* (weight 500) at 11 px with `text-transform: uppercase` matches the brand's voice once tracking is bumped to `0.04em`.
@@ -413,6 +421,7 @@ The two primary faces are proprietary. Open-source substitutes:
 ## Layout
 
 ### Spacing System
+
 - **Base unit**: 4 px. Almost every captured value is a multiple of 4, with two exceptions (7.2 px, 55.2 px) that are gap-multiplier derivatives, not layout decisions.
 - **Tokens**: `{spacing.xxs}` 2 px · `{spacing.xs}` 4 px · `{spacing.sm}` 8 px · `{spacing.md}` 12 px · `{spacing.lg}` 16 px · `{spacing.xl}` 20 px · `{spacing.2xl}` 24 px · `{spacing.3xl}` 32 px · `{spacing.4xl}` 44 px · `{spacing.5xl}` 48 px · `{spacing.6xl}` 55.2 px · `{spacing.section}` 80 px.
 - **Section padding**: marketing bands use `{spacing.section}` 80 px top/bottom on desktop. The hero and the "research" dark band keep the 80 px rhythm; pricing tables tighten to `{spacing.5xl}` to keep dense data legible.
@@ -420,6 +429,7 @@ The two primary faces are proprietary. Open-source substitutes:
 - **Inline gap**: button + nav rows use `{spacing.md}` 12 px between siblings; chip groups use `{spacing.sm}` 8 px.
 
 ### Grid & Container
+
 - **Max width**: ~1280 px desktop container; nothing rendered above that. Content centres with horizontal gutters of `{spacing.3xl}` 32 px on desktop, `{spacing.lg}` 16 px on mobile.
 - **Column patterns**:
   - Research / testimonial grids: 3-up at desktop, 1-up at mobile.
@@ -429,6 +439,7 @@ The two primary faces are proprietary. Open-source substitutes:
   - Hero: 50 / 50 split (headline left, ribbon graphic right) at desktop; stacked at mobile with graphic above.
 
 ### Whitespace Philosophy
+
 Surface contrast does most of the separation. A dark band ends → 80 px of breathing room → next light band begins. Inside a band, headline and lead paragraph hug close (`{spacing.lg}` 16 px between them), then a wider gap before the supporting visual or CTA cluster. Inside pricing data tables, the brand keeps rows tight (`{spacing.md}` 12 px vertical) — the table reads more like a sheet than a marketing component.
 
 ### Responsive Strategy
@@ -444,9 +455,11 @@ Surface contrast does most of the separation. A dark band ends → 80 px of brea
 | Desktop-Large | ≥ 1280px | Container caps at 1280 px; bands stay edge-to-edge in colour while content centres. |
 
 #### Touch Targets
+
 The mono-cap button label is set at 16 px; combined with `{spacing.xs}` 4 px top / bottom and a 24 px horizontal padding, the primary pill renders at roughly 32 px tall. On mobile viewports, button height is inflated to ≥ 44 px through extra vertical padding inside the touch row — meeting WCAG AAA. The circular icon button (`button-icon-circular`) renders at 44 × 44 px minimum at all viewports.
 
 #### Collapsing Strategy
+
 - **Nav**: full link row + black "Sign in" pill + "Get started" pill at desktop. Collapses to logo + hamburger at mobile; the menu opens as a full-overlay drawer with the same link list stacked vertically.
 - **Hero**: at desktop, headline left + gradient ribbon right (50 / 50). At mobile, headline stacks above a smaller-scale ribbon — never below.
 - **Research band**: 4-up grid at desktop drops to 2-up at tablet, 1-up at mobile. Card chrome stays identical.
@@ -454,6 +467,7 @@ The mono-cap button label is set at 16 px; combined with `{spacing.xs}` 4 px top
 - **Footer wordmark banner**: scales fluidly — the giant `together.ai` wordmark stays edge-to-edge regardless of viewport.
 
 #### Image Behavior
+
 - **Hero ribbon graphic**: rendered as an SVG, scales fluidly with the hero container; never crops, never repositions.
 - **Testimonial portraits**: square or 4:5 portrait, hard-cropped at top; consistent square framing across the grid.
 - **Article thumbnails**: 16:9 landscape, fills card top with `{rounded.sm}` corners on the image only.
@@ -469,6 +483,7 @@ The mono-cap button label is set at 16 px; combined with `{spacing.xs}` 4 px top
 | Level 3 — Soft Drop | `rgba(1, 1, 32, 0.1) 0px 4px 10px 0px` — a barely-perceptible shadow tinted with the brand's dark-navy. | Floating elements (the chat-launcher orb, sticky-bottom nav row when one appears). |
 
 ### Decorative Depth
+
 - **Gradient ribbon as depth**: the hero's three-stop gradient ribbon is the page's only true atmospheric effect. It loops through layered translucent shapes that imply depth without leaving the brand palette.
 - **Code editor mockup as section-depth break**: a dark code-editor surface inside the otherwise-white product band acts as a one-step lift, mirroring the hero's polarity flip.
 - **Wordmark banner as terminal depth**: the giant `together.ai` letters at the bottom are technically inside `{colors.canvas}` but tinted toward `{colors.hairline}` so they read as a faint stencil, giving the page a final "you have arrived" sign-off.
@@ -486,6 +501,7 @@ The mono-cap button label is set at 16 px; combined with `{spacing.xs}` 4 px top
 | `{rounded.full}` | 9999px | The floating chat-launcher orb (`button-icon-circular`). The only fully-pill shape in the system. |
 
 ### Photography Geometry
+
 - **Hero ribbon**: SVG gradient, free-form; no aspect-ratio constraint.
 - **Customer logos**: vector, rendered grayscale at consistent height (~24 px) in a wrapping flex row.
 - **Testimonial portraits**: 1:1 square crop with hard-edge corners — no avatar pill.
@@ -612,10 +628,10 @@ The mono-cap button label is set at 16 px; combined with `{spacing.xs}` 4 px top
 **`ex-toast`** — Toast notification surface — feature-card shape + medium shadow.
 - Properties: `backgroundColor`, `rounded`, `padding`, `typography`
 
-
 ## Do's and Don'ts
 
 ### Do
+
 - Reserve `{colors.primary}` (`#000000`) for every primary CTA. One black pill per visible viewport — that consistency is the brand's whole conversion story.
 - Set every section eyebrow and button label in `{typography.mono-caps-button}` / `{typography.mono-caps-eyebrow}` — uppercase mono, positive tracking.
 - Pair the brand gradient (`{colors.accent-orange}` → `{colors.accent-magenta}` → `{colors.accent-periwinkle}`) at hero scale only. The gradient is the brand chrome; never shrink to icon size.
@@ -624,6 +640,7 @@ The mono-cap button label is set at 16 px; combined with `{spacing.xs}` 4 px top
 - Render the giant `together.ai` wordmark banner at the bottom of every long page in `{typography.display-xxl}`, tinted toward `{colors.hairline}` so it reads as a stencil — not as a heavy footer title.
 
 ### Don't
+
 - Don't introduce a fifth accent colour. The three-stop gradient + mint pill is the entire decorative palette; new accents flatten the brand.
 - Don't set body paragraphs in the mono face. The mono is for labels only; long-form mono reads as a console log, not as marketing copy.
 - Don't centre-align body paragraphs under a left-aligned display headline. The brand keeps text-block alignment consistent within a copy stack.

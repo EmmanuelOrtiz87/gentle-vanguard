@@ -13,7 +13,7 @@ type: bugfix
 
 **Where**: src/post-autostart-summary.ts:63 (require→readdirSync), src/correction-rules-engine.ts (removed dead PS1 fallback + runPs1), src/engram-auto-sync.ts (removed dead PS1 fallback), tests/eval/health-check.test.ts:32 (require→readFileSync), package.json:52 (node→npx tsx), config/session-autostart.config.json:463 (list→prune), docs/ROADMAP.md, docs/operations/PRODUCTION-RUNBOOK.md
 
-**Learned**: 
+**Learned**:
 - ESM projects cannot use require() — tsx allows it but it's wrong for the module system
 - Dead PS1 fallback paths add complexity without value when TS version always exists
 - format-check hook catches unformatted markdown files — always run prettier before commit

@@ -11,13 +11,13 @@ type: architecture
 
 **Why**: El usuario necesitaba visibilidad de consumo con costo preciso según el modelo usado, y control de formato compacto/verbose.
 
-**Where**: 
+**Where**:
 - token-usage-notifier.ps1: parámetro -Model, Get-EstimatedCost actualizado
 - token-usage-auto.ps1: pasa -Model $Model al notifier
 - pre-process-input.ps1: handler /notif compact
 - toggle-token-display.ps1: ValidateSet incluye "compact"
 
-**Learned**: 
+**Learned**:
 - Bug menor: toggle-token-display.ps1 línea ~122, el switch de $typeLabel no incluye case "compact" → muestra "[]" vacío. Fix: agregar "compact" { "Compact Mode" }.
 - provider-costs.json tiene tasas per-1K-tokens. Get-EstimatedCost multiplica por 1000 para convertir a per-M.
 - Claude Sonnet 4: $0.003/1K input = $3/M, $0.015/1K output = $15/M.

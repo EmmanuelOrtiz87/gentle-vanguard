@@ -13,7 +13,7 @@ type: decision
 
 **Where**: src/engram-auto-sync.ts, scripts/utilities/config/validate-opencode-config.ps1, scripts/utilities/EVOLVE/auto-code-review.ps1, .codex/config.toml, .windsurf/config.json, .engram/checksums.sha256, .engram-data/, .runtime/telemetry/
 
-**Learned**: 
+**Learned**:
 - Always guard syncChecksums() against missing DB (same pattern as checkSynchronization())
 - OpenCode 'references' (plural) is valid property, not typo of 'reference'
 - CodeGraph WAL checkpoint (sqlite3 PRAGMA wal_checkpoint(TRUNCATE)) resolved DEGRADED→HEALTHY

@@ -13,7 +13,7 @@ type: bugfix
 
 **Where**: src/maintenance-watchtower.ts — checkDashboardWs() function
 
-**Learned**: 
+**Learned**:
 - Dashboard WS uses dynamic port allocation via Get-FreePort() in dashboard-common.ps1
 - Ports are persisted to .runtime/dashboard-ports.json but can become stale when processes die
 - The fix tries configured port first, then fallback ports (8080, 8082) — catches the actual running server

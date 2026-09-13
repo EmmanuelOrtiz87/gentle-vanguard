@@ -13,7 +13,7 @@ type: architecture
 
 **Where**: scripts/maintenance/maintenance-watchtower.ps1 (reescrito completo), AGENTS.md (documentación agregada)
 
-**Learned**: 
+**Learned**:
 - El WS server caía porque el watchdog se lanzaba como subproceso del shell tool; al expirar timeout del bash tool, se mataba todo el árbol. Solución: lanzar watchdog como proceso independiente con Start-Process -WindowStyle Hidden.
 - Los 42 steps del autostart NO necesitan consolidación agresiva porque lazy:true ya los hace no-bloqueantes.
 - @types/react 19 rompe JSX.Element namespace — migrar a React.ReactNode.

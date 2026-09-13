@@ -235,6 +235,7 @@ Typography runs **Super Sans VF** — a proprietary variable display sans — at
 > **Source pages:** home (`/`), `/products/go-ai-assistant`, `/contact-sales`, `/plans`.
 
 ### Brand & Accent
+
 - **Primary Indigo Navy** (`{colors.primary}` — `#1b1938`): The brand's primary surface and CTA color. Hero canvas, filled rounded-rectangle button, featured pricing tier.
 - **Indigo Deep** (`{colors.primary-deep}` — `#0e0c1f`): Pressed-state lift / deeper navy used in hero gradient stops.
 - **Surface Violet Soft** (`{colors.surface-violet-soft}` — `#c9b4fa`): The hero pill-button fill — pale violet over the indigo canvas. Also appears in atmospheric backdrops.
@@ -242,12 +243,14 @@ Typography runs **Super Sans VF** — a proprietary variable display sans — at
 - **Surface Teal Mid** (`{colors.surface-teal-mid}` — `#155555`): Slightly lifted teal for nested chrome inside the band.
 
 ### Surface
+
 - **Canvas** (`{colors.canvas}` — `#ffffff`): Default body background.
 - **Canvas Soft** (`{colors.canvas-soft}` — `#fafaf8`): Barely-warm off-white for alternating feature-row bands.
 - **Hairline** (`{colors.hairline}` — `#e8e4dd`): 1px borders, slightly warm grey.
 - **Hairline Dark** (`{colors.hairline-dark}` — `#3f3a52`): 1px borders on dark surfaces.
 
 ### Text
+
 - **Ink** (`{colors.ink}` — `#292827`): Default body text. Warm dark grey, never pure black.
 - **Ink Mute** (`{colors.ink-mute}` — `#73706d`): Secondary text, captions.
 - **Ink Faint** (`{colors.ink-faint}` — `#9a9794`): Tertiary / disabled text.
@@ -281,27 +284,32 @@ For substitution use **Inter Variable** (open-source) at weight 460 / 540 / 600 
 | `{typography.micro}` | 12px | 540 | 1.4 | 0 | Pill label, fine print |
 
 ### Principles
+
 - **Sub-default weights.** The brand picks 460 / 540 / 600 instead of 400 / 500 / 700 — a quiet warmth in the typography that distinguishes it from default SaaS systems.
 - **Tight display leading.** 0.96 on 48–64px display — the type stacks unusually compact.
 - **Negative tracking on display sizes.** -1.32px at 48px scaling proportionally — tightens the variable letterforms into editorial density.
 
 ### Note on Font Substitutes
+
 **Inter Variable** (open-source via Google Fonts) is the recommended substitute. Set `font-variation-settings: "wght" 540` for display, 460 for body — Inter's variable axes match. Avoid fixed-weight Inter; the in-between weights are the brand's signature.
 
 ## Layout
 
 ### Spacing System
+
 - **Base unit**: 8px (with 2 / 4 / 12 sub-tokens for fine work).
 - **Tokens**: `{spacing.xxs}` 2px · `{spacing.xs}` 4px · `{spacing.sm}` 8px · `{spacing.md}` 12px · `{spacing.lg}` 16px · `{spacing.xl}` 24px · `{spacing.xxl}` 32px · `{spacing.huge}` 64px.
 - **Section padding**: 64–96px on most sections; closing teal band uses 96–128px for editorial weight.
 - **Card internal padding**: 32px on pricing cards; 24px on alternating feature rows.
 
 ### Grid & Container
+
 - Hero spans full viewport width with the violet-sky backdrop edge-to-edge; content centers in a ~960px column.
 - Body content centers in ~960–1100px.
 - Pricing collapses 3-up → 2-up → 1-up at 1024 / 768 breakpoints.
 
 ### Whitespace Philosophy
+
 The brand uses generous editorial whitespace on both polarities — dark hero and white body. Section gaps tend toward 96px; the teal closing band gets up to 128px of vertical air. The whitespace itself is part of the brand's "considered, slow-tempo" feel.
 
 ## Elevation & Depth
@@ -314,6 +322,7 @@ The brand uses generous editorial whitespace on both polarities — dark hero an
 | 3 | Atmospheric backdrop (violet-sky over indigo) | The hero's depth medium |
 
 ### Decorative Depth
+
 The hero's depth is the **violet-sky atmospheric backdrop** — a soft indigo-to-violet-to-sky-blue radial wash that sits behind the portrait subject. Implemented as a CSS radial gradient or large background image. Below the hero, depth is minimal — the white canvas is flat.
 
 ## Shapes
@@ -330,6 +339,7 @@ The hero's depth is the **violet-sky atmospheric backdrop** — a soft indigo-to
 | `{rounded.full}` | 9999px | Pill tabs in feature row, hero CTA |
 
 ### Photography Geometry
+
 The hero uses **half-bleed portrait subjects** — a person photographed at twilight, looking off-frame, occupying the right half of the hero. The portrait extends edge-to-edge vertically and stops mid-canvas horizontally; type sits on the left side. Other photography is rare; product UI mockups handle most other illustrative needs.
 
 ## Components
@@ -399,6 +409,7 @@ The hero uses **half-bleed portrait subjects** — a person photographed at twil
 ## Do's and Don'ts
 
 ### Do
+
 - Pair every hero with the violet-sky atmospheric backdrop and a half-bleed portrait subject when possible.
 - Render display tiers at sub-default weights (460 / 540) — the warmth is the typographic signature.
 - Use rounded-rectangle CTAs at 8px radius everywhere except the hero (where pill-shaped is the rule).
@@ -407,6 +418,7 @@ The hero uses **half-bleed portrait subjects** — a person photographed at twil
 - Apply tight 0.96 line-height on display sizes; the editorial compression is the brand.
 
 ### Don't
+
 - Don't use pill-shaped buttons in the body of the page; the pill is hero-only.
 - Don't bump display weight above 540 unless using `body-strong` (700) for emphasized inline body.
 - Don't render body text in pure black — the warm grey `#292827` is part of the brand.
@@ -425,10 +437,12 @@ The hero uses **half-bleed portrait subjects** — a person photographed at twil
 | Mobile | < 768px | Pricing 1-up; hamburger nav; display drops 64 → 36px |
 
 ### Touch Targets
+
 - Buttons hit ≥ 44×44px on mobile via 12px vertical padding × 16px line-height. WCAG AAA.
 - Form fields stay at the 44px minimum height.
 
 ### Collapsing Strategy
+
 - Display tiers stair-step 64 → 48 → 36 → 28 → 22px.
 - Half-bleed portrait crops to head-and-shoulders on mobile; atmospheric backdrop simplifies.
 - Pricing tiers stair-step 3-up → 2-up → 1-up.
@@ -436,6 +450,7 @@ The hero uses **half-bleed portrait subjects** — a person photographed at twil
 - Closing teal band reduces vertical padding from 128 → 64px on mobile.
 
 ### Image Behavior
+
 Hero portrait uses `srcset` with desktop / mobile crops — desktop favors the full half-bleed composition; mobile crops to head-and-shoulders.
 
 ## Iteration Guide

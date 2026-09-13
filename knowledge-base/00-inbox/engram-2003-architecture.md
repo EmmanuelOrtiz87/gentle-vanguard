@@ -11,7 +11,7 @@ type: architecture
 
 **Why**: The database needed a proper identity (like Engram, CodeGraph, Graphify). It stores ALL operational data: metrics, sessions, traces, events, alerts, feedback, response cache, contract results, skill usage, token usage, routing rules, and session scoring.
 
-**Where**: 
+**Where**:
 - rules/NEXUS-NORMATIVA.md — identity, lifecycle, guardrails, retention policy
 - skills/nexus-database/SKILL.md — autonomous management skill
 - AGENTS.md — documentation updated with full Nexus identity section

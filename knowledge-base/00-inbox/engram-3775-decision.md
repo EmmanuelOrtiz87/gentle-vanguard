@@ -13,7 +13,7 @@ type: decision
 
 **Where**: src/cli/create-installer.ts (fix NSI), src/infrastructure/sync-to-public.ts (fix installer versionado), src/cli/protect.ts, dist/Gentle-Vanguard-Setup-4.0.0.exe, docs/guides/HOMOLOGATION-GUIDE.md, C:\Workspace_local\gentle-vanguard-public (repo público local).
 
-**Learned**: 
+**Learned**:
 1. **Bug NSIS real**: makensis rechaza el template .nsi con "Bad text encoding" si contiene em-dash (—, U+2014) en UTF-8 sin BOM — NSIS lee el .nsi como ACP. Fix: ASCII puro en el template (3 líneas cabecera + 1 DetailPrint). Los em-dash en comentarios TS no llegan al NSI.
 2. **sync-to-public.ts copiaba el .exe legacy equivocado**: buscaba dist/Gentle-Vanguard.exe (viejo, 31 MB) pero el build genera dist/Gentle-Vanguard-Setup-<ver>.exe. Fix: buscar el installer versionado más reciente con regex /^Gentle-Vanguard-Setup-\d+\.\d+\.\d+\.exe$/ y copiarlo como Gentle-Vanguard.exe + .sha256.
 3. **commitlint hook exige conventional commits**: git merge --no-edit falla; hay que usar git commit -m "chore(merge): ..." explícito.

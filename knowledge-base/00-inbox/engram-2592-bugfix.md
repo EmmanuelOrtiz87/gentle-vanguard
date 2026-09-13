@@ -15,7 +15,7 @@ type: bugfix
 
 **Where**: scripts/database/db-health.ts, src/core/health-check.ts
 
-**Learned**: 
+**Learned**:
 - On Windows, NEVER use `runSyncShell`/`cmd.exe /d /s /c` with nested quotes for sqlite3 or similar CLIs — use `runSync` with direct argv arrays, or better, use better-sqlite3 directly.
 - `runSync`/`runSyncShell` from src/core/run-command.ts support the `input` option (SpawnSyncOptions) for passing stdin to child processes.
 - The watchtower (maintenance-watchtower.ts) already used the correct direct-argv pattern for sqlite3.

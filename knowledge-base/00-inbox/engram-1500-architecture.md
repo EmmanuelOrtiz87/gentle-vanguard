@@ -13,7 +13,7 @@ type: architecture
 
 **Where**: src/health-check.ts (332 lines), package.json (added "health:check:ts" script)
 
-**Learned**: 
+**Learned**:
 - All 14 checks (mcp, team, session, factory, sdd, pnpm, lefthook, optimization, gateguard, costtracking, ml, rag, dashboard, mcpbridge) ported
 - TCP port check requires async (net.Socket is callback-based), so checkDashboardV3 and checkEngramRag are async; main() uses instanceOf Promise to handle both sync and async checks
 - PS1-style pipeline (`2>&1`, `|`) replaced with spawnSync/execSync and manual output parsing

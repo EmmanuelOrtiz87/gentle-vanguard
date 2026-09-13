@@ -21,7 +21,7 @@ type: decision
    - Corregidas 3 referencias en src/: cross-workspace-validator.ts, pre-commit.ts, pre-commit-privacy.ts
    - 7 hooks sin TS equivalente (aceptable - no son críticos)
    - 269 restantes en configs/documentación (intencionales/aceptables)
-   
+
 3. ✅ **README.md Desactualizado - RESUELTO**
    - Actualizado setup-complete.ps1 → src/setup-complete.ts
    - Agregado npm start / npm run start:complete

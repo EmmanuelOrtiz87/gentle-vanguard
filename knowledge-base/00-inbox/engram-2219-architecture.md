@@ -11,13 +11,13 @@ type: architecture
 
 **Why**: El usuario pidió revisar antes de consolidar/deprecar para no romper nada
 
-**Where**: 
+**Where**:
 - config/session-autostart.config.json (líneas 24-40, 195-211)
 - src/session-cleanup-start.ts (326 líneas)
 - src/session-close-orchestrator.ts (769 líneas)
 - src/session-manager.ts (68 líneas, reescrito con mejor documentación)
 
-**Learned**: 
+**Learned**:
 1. NO son redundantes — son complementarios en direcciones opuestas del lifecycle:
    - cleanup-start (START): Prepara entorno para NUEVA sesión (crea files, resetea counters)
    - orchestrator (END): Cierra sesión ACTUAL (persiste métricas, backup, mata procesos, verifica)

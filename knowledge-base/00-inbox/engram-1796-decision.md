@@ -13,7 +13,7 @@ type: decision
 
 **Where**: Implementation will touch src/security-orchestrator.ts, src/auto-code-review.ts, src/karpathy-enforcer.ts, and related configuration files
 
-**Learned**: 
+**Learned**:
 - Security improvements require expanding prompt injection protections, enhancing hallucination guards, enforcing dependency policies, and improving audit trails
 - Review process enhancements involve documenting standards, creating templates, and validating integration points
 - Integration changes focus on tool detection, cross-platform consistency, and API compatibility

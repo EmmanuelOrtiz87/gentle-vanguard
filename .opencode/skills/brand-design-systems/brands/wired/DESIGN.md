@@ -270,19 +270,23 @@ Buttons are square. The brand uses `{rounded.none}` 0 px corners across the enti
 ## Colors
 
 ### Brand & Accent
+
 - **Ink Black** (`{colors.primary}` — `#000000`): The brand's only "accent." Used for wordmark, headlines, CTAs, footer fill. Pure black, never softened.
 
 ### Surface
+
 - **Canvas** (`{colors.canvas}` — `#ffffff`): The default page background.
 - **Canvas Soft** (`{colors.canvas-soft}` — `#f5f5f5`): Rare tint used for the comment-section background and search-result row hover states (not in the main page rhythm).
 - **Hairline** (`{colors.hairline}` — `#e0e0e0`): 1 px dividers between story rows. The brand's only "line."
 
 ### Text
+
 - **Ink** (`{colors.ink}` — `#000000`): Every headline, every body paragraph in BreveText.
 - **Ink Soft** (`{colors.ink-soft}` — `#1a1a1a`): A near-black variant used for caption-strong / footer link emphasis.
 - **Body** (`{colors.body}` — `#757575`): Secondary metadata — bylines, timestamps, supporting body lines.
 
 ### Semantic
+
 The brand operates with one inline link colour and no separate error / success / warning palette in its marketing surface. Validation cues on form pages use the ink black + body grey hierarchy.
 
 - **Link** (`{colors.link}` — `#057dbc`): The inline body-link blue. Used only inside long-form article body copy, never on UI buttons or navigation.
@@ -290,6 +294,7 @@ The brand operates with one inline link colour and no separate error / success /
 ## Typography
 
 ### Font Family
+
 Three families ladder the system:
 1. **WiredDisplay** — the proprietary tall-narrow high-contrast serif used exclusively for display headlines (64 px hero, scaling down to 26 px sub-display). The brand's most-recognisable typographic signature.
 2. **BreveText** — the proprietary humanist serif used for long-form body, bylines, and editorial captions. Used at 16 – 19 px line-height 1.45 – 1.50 for comfortable reading density.
@@ -317,11 +322,13 @@ Inter is loaded as a fourth fallback face for embedded utility surfaces (the com
 | `{typography.button-md}` | 16px | 700 | 20px | 0.3px | Button label. |
 
 ### Principles
+
 - **Serif for narrative, sans for structure.** The serif faces never carry button labels or nav text; the sans face never carries article body.
 - **Display weight 400** — the proprietary WiredDisplay reads as elegant by virtue of its thin-tall-narrow design at default weight, not via weight 700+.
 - **Bylines use BreveText weight 700 with relaxed line-height 2.2.** The vertical breathing is part of the editorial signature.
 
 ### Note on Font Substitutes
+
 The three proprietary faces have no exact substitutes. Best open-source approximations:
 - **WiredDisplay** — *Playfair Display* weight 400 at large display sizes captures the high-contrast didone feel, though wider than the brand's tall-narrow proportions.
 - **BreveText** — *Lora* or *Source Serif Pro* at 16 – 19 px.
@@ -330,12 +337,14 @@ The three proprietary faces have no exact substitutes. Best open-source approxim
 ## Layout
 
 ### Spacing System
+
 - **Base unit**: 4 px.
 - **Tokens**: `{spacing.xxs}` 2 px · `{spacing.xs}` 4 px · `{spacing.sm}` 8 px · `{spacing.md}` 12 px · `{spacing.lg}` 16 px · `{spacing.xl}` 20 px · `{spacing.2xl}` 24 px · `{spacing.3xl}` 32 px · `{spacing.4xl}` 48 px.
 - **Section padding**: hero / story grid use `{spacing.4xl}` 48 px top/bottom on desktop.
 - **Story row padding**: `{spacing.lg}` 16 px vertical between bylined story rows.
 
 ### Grid & Container
+
 - Marketing content uses a wide container (~1400 px max).
 - Cover-story grid: 1 large hero + 2-up secondary stories + vertical stack.
 - Story-row stack: full-width single column with hairline dividers.
@@ -351,14 +360,17 @@ The three proprietary faces have no exact substitutes. Best open-source approxim
 | Desktop | ≥ 1024px | Full magazine grid. |
 
 #### Touch Targets
+
 Button-primary renders ~44 px tall (12 vertical padding + 20 line). WCAG AAA at all widths.
 
 #### Collapsing Strategy
+
 - Nav: full link row + Subscribe CTA at desktop. Hamburger at mobile.
 - Magazine grid: hero stays full-width; 2-up secondary drops to 1-up at mobile.
 - Story rows: stay single-column at all viewports.
 
 #### Image Behavior
+
 - Cover images: full-bleed 16:9 hero / 4:3 secondary.
 - Article body images: full-width inside the article column.
 - Author avatars: small inline circular crops next to bylines.
@@ -383,6 +395,7 @@ The brand uses no drop-shadows. Surface contrast and hairline borders carry all 
 | `{rounded.full}` | 9999px | Circular icon containers only (social-share, account avatar). |
 
 ### Photography Geometry
+
 - Cover stories: 16:9 hero, edge-to-edge.
 - Secondary story cards: 4:3 thumbnails.
 - Article body images: native aspect, full column width.
@@ -479,10 +492,10 @@ The brand uses no drop-shadows. Surface contrast and hairline borders carry all 
 **`ex-toast`** — Toast notification surface — feature-card shape + medium shadow.
 - Properties: `backgroundColor`, `rounded`, `padding`, `typography`
 
-
 ## Do's and Don'ts
 
 ### Do
+
 - Reserve `{colors.primary}` black for the wordmark, every CTA, and the footer fill. The brand IS the strict black-on-white duet.
 - Set hero headlines in `{typography.display-hero}` (WiredDisplay 64 px weight 400). The proprietary serif IS the brand's typographic signature.
 - Use `{rounded.none}` 0 px on every button and form input. The brand reads as a printed magazine — square corners are non-negotiable.
@@ -490,6 +503,7 @@ The brand uses no drop-shadows. Surface contrast and hairline borders carry all 
 - Render story rows with `{colors.hairline}` 1 px dividers — the brand's only elevation cue.
 
 ### Don't
+
 - Don't introduce a chromatic brand accent. The link blue is reserved for inline body links inside articles only.
 - Don't round button corners. The brand never softens its rectangular geometry.
 - Don't drop a soft drop-shadow on cards. Surface contrast and hairlines carry elevation.

@@ -33,6 +33,7 @@ metadata:
 ## Categories
 
 ### 1. Typography (`skills/typography`)
+
 - Font selection and pairing
 - Type hierarchy and scale
 - Reading optimization
@@ -40,6 +41,7 @@ metadata:
 - Responsive typography
 
 ### 2. Color (`skills/color`)
+
 - Color theory fundamentals
 - Palette creation
 - Accessible color combinations
@@ -48,6 +50,7 @@ metadata:
 - Color psychology
 
 ### 3. Motion (`skills/motion`)
+
 - Animation principles
 - Easing curves
 - Transition timing
@@ -57,6 +60,7 @@ metadata:
 - Physics-based motion
 
 ### 4. Interaction (`skills/interaction`)
+
 - Click and tap behaviors
 - Drag and drop patterns
 - Form interactions
@@ -65,6 +69,7 @@ metadata:
 - Touch and gesture design
 
 ### 5. Visual (`skills/visual`)
+
 - Layout systems
 - Grid design
 - Spacing and rhythm
@@ -74,6 +79,7 @@ metadata:
 - Visual effects
 
 ### 6. Taste (`skills/taste`)
+
 - Design quality judgment
 - Avoiding AI slop
 - Professional polish
@@ -82,6 +88,7 @@ metadata:
 - Aesthetic refinement
 
 ### 7. Accessibility (`skills/accessibility`)
+
 - WCAG guidelines
 - Screen reader support
 - Keyboard navigation
@@ -91,6 +98,7 @@ metadata:
 - Inclusive design
 
 ### 8. Testing (`skills/testing`)
+
 - Visual regression testing
 - Component testing
 - Cross-browser testing
@@ -99,6 +107,7 @@ metadata:
 - User flow testing
 
 ### 9. Frontend (`skills/frontend`)
+
 - CSS architecture
 - Component patterns
 - Design system integration
@@ -107,6 +116,7 @@ metadata:
 - Modern CSS features
 
 ### 10. Performance (`skills/performance`)
+
 - Animation performance
 - Rendering optimization
 - Layout thrashing prevention
@@ -117,24 +127,28 @@ metadata:
 ## Key Principles
 
 ### Typography Principles
+
 - **Readability**: 16px minimum for body, 1.5 line-height
 - **Hierarchy**: Clear size distinctions (4-5 steps)
 - **Pairing**: One display font + one body font maximum
 - **Metrics**: Consider x-height, cap height, measure
 
 ### Color Principles
+
 - **Accessibility**: 4.5:1 contrast minimum for text
 - **Meaning**: Colors carry semantic meaning
 - **Balance**: 60-30-10 rule for distribution
 - **Consistency**: Define semantic colors, not just palette
 
 ### Motion Principles
+
 - **Purpose**: Every animation serves a function
 - **Duration**: 150-300ms for micro, 300-500ms for major
 - **Easing**: Use cubic-bezier for natural motion
 - **Performance**: Transform and opacity only, avoid layout
 
 ### Interaction Principles
+
 - **Feedback**: Every action needs visual feedback
 - **Affordance**: Elements should show how to use them
 - **Consistency**: Same actions same results across app
@@ -153,6 +167,7 @@ When building with design systems:
 ## Common Patterns
 
 ### Dark Mode
+
 ```css
 /* Use semantic color tokens */
 background: var(--color-canvas);
@@ -161,12 +176,14 @@ border: var(--color-hairline);
 ```
 
 ### Responsive Typography
+
 ```css
 /* Fluid typography */
 font-size: clamp(1rem, 2vw + 0.5rem, 1.5rem);
 ```
 
 ### Performance Animation
+
 ```css
 /* GPU-accelerated */
 transform: translateX(0);
@@ -175,6 +192,7 @@ will-change: transform;
 ```
 
 ### Accessible Focus
+
 ```css
 :focus-visible {
   outline: 2px solid var(--color-primary);

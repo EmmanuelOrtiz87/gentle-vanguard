@@ -24,6 +24,7 @@ type: decision
 - ✅ Compatible con npm run start
 
 **Uso**:
+
 ```
 npm run start              # Inicio rápido
 npm run start:complete     # Con verificaciones completas

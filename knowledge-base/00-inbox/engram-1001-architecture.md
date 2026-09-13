@@ -11,7 +11,7 @@ type: architecture
 
 **Why**: Sin este sistema, el dashboard solo se actualizaba en session start/close. El usuario necesitaba datos en vivo sin refrescar manualmente.
 
-**Where**: 
+**Where**:
 - scripts/metrics/live-feed.ps1 (+ -Daemon mode)
 - scripts/metrics/metrics-server.ps1 (NEW - HTTP server)
 - scripts/utilities/live-feed-manager.ps1 (NEW - process lifecycle)
@@ -19,7 +19,7 @@ type: architecture
 - config/session-autostart.config.json (+ live-feed-start step)
 - scripts/utilities/session-manager.ps1 (+ live-feed-manager stop)
 
-**Learned**: 
+**Learned**:
 1. System.Diagnostics.Process with CreateNoWindow=true + RedirectStandardOutput es la forma más limpia de lanzar background processes persistentes en PowerShell (más robusto que Start-Job que se muere con el parent)
 2. Guardar PIDs en .session/live-feed-state.json permite matar procesos en session close aunque el parent process haya terminado
 3. fetch() polling desde el browser funciona perfectamente cuando el dashboard se sirve via HTTP; desde file:// protocol no funciona por CORS, pero meta refresh cubre ese caso

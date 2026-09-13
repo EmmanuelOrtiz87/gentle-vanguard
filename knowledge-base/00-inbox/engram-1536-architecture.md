@@ -11,13 +11,13 @@ type: architecture
 
 **Why**: PS1 scripts had runtime bugs (session-scoring null access, session-cleanup -and parameter), broken paths in 5 config files, and 5 TS-migrated PS1 originals still on disk despite being documented as eliminated.
 
-**Where**: 
+**Where**:
 - New TS files: src/session-scoring.ts, src/token-budget-guard.ts, src/audit-pipeline.ts, src/session-cleanup-start.ts, src/correction-rules-engine.ts
 - Config fixes: .lefthook.yml, session-autostart.config.json, orchestrator.json, health-check.ts, maintenance-watchtower.ts
 - Removed: 5 TS-migrated PS1 originals, 8 unreferenced PS1 scripts, 5 unreferenced hooks
 - Updated: ps1-ts-migration.json to v3.0.0
 
-**Learned**: 
+**Learned**:
 - auto-code-review.ps1 hook scans scripts/utilities/ and fails on missing files (pre-existing, non-blocking)
 - Watchtower health checks reference PS1 paths directly — must update when migrating to TS
 - format-check hook requires prettier on all new TS files before commit

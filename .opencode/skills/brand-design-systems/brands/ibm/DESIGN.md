@@ -284,12 +284,14 @@ The system reaches for color rarely — IBM Blue marks links, primary CTAs, and 
 > Source pages: ibm.com (home), /software/ai-productivity, /consulting, /products/cloud-pak-for-aiops, /products/bare-metal-servers, community.ibm.com.
 
 ### Brand & Accent
+
 - **IBM Blue** ({colors.primary}): The single brand accent. Links, primary CTAs, CTA banner backgrounds, focus rings.
 - **Blue 60** ({colors.blue-60}): Hovered link state.
 - **Blue 80** ({colors.blue-80}): Pressed primary button.
 - **Blue Hover** ({colors.blue-hover}): Hover state for primary buttons.
 
 ### Surface
+
 - **Canvas** ({colors.canvas}): Default page background.
 - **Surface 1** ({colors.surface-1}): Light gray (#f4f4f4) — input fields, alternate-row stripes, subtle section bands.
 - **Surface 2** ({colors.surface-2}): Slightly darker gray (#e0e0e0) — disabled fields, hairline-as-fill for separators.
@@ -299,6 +301,7 @@ The system reaches for color rarely — IBM Blue marks links, primary CTAs, and 
 - **Inverse Surface 1** ({colors.inverse-surface-1}): One step lighter than inverse canvas — footer column dividers, hovered footer items.
 
 ### Text
+
 - **Ink** ({colors.ink}): All headlines and emphasized body type — charcoal #161616.
 - **Ink Muted** ({colors.ink-muted}): Secondary type at #525252 — meta, sub-headlines, footer body.
 - **Ink Subtle** ({colors.ink-subtle}): Tertiary type at #8c8c8c — disabled, helper text, captions.
@@ -306,6 +309,7 @@ The system reaches for color rarely — IBM Blue marks links, primary CTAs, and 
 - **Inverse Ink Muted** ({colors.inverse-ink-muted}): Light gray on charcoal — footer body.
 
 ### Semantic
+
 - **Success Green** ({colors.semantic-success}): Carbon green-50 — success states.
 - **Warning Yellow** ({colors.semantic-warning}): Carbon yellow-30 — warning states.
 - **Error Red** ({colors.semantic-error}): Carbon red-60 — error states; danger button background.

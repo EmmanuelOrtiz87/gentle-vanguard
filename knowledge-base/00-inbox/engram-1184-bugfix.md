@@ -13,7 +13,7 @@ type: bugfix
 
 **Where**: reports/dashboard-v2/app.js (lines 1-12)
 
-**Learned**: 
+**Learned**:
 - This error is caused by browser extensions (ad-blockers, password managers, etc.) that use chrome extension messaging APIs
 - The dashboard code is not the source - it's external extensions interfering
 - Solution: Override console.error to filter out these specific extension-related error messages

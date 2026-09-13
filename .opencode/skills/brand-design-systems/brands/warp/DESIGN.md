@@ -294,25 +294,30 @@ Type is the second decisive voice. Hero display sits at 64 px Inter weight 400 w
 ## Colors
 
 ### Brand & Accent
+
 - **Off White Primary** (`{colors.primary}` — `#f7f5f0`): The brand's "primary" is a warm off-white. Used as button-primary fill, as default text on canvas, as the wordmark color. There is no chromatic brand accent — the off-white IS the brand's distinguishing tone.
 
 ### Surface
+
 - **Canvas** (`{colors.canvas}` — `#2b2622`): The warm dark page background. Resolved from `oklch(22.0% 0.004 84.6)`. Slightly browner than pure black, slightly warmer than a neutral gray — the warmth IS the brand's identity.
 - **Canvas Soft** (`{colors.canvas-soft}` — `#383330`): A lighter warm-dark fill used for cards, mockup chrome, and partner-logo tiles.
 - **Hairline** (`{colors.hairline}` — `#3f3a36`): 1 px solid divider on dark surfaces.
 
 ### Text
+
 - **Ink** (`{colors.ink}` — `#f7f5f0`): Default text on canvas — same off-white as the primary, intentionally unified.
 - **Body Strong** (`{colors.body-strong}` — `#dad2c1`): Mid-emphasis body text.
 - **Body** (`{colors.body}` — `#c9c0ad`): Secondary body text — captions, supporting copy, press-coverage rows.
 - **Mute** (`{colors.mute}` — `#aea69c`): Lowest-priority text — timestamps, fine print, footer secondary lines. Resolved from `oklch(71.5% 0.008 84.6)`.
 
 ### Semantic
+
 The brand doesn't surface a separate error / warning / success palette in its marketing pages. Validation cues come from the unified off-white system; in-product semantic colors live in the terminal application proper.
 
 ## Typography
 
 ### Font Family
+
 Three faces ladder the system:
 1. **Inter** for every display, body, button, link, and label role. Weights 400 / 500 are the working pair. Used with the brand's "Inter Fallback" custom face as the metric-compatible system fallback.
 2. **DM Mono** for terminal mockups, command snippets, and code blocks. Weight 400 only. Loaded as `--font-dm-mono`.
@@ -338,11 +343,13 @@ Three faces ladder the system:
 | `{typography.button-md}` | 14px | 500 | 20px | 0 | Button labels. |
 
 ### Principles
+
 - **Hero display at weight 400** — the brand reads as quietly confident, not as a billboard.
 - **Negative tracking is part of the voice.** `-1.6 px` at 64 px hero, scaling down through display levels.
 - **Inter for narrative, DM Mono for technical.** Strict role separation.
 
 ### Note on Font Substitutes
+
 All three faces are open or freely-loadable:
 - **Inter** — load directly from Google Fonts or Vercel-hosted CDN.
 - **DM Mono** — open-source on Google Fonts.
@@ -351,12 +358,14 @@ All three faces are open or freely-loadable:
 ## Layout
 
 ### Spacing System
+
 - **Base unit**: 4 px (with occasional 10 px and 6 px values for button padding).
 - **Tokens**: `{spacing.xxs}` 2 px · `{spacing.xs}` 4 px · `{spacing.sm}` 8 px · `{spacing.md}` 10 px · `{spacing.lg}` 16 px · `{spacing.xl}` 24 px · `{spacing.2xl}` 32 px · `{spacing.3xl}` 48 px · `{spacing.4xl}` 64 px · `{spacing.5xl}` 96 px.
 - **Section padding**: hero / content bands use `{spacing.5xl}` 96 px on desktop.
 - **Card interior**: cards sit at `{spacing.xl}` 24 px.
 
 ### Grid & Container
+
 - Marketing content centres at roughly 1200 px width.
 - Hero: 2-column at desktop (split between two terminal screenshots), stacks at mobile.
 - Partner logos: 5-up wrapping flex row.
@@ -373,14 +382,17 @@ All three faces are open or freely-loadable:
 | Desktop | ≥ 1024px | Full hero split; 3-up download tiles. |
 
 #### Touch Targets
+
 Buttons render at ~36 px tall (8 px vertical padding + 20 px line-height). Mobile inflates touch area through additional padding to meet WCAG 44 × 44 px floor.
 
 #### Collapsing Strategy
+
 - Nav: full link row + Sign in / Download right cluster at desktop. Hamburger at mobile.
 - Hero terminal-mockup split: stacks vertically at mobile.
 - Press / job rows: full-width single column; stay legible at all widths.
 
 #### Image Behavior
+
 - **Terminal mockups**: rendered as dark cards with the actual terminal UI inside (warm canvas + colored syntax). Aspect ratio ~3:2.
 - **Partner logos**: monochrome SVGs on dark tile cards.
 - **Testimonial portraits**: 1:1 square crop inside `{rounded.md}` card chrome.
@@ -410,6 +422,7 @@ The brand uses surface-contrast and hairline borders for elevation; soft drop-sh
 | `{rounded.pill}` | 9999px | Icon containers, status pills. |
 
 ### Photography Geometry
+
 - Terminal mockups: ~3:2 inside `{rounded.md}` card chrome.
 - Partner logos: monochrome SVGs at consistent 24 px height inside tile cards.
 - Testimonial portraits: 1:1 square inside `{rounded.md}`.
@@ -508,10 +521,10 @@ The brand uses surface-contrast and hairline borders for elevation; soft drop-sh
 **`ex-toast`** — Toast notification surface — feature-card shape + medium shadow.
 - Properties: `backgroundColor`, `rounded`, `padding`, `typography`
 
-
 ## Do's and Don'ts
 
 ### Do
+
 - Reserve `{colors.primary}` off-white for primary CTA pills and default text. There is no chromatic accent.
 - Use tight `{rounded.sm}` 3 px or `{rounded.md}` 4 px button radii. The brand never uses generous pills for CTAs.
 - Set hero headlines in Inter weight 400 with `-1.6 px` tracking. The brand reads as quietly confident.
@@ -519,6 +532,7 @@ The brand uses surface-contrast and hairline borders for elevation; soft drop-sh
 - Keep the warm-dark canvas tone — pure black breaks the brand's identity.
 
 ### Don't
+
 - Don't introduce a chromatic brand accent. The off-white-on-warm-dark IS the brand's voice.
 - Don't render the hero headline in heavy weight (700+). The brand's display is intentionally light.
 - Don't use generous pill CTAs. The brand's button radius is 3-4 px, almost rectangular.

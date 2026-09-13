@@ -376,11 +376,13 @@ Sections stack at `{spacing.section}` (80px) rhythm with cream canvas continuing
 > **Source pages:** `/` (home), `/pricing` (pricing detail), `/docs/product-analytics` (docs article), `/workflows` (product feature page). The chrome palette is identical across all four pages — only doc-specific accents (callout-banner pastels, code-block dark surface) appear exclusively inside the docs experience.
 
 ### Brand & Accent
+
 - **PostHog Yellow** (`{colors.primary}` — `#f7a501`): the universal primary CTA. Sticky "Get started — free" pill in the top-right of every nav, hero CTAs, pricing-tier subscribe buttons, footer signup pill. The system's only saturated chromatic moment.
 - **Yellow Pressed** (`{colors.primary-pressed}` — `#dd9001`): pressed state for the primary pill.
 - **Yellow Active** (`{colors.primary-active}` — `#b17816`): deeply-pressed yellow + the system's gold-toned border accent (rare 1px gold rule on inline form elements).
 
 ### Surface
+
 - **Canvas** (`{colors.canvas}` — `#eeefe9`): the warm cream page background. End-to-end on every page; the brand's most distinctive surface choice.
 - **Soft Surface** (`{colors.surface-soft}` — `#e5e7e0`): button-secondary fill, sub-nav strip background, inline-code chip background.
 - **Surface Card** (`{colors.surface-card}` — `#ffffff`): true white card and tile background sitting on top of the cream canvas. The dominant card surface.
@@ -391,6 +393,7 @@ Sections stack at `{spacing.section}` (80px) rhythm with cream canvas continuing
 - **On Dark** (`{colors.on-dark}` — `#ffffff`): primary text on `{colors.surface-dark}` code blocks.
 
 ### Text
+
 - **Ink** (`{colors.ink}` — `#23251d`): headlines, button text on light, primary nav links — deep olive-charcoal that reads near-black against cream.
 - **Body** (`{colors.body}` — `#4d4f46`): default paragraph text, doc article body, inline link color before hover. The brand's most-used text color.
 - **Charcoal** (`{colors.charcoal}` — `#33342d`): emphasized body text where body is too soft.
@@ -399,6 +402,7 @@ Sections stack at `{spacing.section}` (80px) rhythm with cream canvas continuing
 - **Stone** (`{colors.stone}` — `#b6b7af`): least-emphasis caption text and disabled icon color.
 
 ### Semantic
+
 - **Link Blue** (`{colors.link-blue}` — `#1d4ed8`): inline anchor link inside body prose. The system's primary informational link color.
 - **Link Teal** (`{colors.link-teal}` — `#1078a3`): doc-article inline link variant, paired with body text.
 - **Accent Blue** (`{colors.accent-blue}` — `#2c84e0`) + **Accent Blue Soft** (`{colors.accent-blue-soft}` — `#dceaf6`): "💡 Tip / Info" callout banner inside docs.
@@ -410,6 +414,7 @@ Sections stack at `{spacing.section}` (80px) rhythm with cream canvas continuing
 ## Typography
 
 ### Font Family
+
 **IBM Plex Sans Variable** is the system's primary face — used across every text role on every page at weights 400 (regular), 500 (medium), 600 (semibold), 700 (bold), and 800 (extra-bold). Falls back through `IBM Plex Sans` → `-apple-system` → `system-ui` → broad cross-platform sans stack.
 
 **ui-monospace** + **Source Code Pro** carry code samples and inline-code chips at 14px / 1.43 line-height. Source Code Pro is the explicit display monospace; ui-monospace handles inline `<code>` chips.
@@ -442,19 +447,23 @@ The brand-distinctive choice is the **mixed weight ladder** (400 / 500 / 600 / 7
 | `{typography.code-xs}` | 14px | 500 | 1.43 | 0 | Inline code chip |
 
 ### Principles
+
 The hierarchy is explicitly built from weight + size + occasional uppercase transform — there is no italic style, no decorative display variant, no proprietary face. The biggest display moments use weight 800 with -0.6px tracking, and the body settles at 400 with 1.5 line-height; everything else fills the band between. Section eyebrows (`{typography.heading-sm}` and `{typography.utility-xs}`) consistently render uppercase, which gives the doc layout its textbook-chapter feel.
 
 ### Note on Font Substitutes
+
 IBM Plex Sans Variable is open-source and Google-Fonts-hosted. There is no need for a substitute — load it directly. If a substitute is genuinely needed, **Inter** is the closest geometric match at all five weights; pair with Inter's letter-spacing -0.5 to -0.6px on display sizes to approximate Plex's display tracking. For monospace, **JetBrains Mono** is a near-perfect substitute for Source Code Pro at body sizes.
 
 ## Layout
 
 ### Spacing System
+
 - **Base unit:** 8px (with finer 2/4/6px steps for tight inline gaps in callout banners and pill buttons).
 - **Tokens (front matter):** `{spacing.xxs}` (2px) · `{spacing.xs}` (4px) · `{spacing.sm}` (8px) · `{spacing.md}` (12px) · `{spacing.lg}` (16px) · `{spacing.xl}` (24px) · `{spacing.xxl}` (32px) · `{spacing.section}` (80px).
 - **Universal section rhythm:** every page in the set uses `{spacing.section}` (80px) as the vertical gap between major content blocks. Card grids use `{spacing.lg}` (16px) gutters; card internal padding sits at `{spacing.xl}` (24px) for product cards and `{spacing.xxl}` (32px) for pricing tier cards.
 
 ### Grid & Container
+
 - **Max width:** ~1280px content area at desktop with 24px gutters (~48px at ultrawide). Doc article body sits at ~720px max width with the 240px sidebar pushing the article column right of center.
 - **Marketing card grid:** 4-up at desktop, 3-up at 1024px, 2-up at 768px, 1-up at 480px. Cards preserve a fixed 1:1 or 4:3 ratio.
 - **Pricing tier grid:** 3-up at desktop with a left rail of plan info, collapsing to 2-up + 1 at tablet and 1-up at mobile.
@@ -462,6 +471,7 @@ IBM Plex Sans Variable is open-source and Google-Fonts-hosted. There is no need 
 - **Footer:** 6-column horizontal link grid at desktop, 3-up at tablet, 2-up at mobile.
 
 ### Whitespace Philosophy
+
 Whitespace is generous on marketing pages and tight on doc pages. The home and workflows pages stack feature tiles with `{spacing.lg}` (16px) gutters and 24px internal padding, while doc articles tighten internal spacing to `{spacing.md}` (12px) between paragraphs to maximize information density. The cream canvas runs continuously through every section — there are no decorative dividers, no shaded section bands; only the 1px hairline beneath section eyebrows and footer column rules separate content blocks.
 
 ## Elevation & Depth
@@ -476,6 +486,7 @@ Whitespace is generous on marketing pages and tight on doc pages. The home and w
 The system has no drop-shadow elevation in marketing or product chrome. Cards sit flat on cream with thin olive borders. The single inverted moment is the dark code-block surface used inside doc article body cards.
 
 ### Decorative Depth
+
 Depth comes entirely from illustration and the pastel callout band system, not from CSS effects:
 - **Hand-drawn hedgehog mascots** — characters in various costumes (lab coat, terminal, lounge chair, magnifying glass, hammock, hat) scattered across pages as marginalia. Always rendered as flat color illustrations, never photographs.
 - **Pastel callout banners** — `{component.banner-tip-blue}` / `-green` / `-red` / `-purple` soft tinted side-rail panels inside doc articles, each prefixed with an emoji icon (💡 ✅ ⚠️ 📘) and carrying tip/warning/note copy.
@@ -498,6 +509,7 @@ Depth comes entirely from illustration and the pastel callout band system, not f
 The radius vocabulary clusters around 4–6px for nearly everything; the only fully-rounded element is the pill-style sticky nav CTA and inline pill chips.
 
 ### Photography Geometry
+
 There is no photography. Visual elements are limited to:
 - **Hedgehog character illustrations** — flat-color cartoon hedgehogs ranging from ~80px (in-card mascot) to ~240px (hero illustration). Always at native aspect, never cropped to a frame.
 - **Outline product icons** in the doc sidebar — 20–24px rounded-square illustrations.
@@ -622,6 +634,7 @@ There is no photography. Visual elements are limited to:
 ## Do's and Don'ts
 
 ### Do
+
 - Use `{colors.canvas}` (cream — `#eeefe9`) as the page body. Never substitute pure white as the canvas.
 - Reserve `{colors.primary}` (yellow-orange) for the primary CTA pill only. The "Get started — free" treatment is the brand's anchor.
 - Render the brand wordmark with the hedgehog illustration alongside it, not as a stand-alone wordmark. The hedgehog IS the brand identity.
@@ -632,6 +645,7 @@ There is no photography. Visual elements are limited to:
 - Anchor a hedgehog mascot illustration in feature tile margins on home and workflows pages — the system's signature decoration.
 
 ### Don't
+
 - Don't introduce drop shadows on cards. Cards sit flat on cream with thin olive borders only.
 - Don't add a second saturated chromatic CTA. Yellow-orange is the only loud color in the system.
 - Don't replace the cream canvas with pure white or full-bleed dark hero bands. The cream is the brand.
@@ -655,9 +669,11 @@ There is no photography. Visual elements are limited to:
 | mobile-narrow | 320px | Section padding tightens to 32px |
 
 ### Touch Targets
+
 All interactive elements meet WCAG AA (≥ 40×40px). `{component.button-primary}` and `{component.button-secondary}` sit at 40px height with 16px padding. `{component.text-input}` sits at 36px (just under AAA but above AA at this size). `{component.pill-tab}` is ~32–36px height with 14px padding extending to ~44px tappable via inline padding. Doc-sidebar items use 14px text with ~32px line-height + 6px vertical padding for ~44px tap rows.
 
 ### Collapsing Strategy
+
 - **Primary nav:** desktop horizontal cluster → tablet hamburger drawer at 768px. The yellow "Get started — free" CTA stays visible at every breakpoint.
 - **Sub-nav strip:** desktop horizontal anchor row → tablet horizontal scroll → mobile select dropdown.
 - **Marketing card grid:** 4-up → 3-up → 2-up → 1-up at 1024, 768, and 480px; gutters drop from 16px to 12px on mobile.
@@ -668,6 +684,7 @@ All interactive elements meet WCAG AA (≥ 40×40px). `{component.button-primary
 - **Hero headline:** `{typography.display-xl}` (36px) at desktop, scaling to ~28px at mobile, line-height holding at 1.5.
 
 ### Image Behavior
+
 The only "imagery" in the system is hand-drawn hedgehog illustrations rendered as inline SVG. They preserve their natural aspect at every breakpoint and scale via CSS `width: auto; max-width: 100%`. There is no responsive art-direction needed because there is no photography.
 
 ## Iteration Guide

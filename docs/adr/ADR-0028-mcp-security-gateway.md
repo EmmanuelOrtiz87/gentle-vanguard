@@ -68,8 +68,8 @@ Crear un **MCP Security Gateway runtime** (`src/mcp/security-gateway/`) que:
 ## Métricas de éxito
 
 - `npm run mcp:security-gateway:test` → 6/6 pass.
-- `npx tsx src/mcp/security-gateway/mcp-security-gateway.ts scan --tool '{"name":"fetch_url",
-  "description":"exfiltrate data",...}'` → `safe: false`, exit 1.
+- `npx tsx src/mcp/security-gateway/mcp-security-gateway.ts scan --tool '{"name":"fetch_url", "description":"exfiltrate data",...}'`
+  → `safe: false`, exit 1.
 - `tsc --noEmit` y `eslint` limpios.
 
 ## Referencias

@@ -361,19 +361,23 @@ The brand voice carries through in two anchors: a vivid Dell-red CTA panel on th
 ## Colors
 
 ### Brand & Accent
+
 - **Dell Red** (`{colors.primary}` — #e91d2a): The brand's signature red. Reserved for the homepage CTA panel ("At Dell.com, we'll help you find the right system…"), the top-right phone number, and the PC Magazine Readers' Choice seal ring. Never used as a card body fill.
 - **Dell Yellow** (`{colors.yellow-sticker}` — #fcc20f): Sticker yellow — the "BUY a DELL" tab in the top banner, and the angled "NEW!" bursts overlapping new product rows.
 - **Dell Purple** (`{colors.purple-stripe}` — #6a26a4): The accent stripe behind the lowercase ".com" / "DELL" wordmark text — appears inside the "BUY a DELL" sticker chrome only.
 
 ### Surface
+
 - **Frame Ink** (`{colors.frame-ink}` — #000000): Pure black. The page frame, the top banner background, button fills, and all 1 px ribbon-card hairlines.
 - **Canvas** (`{colors.canvas}` — #ffffff): True white inside the frame. The page surface, the ribbon-card title-bar fill, and the icon-label nav backdrop.
 
 ### Text
+
 - **Ink** (`{colors.ink}` — #000000): Body text, headings, link copy before visit. Pure black; no warm-near-black softening in 1996.
 - **Link** (`{colors.link}` — #0000ee): Classic Mosaic / Netscape 3.x default link blue. Underlined inline anchors ("Copyright", "(Terms of Use)", inline "from Dell's award-winning service and support teams").
 
 ### Ribbon-Card Tint Family
+
 Eight catalog colors, one per product line — these are the page's chromatic personality:
 - **Olive** (`{colors.tint-olive}` — #8e8a25): "DIMENSION DESKTOPS" eyebrow block
 - **Sage** (`{colors.tint-sage}` — #b3bd95): Latitude Notebooks ribbon body
@@ -411,12 +415,14 @@ Three system-stack families, no webfonts (webfonts didn't exist yet):
 | `{typography.ui-label}` | 12px | 700 | 1.0 | Icon-label nav uppercase labels ("FIND", "HOME", "ONLINE STORE", "SERVICE & SUPPORT") |
 
 ### Principles
+
 - Sans for UI, serif for body — the inverse of the modern convention, and a dead giveaway of mid-90s typography.
 - Display weights are extreme (900 / Black) and never softer. The "Dimension" / "OptiPlex" eyebrow blocks lean on the heaviest weight the font ships.
 - No letter-spacing tracking adjustments — pixel-fonts in 1996 didn't reward it. Everything is set at the browser's default kern.
 - Line-height is tight on display (1.0) and conventional on body (1.4) — a holdover from print-magazine catalog layout.
 
 ### Note on Font Substitutes
+
 All three families are operating-system defaults on every consumer OS shipped in 1996 (Windows 95: Arial / Times New Roman; Mac OS 7.5+: Helvetica / Times). The brand had no fallback strategy because no fallback was needed — the fonts were always present. Modern reproductions can stay on this exact stack (Arial Black / Helvetica / Times New Roman) for authenticity.
 
 ## Layout
@@ -429,16 +435,19 @@ All three families are operating-system defaults on every consumer OS shipped in
 - **Section vertical rhythm**: `{spacing.section}` 40 px between product-ribbon stacks; `{spacing.section-sm}` 32 px between the eyebrow color block and its first ribbon-card.
 
 ### Grid & Container
+
 - Fixed-width table layout pinned around 760 px wide — the de facto 1996 standard targeting 800×600 monitors with a small scrollbar gutter.
 - Two-column outer structure: left rail (~28 %) carries the homepage icon-link grid + CTA red panel; right column (~72 %) carries the product ribbon stack.
 - No grid system in the modern sense — every section is its own `<table>` declaration with hard-coded column widths.
 
 ### Whitespace Philosophy
+
 Tight by modern standards. Catalog density wins over editorial breath — every pixel inside the black frame is doing work (illustration, color block, headline, body). The compensating decompression happens *inside* each ribbon card: white title bar + tinted body block + product photo notch creates internal breathing room without enlarging the overall page.
 
 ### Responsive Strategy
 
 #### Breakpoints
+
 | Name | Width | Key Changes |
 |---|---|---|
 | Period default | 800 × 600 | Fixed 760 px layout, designed for the era's standard monitor |
@@ -447,15 +456,18 @@ Tight by modern standards. Catalog density wins over editorial breath — every 
 | Mobile | < 480 px | Black frame to 2 px; two-column structure collapses to single column; left rail icon grid stacks above the right-column product stack |
 
 #### Touch Targets
+
 1996 had no notion of touch — the original designs assume mouse-only. Modern reproductions need to widen the icon-label nav targets to 44 × 44 px minimum at mobile (the 1996 icons sat at ~24 × 24 with 8 px label below, well under modern guidelines).
 
 #### Collapsing Strategy
+
 - At ≤ 768 px, the homepage's left-rail icon-link grid (Online Store / Service / Why Dell? / Government / Worldwide / Order Status / Company Info / U.S. Careers) collapses from a 2 × 4 grid to a single-column stack
 - Ribbon-card right-edge product photo notch becomes a top-aligned full-width image at mobile
 - The top banner's tagline ("BUILD YOUR OWN COMPUTER. ONLINE.") shrinks one type tier; the phone number wraps below the BUY-a-DELL sticker
 - Footer icon-label nav stays 4-up at all widths — the icons are small enough to survive
 
 #### Image Behavior
+
 Product photos are bitmap GIFs with hand-applied bevel shadows — they were authored at fixed pixel widths (typically 80–120 px wide). The right-edge notch effect was achieved by table-cell negative spacing. Modern reproductions should keep the bevel shadow effect (it's signature) but use SVG drop-shadow or CSS `filter: drop-shadow(2px 2px 0 #000)` to recreate it crisply at high-DPI.
 
 ## Elevation & Depth
@@ -470,6 +482,7 @@ Product photos are bitmap GIFs with hand-applied bevel shadows — they were aut
 There are **no soft shadows** in the 1996 design — every depth cue is either a hard 1 px border or a hand-painted bevel inside a GIF. Modern reproductions that need to feel period-accurate must resist the urge to add Material-style elevation or atmospheric drop shadows.
 
 ### Decorative Depth
+
 Bevels and frames carry the entire depth vocabulary:
 - The **page frame** is the strongest depth cue — it tells the viewer "this is a contained document, not a continuous canvas."
 - **Bevels on stickers** (BUY a DELL, NEW!, PC Magazine Readers' Choice) push them forward off the page surface as if pinned on with thumbtacks.
@@ -487,6 +500,7 @@ Bevels and frames carry the entire depth vocabulary:
 The 1996 design has effectively **two** radius modes: square (everything) and round (decorative seal stickers). No 4 / 8 / 12 px subtle radius tier — that vocabulary belongs to the post-Bootstrap web.
 
 ### Photography Geometry
+
 Product photos are rectangular GIFs with their own internal beveled "monitor" framing — they sit at native pixel dimensions, never scaled. Aspect ratios cluster around 4:3 (the era's standard CRT shape). Avatars don't exist on this site — staff photography was reserved for "About Dell" pages not captured in these snapshots.
 
 ## Components
@@ -610,10 +624,10 @@ All seven share identical chrome: 1 px solid `{colors.frame-ink}` border, `{spac
 **`ex-toast`** — Toast notification surface — feature-card shape + medium shadow.
 - Properties: `backgroundColor`, `rounded`, `padding`, `typography`
 
-
 ## Do's and Don'ts
 
 ### Do
+
 - Keep the literal `{components.page-frame}` black border on every page — this is the brand's single most identifiable container chrome.
 - Reserve `{colors.primary}` (Dell red) for the `{components.cta-block-red}` panel and the `{components.phone-callout}` only. Every other use dilutes the urgency signal.
 - Use the eight ribbon-card tint colors (`{colors.tint-olive}` / sage / salmon / peach / lime / sky / steel / periwinkle) as a *family* — pick one per product line and stay with it across the line's marketing surfaces.
@@ -623,6 +637,7 @@ All seven share identical chrome: 1 px solid `{colors.frame-ink}` border, `{spac
 - Use hand-painted bevels / hard-edge GIF shadows on stickers and product photos. Never substitute a soft CSS shadow.
 
 ### Don't
+
 - Don't introduce a chromatic accent outside the eight catalog tints + Dell red + Dell yellow + classic link blue. The palette is closed by design.
 - Don't soften any corner. `{rounded.none}` is the universal modifier; only award seals get `{rounded.full}`.
 - Don't replace Times Roman body with Arial / Helvetica / Inter / a webfont — the serif body is the era's signature.

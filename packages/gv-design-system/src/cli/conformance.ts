@@ -23,11 +23,18 @@ const shell = readFileSync(sourceShell, 'utf8');
 add('canonical shell exists', shell.length > 1000);
 add('shell has responsive contract', shell.includes('@media (max-width: 1023px)'));
 add('shell has reduced motion contract', shell.includes('prefers-reduced-motion'));
-add('shell has canonical primitives', ['.gv-topbar', '.gv-view-tabs', '.gv-panel', '.gv-footer'].every((name) => shell.includes(name)));
+add(
+  'shell has canonical primitives',
+  ['.gv-topbar', '.gv-view-tabs', '.gv-panel', '.gv-footer'].every((name) => shell.includes(name)),
+);
 
 for (const snapshot of ['assets/gv-shell.css', 'apps/design-hub/public/gv-shell.css']) {
   const value = file(snapshot);
-  add(`${snapshot} matches source`, value === shell, `expected ${shell.length} bytes, got ${value.length}`);
+  add(
+    `${snapshot} matches source`,
+    value === shell,
+    `expected ${shell.length} bytes, got ${value.length}`,
+  );
 }
 
 for (const app of [
@@ -50,12 +57,20 @@ for (const app of [
   add(`${app} declares gv-app-shell`, file(app).includes('gv-app-shell'));
 }
 
-add('command center serves shell', file('apps/command-center/public/index.html').includes('/gv-shell.css'));
-add('package exports shell', file('packages/gv-design-system/package.json').includes('"./shell.css"'));
+add(
+  'command center serves shell',
+  file('apps/command-center/public/index.html').includes('/gv-shell.css'),
+);
+add(
+  'package exports shell',
+  file('packages/gv-design-system/package.json').includes('"./shell.css"'),
+);
 
 const failures = checks.filter((check) => !check.ok);
 for (const check of checks) {
-  console.log(`${check.ok ? 'PASS' : 'FAIL'} ${check.label}${check.detail ? ` (${check.detail})` : ''}`);
+  console.log(
+    `${check.ok ? 'PASS' : 'FAIL'} ${check.label}${check.detail ? ` (${check.detail})` : ''}`,
+  );
 }
 if (failures.length) {
   console.error(`\n${failures.length} conformance check(s) failed.`);

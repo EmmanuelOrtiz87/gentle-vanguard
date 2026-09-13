@@ -71,7 +71,11 @@ function loadJsonSafe<T>(path: string): T | null {
 
 function hasProviderAuth(providerId: string, provider: ProviderConfig): boolean {
   if (provider.options?.apiKey) return true;
-  if (provider.options?.headers && Object.values(provider.options.headers).some((v) => String(v).length > 3)) return true;
+  if (
+    provider.options?.headers &&
+    Object.values(provider.options.headers).some((v) => String(v).length > 3)
+  )
+    return true;
   const auth = loadJsonSafe<Record<string, { key?: string }>>(GLOBAL_OPENCODE_AUTH);
   return Boolean(auth?.[providerId]?.key);
 }
@@ -192,9 +196,7 @@ function detectCapability(): {
       baseURL.includes('localhost') ||
       baseURL.includes('127.0.0.1') ||
       baseURL.includes('192.168.');
-    const hasApiKey = Boolean(
-      hasProviderAuth(name, p),
-    );
+    const hasApiKey = Boolean(hasProviderAuth(name, p));
     return { name, models: Object.keys(p.models ?? {}).length, hasApiKey, local };
   });
 
@@ -240,7 +242,9 @@ function switchModel(modelRef: string): { ok: boolean; message: string; backup?:
     const dynamicProviderMatch = modelRef.match(/^([^/]+)\/(.+)$/);
     const dynamicProvider = dynamicProviderMatch && config.provider?.[dynamicProviderMatch[1]];
     const acceptsDynamicModel = Boolean(
-      dynamicProviderMatch && dynamicProvider && Object.keys(dynamicProvider.models ?? {}).length === 0,
+      dynamicProviderMatch &&
+      dynamicProvider &&
+      Object.keys(dynamicProvider.models ?? {}).length === 0,
     );
 
     if (!exact && !bySuffix && !acceptsDynamicModel) {
@@ -249,7 +253,7 @@ function switchModel(modelRef: string): { ok: boolean; message: string; backup?:
         message: `Modelo "${modelRef}" no encontrado. Usa "npm run model:list" para ver los disponibles.`,
       };
     }
-    const resolved: string = exact ? modelRef : bySuffix ?? modelRef;
+    const resolved: string = exact ? modelRef : (bySuffix ?? modelRef);
 
     // Backup global config
     const backupPath = join(ROOT, '.runtime', 'backups', `opencode.json.bak-${Date.now()}`);

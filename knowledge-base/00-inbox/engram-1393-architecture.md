@@ -11,7 +11,7 @@ type: architecture
 
 **Why**: Needed corruption-proof safeguard stack with pre-verification, SHA256 checksums, byte-level SQLite header validation, AES-256 encrypted metadata, and authorization guard for critical operations
 
-**Where**: 
+**Where**:
 - `scripts/utilities/ops/BACKUP-RESTORE/backup-engram.ps1` — core backup/restore/verify (pre-integrity-check, SHA256 checksums, byte-level SQLite header, auto-checksums generation)
 - `scripts/utilities/memory/ENGRAM/engram-integrity-check.ps1` — health check without System.Data.SQLite dependency
 - `scripts/utilities/memory/ENGRAM/engram-change-guard.ps1` — authorization guard for critical operations
@@ -32,7 +32,7 @@ type: architecture
 - All pre-push hooks pass (audit-check, orchestrator-auto-fix)
 - Committed and pushed to main: 005cf9bf
 
-**Learned**: 
+**Learned**:
 - UTF-8 accented characters in PowerShell string literals cause cascading parse errors on Windows - always use ASCII 7-bit
 - System.Data.SQLite.SQLiteConnection NOT available in bare runtime - use byte-level header check (first 16 bytes: SQLite format 3\0)
 - Em dash U+2014 and smart quotes U+2018/U+2019 break PowerShell parsing

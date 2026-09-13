@@ -418,6 +418,7 @@ The system pairs PP Editorial Old (a near-serif elegant display face) for hero d
 > Source pages: mistral.ai/ (homepage), /products/studio (Le Studio product), /solutions/coding (coding solution), /news/vibe-remote-agents-mistral-medium-3-5 (news), /contact (contact form), /services (services tiers). Token coverage was identical across all six pages.
 
 ### Brand & Accent
+
 - **Mistral Orange** ({colors.primary}): Primary CTA color, brand orange
 - **Orange Deep** ({colors.primary-deep}): Pressed-state and emphasis variant
 - **Sunshine 300** ({colors.sunshine-300}): Atmospheric light orange-yellow
@@ -429,12 +430,14 @@ The system pairs PP Editorial Old (a near-serif elegant display face) for hero d
 - **Block 5/6/7** ({colors.block-5}, {colors.block-6}, {colors.block-7}): Spectrum stops along the sunset gradient (light-yellow → mid-yellow → deep-orange)
 
 ### Cream / Neutral Warm
+
 - **Cream** ({colors.cream}): Warm yellow-cream surface for form panels, feature cards, footer
 - **Cream Soft** ({colors.cream-soft}): Lighter cream variant
 - **Cream Deeper** ({colors.cream-deeper}): More-saturated cream for badge/tag chips
 - **Beige Deep** ({colors.beige-deep}): Cream surface 1px border color
 
 ### Surface
+
 - **Canvas White** ({colors.canvas}): Page background and card surface
 - **Surface** ({colors.surface}): Subtle quieter background
 - **Surface Cream** ({colors.surface-cream}): Cream-yellow tinted surface
@@ -444,6 +447,7 @@ The system pairs PP Editorial Old (a near-serif elegant display face) for hero d
 - **Hairline Strong** ({colors.hairline-strong}): Stronger 1px border for inputs
 
 ### Text
+
 - **Ink** ({colors.ink}): Primary headlines and body text
 - **Ink Tint** ({colors.ink-tint}): Slightly softer black for hero overlay text
 - **Charcoal** ({colors.charcoal}): Body emphasis
@@ -456,11 +460,13 @@ The system pairs PP Editorial Old (a near-serif elegant display face) for hero d
 - **On Cream** ({colors.on-cream}): Ink text on cream surfaces
 
 ### Semantic
+
 - **Link** ({colors.link}): Inline link color (matches primary orange)
 
 ## Typography
 
 ### Font Family
+
 **PP Editorial Old** (display): Mistral's signature near-serif elegant display typeface used for hero displays, large numbers, and editorial section openers. Carries a slightly classical, intelligent character that contrasts the contemporary product positioning. Fallbacks: 'Times New Roman', Georgia, serif.
 
 **Inter** (UI prose): Variable typeface for body, navigation, buttons, labels, captions. Fallbacks: ui-sans-serif, system-ui, -apple-system, sans-serif.
@@ -492,6 +498,7 @@ The system pairs PP Editorial Old (a near-serif elegant display face) for hero d
 | `{typography.code-md}` | 14px | 400 | 1.50 | 0 | JetBrains Mono | Code blocks |
 
 ### Principles
+
 - **Editorial / sans pairing** — PP Editorial Old (near-serif, classical) anchors hero displays; Inter (geometric sans) carries everything else. The contrast IS the brand voice.
 - **Generous body leading** (1.55 on body-md) for editorial readability across long-form pages
 - **Tight hero leading** (1.05 on 84px display) creates magazine-grade typographic display
@@ -501,12 +508,14 @@ The system pairs PP Editorial Old (a near-serif elegant display face) for hero d
 ## Layout
 
 ### Spacing System
+
 - **Base unit**: 4px (8px primary increment)
 - **Tokens**: `{spacing.xxs}` (4px) · `{spacing.xs}` (8px) · `{spacing.sm}` (12px) · `{spacing.md}` (16px) · `{spacing.lg}` (20px) · `{spacing.xl}` (24px) · `{spacing.xxl}` (32px) · `{spacing.xxxl}` (40px) · `{spacing.section-sm}` (48px) · `{spacing.section}` (64px) · `{spacing.section-lg}` (96px) · `{spacing.hero}` (120px)
 - **Section rhythm**: Marketing pages use `{spacing.section-lg}` (96px); content pages tighten to `{spacing.section}` (64px)
 - **Card internal padding**: `{spacing.xl}` (24px) for compact cards; `{spacing.xxl}` (32px) for feature panels and form panels
 
 ### Grid & Container
+
 - Marketing pages use 1280px max-width with 32px gutters
 - Hero band uses 2-column split (text left, sunset photography right) on desktop
 - Le Studio product page uses 3-up feature grid below the hero
@@ -514,6 +523,7 @@ The system pairs PP Editorial Old (a near-serif elegant display face) for hero d
 - Services page uses 4-tier card layout with cream feature panel separator strip
 
 ### Whitespace Philosophy
+
 Marketing surfaces give content generous breathing room — `{spacing.hero}` (120px) hero padding lets the mountain-sunset photography fill the frame. Form pages tighten dramatically: contact form panel uses `{spacing.xxl}` (32px) internal padding, fields stack on `{spacing.md}` (16px) gap.
 
 ## Elevation & Depth
@@ -529,6 +539,7 @@ The system runs predominantly flat with strategic atmospheric depth from photogr
 | 4 (modal) | `rgba(0, 0, 0, 0.12) 0px 16px 48px -8px` | Modals, dropdowns |
 
 ### Decorative Depth
+
 - The atmospheric depth on Mistral's hero comes from the photographic mountain-sunset imagery — natural light gradient does the work
 - The "sunset stripe" closing band carries depth via its multi-stop gradient (red → orange → yellow → cream)
 - IDE / code mockups use dark-canvas backgrounds with subtle drop shadow
@@ -550,6 +561,7 @@ The system runs predominantly flat with strategic atmospheric depth from photogr
 The radius scale is sober and editorial — Mistral does NOT use pill buttons. `{rounded.md}` (8px) for buttons, `{rounded.lg}` (12px) for cards, `{rounded.full}` reserved for badges and the rare pill tab.
 
 ### Photography Geometry
+
 - Hero photography is full-bleed atmospheric mountain-sunset imagery with no internal framing
 - IDE/code mockups render with `{rounded.lg}` (12px) corners on dark canvas
 - Customer logos wall presents wordmarks inline at consistent 60–80px height
@@ -587,7 +599,7 @@ The radius scale is sober and editorial — Mistral does NOT use pill buttons. `
 - Background `{colors.canvas}`, rounded `{rounded.lg}`, padding `{spacing.xl}`, border `1px solid {colors.hairline-soft}`.
 
 **`card-feature`** — White feature card with larger padding.
-- Background `{colors.canvas}`, rounded `{rounded.lg}`, padding `{spacing.xxl}`, border `1px solid `{colors.hairline-soft}`.
+- Background `{colors.canvas}`, rounded `{rounded.lg}`, padding `{spacing.xxl}`, border `1px solid`{colors.hairline-soft}`.
 
 **`card-cream`** — Warm cream-yellow feature card (services tiers, perk callouts).
 - Background `{colors.cream}`, text `{colors.ink}`, rounded `{rounded.lg}`, padding `{spacing.xxl}`, border `1px solid {colors.beige-deep}`.
@@ -707,6 +719,7 @@ The radius scale is sober and editorial — Mistral does NOT use pill buttons. `
 ## Do's and Don'ts
 
 ### Do
+
 - Reserve `{colors.primary}` (saturated orange) for primary CTAs and active states only
 - Use the **sunset stripe band** at the foot of every page — it's the brand's most recognizable signature
 - Pair PP Editorial Old (display) with Inter (UI) — never substitute either with a generic alternative
@@ -716,6 +729,7 @@ The radius scale is sober and editorial — Mistral does NOT use pill buttons. `
 - Use stat-display token (PP Editorial 56px) for stat callouts to maintain editorial character
 
 ### Don't
+
 - Don't use pill-shaped buttons (`{rounded.full}`) — Mistral's geometry is sober and editorial, not playful
 - Don't introduce additional accent colors beyond the orange/yellow/cream sunset palette
 - Don't reduce hero leading below 1.05 — the editorial display needs that magazine-grade tightness
@@ -726,6 +740,7 @@ The radius scale is sober and editorial — Mistral does NOT use pill buttons. `
 ## Responsive Behavior
 
 ### Breakpoints
+
 | Name | Width | Key Changes |
 |---|---|---|
 | Mobile (small) | < 480px | Single column. Hero scales to 40px (PP Editorial). Pill nav collapses to hamburger. Pricing tiers stack 1-up. |
@@ -735,11 +750,13 @@ The radius scale is sober and editorial — Mistral does NOT use pill buttons. `
 | Wide Desktop | ≥ 1280px | Full 84px hero presentation. |
 
 ### Touch Targets
+
 - Buttons render at 40–44px effective height — at WCAG AAA floor with `10px 20px` padding
 - Form inputs render at 44px height
 - Pill tabs render at ~32px tall — bumps to 44px on mobile
 
 ### Collapsing Strategy
+
 - **Promo banner** stays full-width; truncates at < 480px
 - **Top nav** below 1024px collapses to hamburger
 - **Hero band**: 2-column hero (text + photography) collapses to stacked at < 1024px
@@ -750,6 +767,7 @@ The radius scale is sober and editorial — Mistral does NOT use pill buttons. `
 - **Sunset stripe band** stays full-width on all breakpoints
 
 ### Image Behavior
+
 - Mountain-sunset photography uses 16:9 ratio with full-bleed scaling
 - IDE mockup images maintain aspect ratio across breakpoints
 - Customer logo wall presents wordmarks at consistent 60–80px height

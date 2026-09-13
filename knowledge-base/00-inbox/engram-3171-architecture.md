@@ -24,7 +24,7 @@ type: architecture
 - Secret scan: 25 matches (all in tests/examples, no real secrets)
 - Format: ~80 files need prettier formatting (cosmetic)
 
-**Learned**: 
+**Learned**:
 1. opencode.json model config does NOT control the task tool's subagent model — this is a platform limitation
 2. For reliable execution, orchestrator should run checks directly via bash instead of delegating to subagents
 3. stack:verify:quick crashes with ChildProcess.kill error on Windows — needs investigation

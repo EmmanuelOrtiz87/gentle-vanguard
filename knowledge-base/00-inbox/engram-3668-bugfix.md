@@ -13,7 +13,7 @@ type: bugfix
 
 **Where**: apps/archify/src/api.ts (new), apps/archify/src/App.tsx (rewritten), apps/archify/src/styles.css (rewritten), apps/archify/server/shared-types.ts (new), apps/archify/server/server.ts (fixed), apps/archify/server/ai-generate.ts (fixed), apps/archify/server/importers.ts (fixed), apps/archify/src/components/CanvasEditor.tsx (fixed)
 
-**Learned**: 
+**Learned**:
 - Server modules can't import from `../../src/api` (different compilation context) — created `server/shared-types.ts` with shared `DiagramType`
 - `server/server.ts` had leftover Nexus DB code (`DatabaseManager.getInstance().events.insertEvent(DEFAULT_TENANT_ID, ...)`) that conflicted with the new app-local DB — removed duplicate `trackEvent` function, renamed import to `dbTrackEvent`
 - CanvasEditor.tsx used `e.sourceNode?.data` / `e.targetNode?.data` but React Flow edge objects don't have `sourceNode`/`targetNode` — fixed by building a nodeMap lookup and using `resolveId(e.source)` / `resolveId(e.target)`

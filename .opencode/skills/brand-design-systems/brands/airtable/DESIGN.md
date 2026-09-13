@@ -303,10 +303,12 @@ Type voice is Haas Grotesk at modest weights (400 for display, 500 for sub-title
 ## Colors
 
 ### Brand & Accent
+
 - **Primary** (`{colors.primary}` — #181d26): The dominant brand color. Used for the primary CTA background, h1/h2 display type, and the `{component.surface-dark}` band. Not "blue, then black" — black IS the primary throughout the marketing system.
 - **Primary Active** (`{colors.primary-active}` — #0d1218): The press state on primary buttons.
 
 ### Surface
+
 - **Canvas** (`{colors.canvas}` — #ffffff): The default page surface; the floor of every editorial body.
 - **Surface Soft** (`{colors.surface-soft}` — #f8fafc): Tabbed feature cards and the featured pricing tier.
 - **Surface Strong** (`{colors.surface-strong}` — #e0e2e6): The light gray "Start building with Airtable" CTA banner near the footer.
@@ -315,6 +317,7 @@ Type voice is Haas Grotesk at modest weights (400 for display, 500 for sub-title
 - **Hairline** (`{colors.hairline}` — #dddddd): The 1px border tone for input outlines, table dividers, secondary-button outlines.
 
 ### Text
+
 - **Ink** (`{colors.ink}` — #181d26): The strongest text — h1/h2 display type and primary button text-on-light. Same hex as `{colors.primary}` because they are the same role expressed at type and button layers.
 - **Body** (`{colors.body}` — #333840): The default running-text color.
 - **Muted** (`{colors.muted}` — #41454d): Footer links, breadcrumbs, captions.
@@ -322,6 +325,7 @@ Type voice is Haas Grotesk at modest weights (400 for display, 500 for sub-title
 - **On Primary / On Dark** (`{colors.on-primary}` — #ffffff): The text color on primary buttons and dark surfaces.
 
 ### Signature Card Surfaces
+
 These are the colors that carry Airtable's brand voltage. They appear as full-bleed, full-card surfaces — never as accents on a small element.
 - **Coral** (`{colors.signature-coral}` — #aa2d00): The largest signature card on the homepage ("Production apps in prototype speed"). Full-bleed dark coral with white type.
 - **Forest** (`{colors.signature-forest}` — #0a2e0e): A deep-green signature card used in the homepage demo-grid cluster.
@@ -329,6 +333,7 @@ These are the colors that carry Airtable's brand voltage. They appear as full-bl
 - **Peach** (`{colors.signature-peach}` — #fcab79), **Mint** (`{colors.signature-mint}` — #a8d8c4), **Yellow** (`{colors.signature-yellow}` — #f4d35e), **Mustard** (`{colors.signature-mustard}` — #d9a441): Demo-card surfaces that carry small product UI fragments inside the multi-card grid sections.
 
 ### Semantic
+
 - **Link** (`{colors.link}` — #1b61c9): Inline body links and anchor text. Darker on press to `{colors.link-active}` (#1a3866). Despite the `--theme_button-background-primary` CSS-variable name, this color is **not** the primary button color — it is the link color.
 - **Info** (`{colors.info}` — #254fad) and **Info Border** (`{colors.info-border}` — #458fff): Inline info badges and focused-input outline.
 - **Success** (`{colors.success}` — #006400) and **Success Border** (`{colors.success-border}` — #39bf45): Confirmation states.
@@ -336,6 +341,7 @@ These are the colors that carry Airtable's brand voltage. They appear as full-bl
 ## Typography
 
 ### Font Family
+
 The system runs **Haas / Haas Groot Disp** (Airtable's licensed display + text type). Haas Groot Disp covers display sizes (h1 / h2); Haas Grotesk covers everything 24px and below. The fallback stack walks `-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif`.
 
 The pricing surface runs a separate **Inter Display** stack at mid-weights (475 / 575) — a deliberate sub-system signaling commercial precision.
@@ -360,16 +366,19 @@ The pricing surface runs a separate **Inter Display** stack at mid-weights (475 
 | `{typography.pricing-card-title}` | 20px | 475 | 1.3 | 0 | Pricing tier card plan name |
 
 ### Principles
+
 The Haas system prefers weight 400 for display sizes — a 40px h1 is **not** bold. Visual emphasis is delegated to size, color contrast, and the signature surface cards. Where the system does want weight, it pivots to 500 (sub-titles, buttons, article titles), never 600 or 700 in the editorial body. The only true bold (600) lives in `{typography.legal}` — a sign that boldness is reserved for terms-of-service surfaces, not marketing.
 
 The pricing-page sub-system uses Inter Display at `font-weight: 475` — a custom mid-weight between regular (400) and medium (500), shipped as a variable font.
 
 ### Note on Font Substitutes
+
 If Haas Groot Disp and Haas Grotesk are unavailable, **Inter Display** (variable) is the closest open-source substitute for both — adjust line-height down by ~5% to match Haas's tighter cap-height. For the pricing sub-system, use Inter Display directly. On macOS / iOS, **system-ui** is sufficient; on Windows, the chain falls through to Segoe UI, which is a usable but slightly cooler substitute.
 
 ## Layout
 
 ### Spacing System
+
 - **Base unit:** 4px (all spacing snaps to 4-multiples).
 - **Tokens:** `{spacing.xxs}` 4px · `{spacing.xs}` 8px · `{spacing.sm}` 12px · `{spacing.md}` 16px · `{spacing.lg}` 24px · `{spacing.xl}` 32px · `{spacing.xxl}` 48px · `{spacing.section}` 96px.
 - **Section padding (vertical):** `{spacing.section}` (96px) is the universal vertical rhythm constant — every major editorial band on every page uses 96px top + 96px bottom internal padding.
@@ -377,12 +386,14 @@ If Haas Groot Disp and Haas Grotesk are unavailable, **Inter Display** (variable
 - **Gutters:** `{spacing.lg}` (24px) between cards in 3-up grids; `{spacing.md}` (16px) inside denser logo strips and footer column gutters.
 
 ### Grid & Container
+
 - **Max content width:** ~1280px centered, with `{spacing.xxl}` (48px) horizontal breathing room.
 - **Editorial body:** Single 8/12-column at large breakpoints, collapsing to single-column on mobile.
 - **Demo-card grids:** 3 or 4 columns at desktop, 2 at tablet, 1 at mobile. Card sizes are deliberately uneven within the grid to dodge a uniform "spec sheet" feel.
 - **Logo strip:** 6 monochrome partner logos in a single row at desktop; wraps to 3-up on mobile.
 
 ### Whitespace Philosophy
+
 Airtable uses whitespace as the dominant atmospheric tool. Hero sections sit in 96px+ of pure whitespace above and below the headline + sub-headline pair, with no decoration in that whitespace. The hero is intentionally calm — there is no gradient, no aurora, no atmospheric mesh behind the type. The system trusts whitespace alone to do the framing.
 
 ## Elevation & Depth
@@ -398,6 +409,7 @@ Airtable uses whitespace as the dominant atmospheric tool. Hero sections sit in 
 The elevation philosophy is **color-block first, shadow second**. Shadows are minimal; depth is delegated to the contrast between white canvas and signature surface cards. There is no soft-glow / atmospheric-shadow / heavy-elevation language anywhere in the marketing system.
 
 ### Decorative Depth
+
 - **Vertical rainbow stripes** appear on the articles hero only — multi-color vertical bands sitting on `{colors.surface-dark-elevated}`. This is a single-page treatment, not a system-wide signature.
 - **Photography-as-depth** in the demo-card grid: every card carries a real product UI screenshot or mockup, contributing depth through legible artifact density rather than decorative effects.
 
@@ -415,6 +427,7 @@ The elevation philosophy is **color-block first, shadow second**. Shadows are mi
 | `{rounded.full}` | 9999px / 50% | Circular icon buttons, avatar surfaces |
 
 ### Photography Geometry
+
 Product UI screenshots inside demo-card grids retain native aspect ratios (typically 4:3 or 16:10) and crop into `{rounded.md}` containers. Hero illustrations bleed full-width with no rounding. Article-card thumbnails use 16:9 with `{rounded.md}` corners. Avatars in testimonials use `{rounded.full}` (perfect circles). Pricing comparison table images stay rectangular with no rounding.
 
 ## Components
@@ -489,6 +502,7 @@ Product UI screenshots inside demo-card grids retain native aspect ratios (typic
 ## Do's and Don'ts
 
 ### Do
+
 - Keep `{component.button-primary}` near-black. The brand's primary CTA is `{colors.primary}`, not the link blue. Mixing them up turns a confident hero into a confused one.
 - Reserve `{component.button-primary}` for one primary action per viewport. The system is designed for scarcity at the brand-action layer.
 - Use `{component.button-secondary}` (white with hairline outline) as the natural pair with `{component.button-primary}`. The two together form Airtable's signature button row.
@@ -499,6 +513,7 @@ Product UI screenshots inside demo-card grids retain native aspect ratios (typic
 - Anchor every editorial band with `{spacing.section}` (96px) vertical padding.
 
 ### Don't
+
 - Don't make `{colors.link}` (#1b61c9) the primary button color. It is the link color. The primary button is `{colors.primary}` (#181d26, near-black). Treating link-blue as the brand action is the most common mistake when reading Airtable's CSS variables.
 - Don't add a gradient backdrop to the hero. Airtable's hero is white, full stop. Mesh, aurora, spotlight gradients all read as "another SaaS template" — not Airtable.
 - Don't bold display-weight type. `{typography.display-xl}` and `{typography.display-lg}` are intentionally weight 400 / 500 — going to 700 reads as marketing-page-template.
@@ -519,17 +534,20 @@ Product UI screenshots inside demo-card grids retain native aspect ratios (typic
 | Wide | > 1440px | Same as Desktop with more outer breathing room; max content width caps at ~1280px and the page adds outer margin rather than scaling type up |
 
 ### Touch Targets
+
 - `{component.button-primary}` and siblings render at 48 × 48px minimum (16px vertical padding + 16px line-height) — comfortably above WCAG AAA's 44 × 44.
 - `{component.button-icon-circular}` is exactly 40 × 40px — slightly under WCAG's recommended 44, but the centered icon and dot-radius compensate visually.
 - `{component.text-input}` height is 44px.
 
 ### Collapsing Strategy
+
 - Top nav collapses to a hamburger at < 768px; the menu opens as a full-screen sheet rather than a dropdown.
 - Card grids reduce columns rather than scaling cards down.
 - The `{component.feature-card-tabbed}` re-stacks the tab rail above the content pane on mobile.
 - The pricing comparison table converts to horizontally-scrollable swipe at < 1024px; the four plan headers stay visible while body rows scroll.
 
 ### Image Behavior
+
 - Demo-card UI screenshots crop to fit their container rather than scaling up.
 - Hero illustrations bleed full-width on mobile, losing horizontal margin.
 - Signature card images (inside coral / forest / dark cards) compress to their card width without cropping.

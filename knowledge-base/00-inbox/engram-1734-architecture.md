@@ -11,7 +11,7 @@ type: architecture
 
 **Why**: Final close-out of Wave 8 PS1→TS migrations and infrastructure cleanup
 
-**Where**: 
+**Where**:
 - src/fine-tuning-data-collector.ts — fixed Record→FtRecord naming clash
 - src/adaptive-codex-windsurf-profile.ts:87 — fixed eqeqeq (typeof pattern)
 - src/json-validator.ts:108 — fixed prefer-const via --fix
@@ -20,7 +20,7 @@ type: architecture
 - config/ps1-ts-migration.json — 3 files added to completedWave8 + tsFiles[]
 - apps/web-dashboard — build passes 0 errors
 
-**Learned**: 
+**Learned**:
 - Pipeline is fully operational with ~32 PS1→TS migrations (68% completion)
 - ~10 PS1 remain in pipeline, all lazy/non-required
 - 604 lint warnings remain (no-console, explicit-return-type) — non-blocking

@@ -13,7 +13,7 @@ type: pattern
 
 **Where**: src/start-monitor-daemon.ts, y cualquier script que haga spawn detached.
 
-**Learned**: 
+**Learned**:
 - Usar: spawn('npx tsx script.ts --flag valor', [], { shell: true, detached: true, ... })
 - NO usar: spawn('npx', ['tsx', 'script.ts'], { shell: false, ... }) — ENOENT en Windows
 - NO usar: spawn('npx', ['tsx', 'script.ts'], { shell: true, ... }) — deprecation warning

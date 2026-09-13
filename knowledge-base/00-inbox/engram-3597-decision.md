@@ -49,7 +49,7 @@ type: decision
 **Files Path**: `docs/brand/` and `apps/academy-web/`
 **Multi-Tool Compatible**: ChatGPT, Claude, Gemini, Figma, Adobe CC, VS Code
 
-**Next Steps**: 
+**Next Steps**:
 1. Implement in Academy (replace style.css import)
 2. Roll out to other apps (dashboard, analytics, etc.)
 3. Generate marketing assets (banners, social)

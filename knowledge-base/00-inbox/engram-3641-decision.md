@@ -16,6 +16,7 @@ type: decision
 **Learned**:
 
 ## GENTLE-AI v2.5.0 — "Review Closes Where Proof Ends"
+
 Últimos commits (2026-09-02): review stop-hook para Claude Code, retry de validators malformados, cooldown state persistence, model assignments en delegación orgánica.
 
 **Lo que GV YA cubre**: SDD 7 fases, RDD con kill-switch, Engram, skills, MCP, guardrails, routing probabilístico (adaptive-steps), acknowledge pattern (receipt-manager).
@@ -28,6 +29,7 @@ type: decision
 5. **OpenCode SDD Profiles** — perfiles de modelo por fase (cheap/balanced/premium) — GV tiene config/model-router.json con perfiles pero no el patrón `gentle-orchestrator`
 
 ## MICROSOFT AGT v4.1.0 — Enterprise governance
+
 Últimos commits (2026-08-31): signed http trust verification, replay attack prevention en Django trust middleware.
 
 **Lo que GV YA cubre**: RDD kill-switch (rdd-kill-switch.ts), saga orchestrator, circuit breakers, chaos engineering, event-sourcing hash-chained (audit tamper-evident), review lenses, MCP gateway (lifecycle), guardrails input/output.
@@ -43,6 +45,7 @@ type: decision
 8. **Decision BOM / audit trail export** para SOC 2 / EU AI Act.
 
 ## VEREDICTO
+
 GV está a la par o supera en: SDD, RDD, dashboard, design system, token tracking, process hygiene, event-sourcing audit.
 
 Los gaps REALES de valor son:

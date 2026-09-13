@@ -11,7 +11,7 @@ type: architecture
 
 **Why**: Mechanical refactor (F2.5) to reduce a 901-line monolith into per-domain modules. ZERO behavior changes required.
 
-**Where**: 
+**Where**:
 - `src/orchestration/adaptive-router.ts` (entry, 26 lines)
 - `adaptive-router/types.ts` (interfaces: RouterArgs, AgentPerformance, DomainEntry, RoutingOverride, RoutingTable, SkillMetric, DelegationRecord, CorrectionEntry)
 - `adaptive-router/config.ts` (paths, DEFAULT_CONFIG, loadJson, loadJsonLines, Logger, getLogger, ensureDir, now, daysAgo)
@@ -20,7 +20,7 @@ type: architecture
 - `adaptive-router/table.ts` (computeAgentPerformance, buildOverrides, buildRoutingTable, formatStatus)
 - `adaptive-router/index.ts` (getDb, parseArgs, main)
 
-**Learned**: 
+**Learned**:
 - GOTCHA: the original `getDb()` used `_require('../apps/web-dashboard/server/database/manager')` from `src/orchestration/adaptive-router.ts`, which resolves to `src/apps/...` — a BROKEN path that doesn't exist. So `getDb()` always returned null (require threw, caught silently). To preserve ZERO behavior change, the new index.ts at `src/orchestration/adaptive-router/` must use `_require('../../apps/...')` (also resolves to broken `src/apps/...`), NOT `'../../../apps/...'` (which would resolve to the real `apps/...` and enable SQLite dual-write — a behavior change).
 - Use `.js` extension specifiers in imports (TS5097-safe).
 - `--suggest` is NOT a recognized flag in parseArgs — it defaults to build mode. This is original behavior, unchanged.

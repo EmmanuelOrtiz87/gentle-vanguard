@@ -409,6 +409,7 @@ Surfaces use a four-step ladder: `{colors.canvas}` (pure white for cards), `{col
 ## Colors
 
 ### Brand & Accent
+
 - **Ink** (`{colors.primary}` — `#171717`): The single primary CTA color. Black-near-pure ink that carries every Sign Up pill, every footer CTA, the dark-band polarity-flip. Used as text color throughout the page on light surfaces. (Resolved from `--ds-gray-1000`.)
 - **Cyan** (`{colors.cyan}` — `#50e3c2`): A signature mint-cyan used in the brand gradient and inside Geist-system spotlight tokens. Visible inside the hero gradient stops.
 - **Highlight Pink** (`{colors.highlight-pink}` — `#ff0080`): The brand's highlight magenta, used as the high-saturation stop in the preview-gradient pair.
@@ -416,6 +417,7 @@ Surfaces use a four-step ladder: `{colors.canvas}` (pure white for cards), `{col
 - **Link Blue** (`{colors.link}` — `#0070f3`): The brand's primary link color and the legacy `--geist-success` semantic.
 
 ### Surface
+
 - **Canvas** (`{colors.canvas}` — `#ffffff`): The pure-white card / dialog / modal surface.
 - **Canvas Soft** (`{colors.canvas-soft}` — `#fafafa`): The default page background — 98 % white. Almost every section sits on this tone.
 - **Canvas Soft 2** (`{colors.canvas-soft-2}` — `#f5f5f5`): A slightly deeper inset surface for "code editor inner background", template-card hover states, and dropdown menus.
@@ -423,12 +425,14 @@ Surfaces use a four-step ladder: `{colors.canvas}` (pure white for cards), `{col
 - **Hairline Strong** (`{colors.hairline-strong}` — `#a1a1a1`): The 500-level gray, used as the slightly-stronger divider on light bands and as the deemphasised text color.
 
 ### Text
+
 - **Ink** (`{colors.ink}` — `#171717`): Every heading and body paragraph on light surfaces.
 - **Body** (`{colors.body}` — `#4d4d4d`): Secondary text — sub-headings, body captions, nav-link inactive text, footer column body.
 - **Mute** (`{colors.mute}` — `#888888`): Lowest-priority text — placeholder text, fine print, low-key labels.
 - **On Primary** (`{colors.on-primary}` — `#ffffff`): All text on `{colors.primary}` surfaces.
 
 ### Semantic
+
 - **Success / Link** (`{colors.success}` — `#0070f3`): The brand's legacy success indicator doubles as the primary link color. Visible underline-on-hover for inline body links.
 - **Link Deep** (`{colors.link-deep}` — `#0761d1`): The pressed / visited tone for inline links.
 - **Link Bg Soft** (`{colors.link-bg-soft}` — `#d3e5ff`): Soft pastel blue fill for "what's new" pill banners and informational badges.
@@ -439,6 +443,7 @@ Surfaces use a four-step ladder: `{colors.canvas}` (pure white for cards), `{col
 - **Warning Soft** (`{colors.warning-soft}` — `#ffefcf`) / **Warning Deep** (`{colors.warning-deep}` — `#ab570a`): Background + pressed variants.
 
 ### Brand Gradient
+
 The brand's signature decoration is a three-pair gradient stack:
 - **Develop** (`{colors.gradient-develop-start}` `#007cf0` → `{colors.gradient-develop-end}` `#00dfd8`) — the blue-to-teal pair used to mark the "deploy" / "develop" rhythm.
 - **Preview** (`{colors.gradient-preview-start}` `#7928ca` → `{colors.gradient-preview-end}` `#ff0080`) — the violet-to-pink pair used for "preview" surfaces.
@@ -449,6 +454,7 @@ The three pairs collapse into a single multi-color mesh gradient when used as th
 ## Typography
 
 ### Font Family
+
 Two custom faces carry the entire system:
 
 1. **A custom geometric sans** (extracted as `Geist`) for every display, body, button, link, and label. Weights 400 / 500 / 600 are the working set; the face never appears in 700 or heavier. Display sizes are tracked aggressively negative (`-2.4 px` at 48 px hero, `-1.28 px` at 32 px section); body stays at neutral or slightly-negative tracking.
@@ -476,12 +482,14 @@ A condensed display sans (`Space Grotesk`) is loaded as a third face for occasio
 | `{typography.button-lg}` | 16px | 500 | 24px | 0 | Marketing-scale pill button labels. |
 
 ### Principles
+
 - **Negative tracking is part of the voice.** Display sizes use aggressive `-2.4` to `-0.6` px tracking. Reverting to default tracking breaks the brand.
 - **Sentence-case headlines, period-terminated.** Headlines like "Build and deploy on the AI Cloud." end with a deliberate period — that punctuation is part of the brand's voice.
 - **Mono for the technical layer only.** Section eyebrows, code blocks, terminal mockups. Body paragraphs never set in mono.
 - **Weight 600 is the display ceiling.** The geometric sans never appears at 700 / 800. The brand reads as a calmer system because of this.
 
 ### Note on Font Substitutes
+
 The two primary faces are proprietary (custom-cut for the brand). Open-source substitutes:
 - **Geometric sans** — *Inter* (400 / 500 / 600) is the closest stylistic match; `font-feature-settings: "ss01", "ss02"` enables the geometric alternates. *Satoshi* is a passable second choice.
 - **Monospace** — *JetBrains Mono* (400) at 12 – 13 px matches the technical voice. *IBM Plex Mono* is the second-best option.
@@ -489,6 +497,7 @@ The two primary faces are proprietary (custom-cut for the brand). Open-source su
 ## Layout
 
 ### Spacing System
+
 - **Base unit**: 4 px. The brand's `--geist-space` token is exactly 4 px and every captured value is a multiple of 4.
 - **Tokens**: `{spacing.xxs}` 4 px · `{spacing.xs}` 8 px · `{spacing.sm}` 12 px · `{spacing.md}` 16 px · `{spacing.lg}` 24 px · `{spacing.xl}` 32 px · `{spacing.2xl}` 40 px · `{spacing.3xl}` 48 px · `{spacing.4xl}` 64 px · `{spacing.5xl}` 96 px · `{spacing.6xl}` 128 px · `{spacing.section}` 192 px.
 - **Section padding**: marketing bands use `{spacing.4xl}` to `{spacing.5xl}` top/bottom. Hero bands stretch to `{spacing.section}` to give the mesh gradient room to breathe.
@@ -496,6 +505,7 @@ The two primary faces are proprietary (custom-cut for the brand). Open-source su
 - **Inline gap**: button rows, nav rows, and chip rows use `{spacing.sm}` to `{spacing.md}` between siblings. The brand's `--geist-gap` is exactly 24 px.
 
 ### Grid & Container
+
 - **Max width**: ~1400 px (`--ds-page-width`); the legacy `--geist-page-width` is 1200 px and still appears on some marketing surfaces. Content centres with horizontal gutters of `{spacing.lg}` 24 px on desktop, `{spacing.md}` 16 px on mobile.
 - **Column patterns**:
   - Three-feature row: 3-up at desktop, 1-up at mobile (rows like "Web Apps / Composable Commerce / Multi-tenant Platforms").
@@ -505,6 +515,7 @@ The two primary faces are proprietary (custom-cut for the brand). Open-source su
   - Logo strip: ~5 logos wide, single row.
 
 ### Whitespace Philosophy
+
 The mesh gradient does most of the heavy decorative lifting; whitespace separates the bands. Section spacing is generous — `{spacing.4xl}` to `{spacing.5xl}` between bands lets the gradient breathe. Inside a card, the headline/paragraph stack is tight (`{spacing.xs}` 8 px gap), then a wider gap before the CTA cluster. The page reads as engineered — large gaps + tight interior, never the other way around.
 
 ### Responsive Strategy
@@ -520,9 +531,11 @@ The mesh gradient does most of the heavy decorative lifting; whitespace separate
 | Ultra-wide | ≥ 1400px | Content stays centred at 1400 px; bands stretch edge-to-edge in colour but content holds the max-width. |
 
 #### Touch Targets
+
 The `button-primary` pill renders at ~32 px tall in nav and ~48 px tall in marketing contexts. Marketing CTAs comfortably meet WCAG AAA at all breakpoints; nav buttons inflate touch area through `{spacing.xs}` padding on mobile to meet the 44 × 44 px floor.
 
 #### Collapsing Strategy
+
 - **Nav**: full link row + Ask AI / Log In / Sign Up pills at desktop. Collapses to logo + hamburger at mobile with the menu opening as a full-overlay.
 - **Hero**: mesh gradient stays centred; headline + body stack vertically at all breakpoints (the brand doesn't use a split-hero pattern).
 - **Three-feature row**: 3-up → 2-up → 1-up at the breakpoints above; cards keep their `{rounded.md}` 8 px shape across all viewports.
@@ -530,6 +543,7 @@ The `button-primary` pill renders at ~32 px tall in nav and ~48 px tall in marke
 - **Template grid**: 5-up → 3-up → 2-up → 1-up. Each `template-card` keeps its 16:9 aspect on the image.
 
 #### Image Behavior
+
 - **Mesh gradient**: rendered as inline SVG or canvas-painted gradient; scales fluidly with the hero container; never crops, never tiles.
 - **Customer logos**: rendered as monochrome SVGs in the logo strip; consistent 24 px height.
 - **Code editor mockup**: dark `{colors.primary}` rectangle with mono text rendered inside; treated as an image at the layout level.
@@ -549,6 +563,7 @@ The `button-primary` pill renders at ~32 px tall in nav and ~48 px tall in marke
 The brand uses STACKED shadows — multiple small offsets layered to fake natural light — never a single 8-px-blur generic drop. Inset hairline rings are always added so the card edge stays crisp.
 
 ### Decorative Depth
+
 - **Mesh gradient as atmospheric depth**: the hero's multi-stop gradient is the brand's only "atmospheric" effect — applied as a flat 2-D backdrop rather than a 3-D illustration.
 - **Polarity-flipped dark band as section-depth**: switching the surface from `{colors.canvas-soft}` to `{colors.primary}` (the deep ink) is the brand's chief depth cue between bands.
 - **Inset-shadow + drop-shadow combo**: the cards' combination of an inset 1 px ring and a multi-stop drop produces a "card sits on the page" effect without ever feeling material-heavy.
@@ -570,6 +585,7 @@ The brand uses STACKED shadows — multiple small offsets layered to fake natura
 | `{rounded.full}` | 9999px | Icon-button circular containers, nav-link ghost pills. |
 
 ### Photography Geometry
+
 - **Mesh gradient**: full-bleed 2-D atmospheric backdrop, never cropped to a frame; treated as the page's wallpaper.
 - **Customer logos**: monochrome SVG, consistent 24 px height in a flex row.
 - **Code editor mockup**: 16:10 dark rectangle, `{rounded.md}` corners.
@@ -714,10 +730,10 @@ The brand uses STACKED shadows — multiple small offsets layered to fake natura
 **`ex-toast`** — Toast notification surface — feature-card shape + medium shadow.
 - Properties: `backgroundColor`, `rounded`, `padding`, `typography`
 
-
 ## Do's and Don'ts
 
 ### Do
+
 - Reserve `{colors.primary}` (`#171717`) for primary CTAs across the page. Black ink IS the conversion target.
 - Use `{rounded.pill}` 100 px for every marketing-scale CTA and `{rounded.sm}` 6 px for nav-scale buttons. The two pill scales coexist deliberately.
 - Set every headline in `{typography.display-*}` weight 600, sentence-case, often period-terminated. Aggressive negative tracking is part of the voice.
@@ -727,6 +743,7 @@ The brand uses STACKED shadows — multiple small offsets layered to fake natura
 - Set every code block and technical eyebrow in `{typography.code}` / `{typography.caption-mono}`. Mono is the voice of the platform.
 
 ### Don't
+
 - Don't introduce a sixth accent colour. The brand operates with ink + gray + the four-pair gradient palette; new accents flatten the voice.
 - Don't render headlines in all-caps. Sentence-case + negative tracking is non-negotiable.
 - Don't drop a single heavy drop-shadow on cards. The brand's elevation is built from stacked small offsets + inset hairline rings.

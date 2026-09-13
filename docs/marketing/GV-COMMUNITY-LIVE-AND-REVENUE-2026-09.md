@@ -29,12 +29,13 @@ de seguimiento.
 
 ### Charla 3 — De un chat a un sistema de IA
 
-Programadores y perfiles técnicos. Explicar cuándo alcanza un prompt, cuándo aparece RAG, cuándo usar
-tools/agentes y qué observar antes de producción.
+Programadores y perfiles técnicos. Explicar cuándo alcanza un prompt, cuándo aparece RAG, cuándo
+usar tools/agentes y qué observar antes de producción.
 
 ### Charla 4 — Arquitectura y diagnóstico para equipos
 
-Empresas y líderes técnicos. Revisar objetivos, datos, riesgos, costos, arquitectura y plan de 30 días.
+Empresas y líderes técnicos. Revisar objetivos, datos, riesgos, costos, arquitectura y plan de 30
+días.
 
 ## 3. Guion de cada vivo
 
@@ -108,9 +109,9 @@ precios ni resultados hasta tener una oferta validada.
 
 ## 9. Señales de avance
 
-Medir registros, asistencia, preguntas, respuestas, guardados, conversaciones iniciadas y diagnósticos
-solicitados. El alcance sirve para descubrir, pero la señal más importante es que una persona vuelva,
-participe y recomiende la comunidad.
+Medir registros, asistencia, preguntas, respuestas, guardados, conversaciones iniciadas y
+diagnósticos solicitados. El alcance sirve para descubrir, pero la señal más importante es que una
+persona vuelva, participe y recomiende la comunidad.
 
 ## 10. Orden de puesta en marcha
 
@@ -123,4 +124,5 @@ participe y recomiende la comunidad.
 7. Repetir el ciclo con una oferta más específica.
 
 La creación y verificación de cuentas requiere acceso del propietario, teléfono y correo. Este
-repositorio queda preparado para publicar, pero no debe guardar contraseñas, tokens ni datos sensibles.
+repositorio queda preparado para publicar, pero no debe guardar contraseñas, tokens ni datos
+sensibles.

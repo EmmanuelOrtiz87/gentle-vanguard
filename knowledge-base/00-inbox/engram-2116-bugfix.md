@@ -13,7 +13,7 @@ type: bugfix
 
 **Where**: `src/token-budget-guard.ts`, lines 175-183 (checkEngram function)
 
-**Learned**: 
+**Learned**:
 - Windows uses `where` instead of `which` for locating executables
 - Added fallback to directly run `engram --version` if path lookup fails
 - Platform detection with `process.platform === 'win32'`

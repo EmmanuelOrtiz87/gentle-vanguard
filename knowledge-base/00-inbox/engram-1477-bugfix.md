@@ -13,7 +13,7 @@ type: bugfix
 
 **Where**: maintenance-watchtower.ps1, correction-capture.ps1, session-scoring.ps1, skill-auto-patch.ps1, usage-tracker.ps1, skill-factory.ps1, sdd-pipeline.ps1, ft-dataset-builder.ps1, ft-data-collector.ps1, ft-trainer.ps1, ft-inference.ps1, ft-evaluator.ps1, ft-registry.ps1, ft-status.ps1, sync-skill-registry.ps1, build-skill-registry.ps1, ft-data-collector.tests.ps1
 
-**Learned**: 
+**Learned**:
 1. Always use nested Join-Path: `Join-Path (Join-Path $a $b) $c`
 2. For cross-function variable sharing, define at script scope (before `function` keyword)
 3. Unicode box-drawing chars cause PowerShell parse errors — use ASCII

@@ -273,7 +273,8 @@ export class SmallestRouteRouter {
           analysis.verification = {
             tier: c.tier,
             score: c.score,
-            action: c.tier === 'high' ? 'rdd-4r-review' : c.tier === 'standard' ? 'sdd-verify' : 'none',
+            action:
+              c.tier === 'high' ? 'rdd-4r-review' : c.tier === 'standard' ? 'sdd-verify' : 'none',
             rationale: c.rationale,
           };
         }
@@ -323,7 +324,7 @@ export class SmallestRouteRouter {
 
     // Infer from description
     const desc = request.description.toLowerCase();
-    if (desc.includes('typo') || desc.includes('fix') && !desc.includes('refactor')) return 1;
+    if (desc.includes('typo') || (desc.includes('fix') && !desc.includes('refactor'))) return 1;
     if (desc.includes('config') || desc.includes('readme')) return 1;
     if (desc.includes('multiple files') || desc.includes('across')) return 8;
     if (desc.includes('new feature') || desc.includes('implement')) return 5;
@@ -346,7 +347,9 @@ export class SmallestRouteRouter {
     return Math.min(Math.max(ambiguity, 0), 1);
   }
 
-  private determineComplexity(request: RoutingRequest): 'trivial' | 'simple' | 'moderate' | 'complex' | 'substantial' {
+  private determineComplexity(
+    request: RoutingRequest,
+  ): 'trivial' | 'simple' | 'moderate' | 'complex' | 'substantial' {
     if (request.complexity) return request.complexity;
 
     const desc = request.description.toLowerCase();
@@ -377,7 +380,10 @@ export class SmallestRouteRouter {
     return 0.8;
   }
 
-  private calculateAlternatives(signals: RouteSignal[], request: RoutingRequest): RouteAlternative[] {
+  private calculateAlternatives(
+    signals: RouteSignal[],
+    request: RoutingRequest,
+  ): RouteAlternative[] {
     const totalWeight = signals.reduce((sum, s) => sum + s.value * s.weight, 0);
 
     // Calculate scores (lower = better for "smallest route")
@@ -410,7 +416,10 @@ export class SmallestRouteRouter {
     return alternatives;
   }
 
-  private selectSmallestViable(alternatives: RouteAlternative[], request: RoutingRequest): {
+  private selectSmallestViable(
+    alternatives: RouteAlternative[],
+    request: RoutingRequest,
+  ): {
     route: RouteType;
     reason: string;
     steps: number;
@@ -430,7 +439,11 @@ export class SmallestRouteRouter {
     const fileCount = this.estimateFileCount(request);
     const confidence = request.confidence || this.inferConfidence(request);
 
-    if (fileCount <= THRESHOLDS.DIRECT_MAX_FILES && confidence >= THRESHOLDS.CONFIDENCE_DIRECT && !request.requiresResearch) {
+    if (
+      fileCount <= THRESHOLDS.DIRECT_MAX_FILES &&
+      confidence >= THRESHOLDS.CONFIDENCE_DIRECT &&
+      !request.requiresResearch
+    ) {
       return {
         route: 'direct',
         reason: `${fileCount} file(s), high confidence (${(confidence * 100).toFixed(0)}%)`,
@@ -444,9 +457,10 @@ export class SmallestRouteRouter {
       // But never force SDD just because of size
       return {
         route: 'delegated',
-        reason: fileCount >= THRESHOLDS.DELEGATED_MIN_FILES
-          ? `${fileCount} files require focused agent`
-          : 'Research phase needs dedicated agent',
+        reason:
+          fileCount >= THRESHOLDS.DELEGATED_MIN_FILES
+            ? `${fileCount} files require focused agent`
+            : 'Research phase needs dedicated agent',
         steps: 20 + fileCount * 2,
         confidence: Math.max(confidence - 0.1, 0.5),
       };
@@ -472,7 +486,10 @@ export class SmallestRouteRouter {
     };
   }
 
-  private requiresConfirmation(selected: ReturnType<SmallestRouteRouter['selectSmallestViable']>, request: RoutingRequest): boolean {
+  private requiresConfirmation(
+    selected: ReturnType<SmallestRouteRouter['selectSmallestViable']>,
+    request: RoutingRequest,
+  ): boolean {
     // Require confirmation if:
     // - High ambiguity and not using SDD
     // - Large file count with direct route
@@ -536,7 +553,12 @@ export class SmallestRouteRouter {
     averageConfidence: number;
     lastAttempt: RoutingHistoryEntry | null;
   } {
-    const byRoute: Record<RouteType, number> = { direct: 0, delegated: 0, sdd: 0, collaborative: 0 };
+    const byRoute: Record<RouteType, number> = {
+      direct: 0,
+      delegated: 0,
+      sdd: 0,
+      collaborative: 0,
+    };
 
     for (const entry of this.history) {
       byRoute[entry.selectedRoute]++;
@@ -600,7 +622,9 @@ function cli(): void {
       console.log(`Requires Confirmation: ${analysis.requiresConfirmation ? 'Yes' : 'No'}`);
       console.log('\nSignals:');
       for (const signal of analysis.signals) {
-        console.log(`  ${signal.name}: ${signal.description} (weight: ${(signal.weight * 100).toFixed(0)}%)`);
+        console.log(
+          `  ${signal.name}: ${signal.description} (weight: ${(signal.weight * 100).toFixed(0)}%)`,
+        );
       }
       console.log('\nRecommendation:');
       console.log(`  ${smallestRoute.recommend(analysis)}`);

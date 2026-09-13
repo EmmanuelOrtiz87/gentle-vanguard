@@ -272,10 +272,12 @@ CTAs are subtle: a near-black ink pill (`{component.button-primary}`) is the pri
 ## Colors
 
 ### Brand & Accent
+
 - **Ink Primary** (`{colors.primary}` — #292524): The primary action color — warm near-black pill. Used scarcely.
 - **Ink Primary Active** (`{colors.primary-active}` — #0c0a09): Press state.
 
 ### Surface
+
 - **Canvas** (`{colors.canvas}` — #f5f5f5): Off-white page floor.
 - **Canvas Soft** (`{colors.canvas-soft}` — #fafafa): Lighter band for subtle alternating sections.
 - **Canvas Deep** (`{colors.canvas-deep}` — #0c0a09): Same as ink — used for the rare dark-mode hero (Agents page).
@@ -285,11 +287,13 @@ CTAs are subtle: a near-black ink pill (`{component.button-primary}`) is the pri
 - **Surface Dark Elevated** (`{colors.surface-dark-elevated}` — #1c1917): Cards on dark canvas.
 
 ### Hairlines
+
 - **Hairline** (`{colors.hairline}` — #e7e5e4): Default 1px divider.
 - **Hairline Soft** (`{colors.hairline-soft}` — #f0efed): Lighter divider.
 - **Hairline Strong** (`{colors.hairline-strong}` — #d6d3d1): Stronger panel outline.
 
 ### Text
+
 - **Ink** (`{colors.ink}` — #0c0a09): Display, primary text.
 - **Body** (`{colors.body}` — #4e4e4e): Default running-text.
 - **Body Strong** (`{colors.body-strong}` — #292524): Same as primary — emphasis.
@@ -300,6 +304,7 @@ CTAs are subtle: a near-black ink pill (`{component.button-primary}`) is the pri
 - **On Dark Soft** (`{colors.on-dark-soft}` — #a8a29e): Muted off-white on dark.
 
 ### Atmospheric Gradient Stops (signature)
+
 - **Gradient Mint** (`{colors.gradient-mint}` — #a7e5d3): Mint green orb.
 - **Gradient Peach** (`{colors.gradient-peach}` — #f4c5a8): Peach orb.
 - **Gradient Lavender** (`{colors.gradient-lavender}` — #c8b8e0): Lavender orb.
@@ -309,12 +314,14 @@ CTAs are subtle: a near-black ink pill (`{component.button-primary}`) is the pri
 These appear ONLY as soft radial-gradient atmospheric orbs inside `{component.gradient-orb-card}` and as background atmospheric blooms behind hero copy. Never as button fills, never as text colors.
 
 ### Semantic
+
 - **Success** (`{colors.semantic-success}` — #16a34a): Confirmation.
 - **Error** (`{colors.semantic-error}` — #dc2626): Validation errors.
 
 ## Typography
 
 ### Font Family
+
 **Waldenburg Light** is the licensed display serif at weight 300. **Inter** carries body, navigation, captions, and buttons. Fallback: `'Times New Roman', serif` for Waldenburg, `sans-serif` for Inter.
 
 ### Hierarchy
@@ -337,27 +344,32 @@ These appear ONLY as soft radial-gradient atmospheric orbs inside `{component.gr
 | `{typography.nav-link}` | 15px | 500 | 1.4 | 0 | Top-nav menu |
 
 ### Principles
+
 - **Display weight stays at 300.** Waldenburg Light is the editorial signature. Never bold display copy.
 - **Subtle letter-spacing on body.** Inter at +0.15-0.18px tracking — slightly looser than default Inter for a more editorial feel.
 - **Negative letter-spacing on display.** Waldenburg pulls -0.32px to -1.92px tighter on display sizes.
 
 ### Note on Font Substitutes
+
 Waldenburg is licensed. Open-source substitute: **EB Garamond** at weight 300 (slightly more humanist) or **GT Sectra** (closer to Waldenburg's modernity). Use Inter directly for body — it's the same family ElevenLabs uses.
 
 ## Layout
 
 ### Spacing System
+
 - **Base unit:** 4px.
 - **Tokens:** `{spacing.xxs}` 4px · `{spacing.xs}` 8px · `{spacing.sm}` 12px · `{spacing.base}` 16px · `{spacing.md}` 20px · `{spacing.lg}` 24px · `{spacing.xl}` 32px · `{spacing.xxl}` 48px · `{spacing.section}` 96px.
 - **Section padding:** 96px.
 
 ### Grid & Container
+
 - Max content width: ~1200px.
 - Editorial body: 12-column grid.
 - Feature card grids: 2-up at desktop for hero splits, 3-up for benefit grids.
 - Footer: 5-column at desktop.
 
 ### Whitespace Philosophy
+
 Generous editorial pacing — print-magazine feel. 96px between bands; cards inside bands sit close (16-24px gap). The atmospheric gradient orbs occupy generous breathing space without competing with copy.
 
 ## Elevation & Depth
@@ -373,6 +385,7 @@ The system uses **hairline + soft drop**. Cards float above the off-white canvas
 | Gradient orb | Radial gradient with one of `{colors.gradient-*}` | Atmospheric depth — never a card surface |
 
 ### Decorative Depth
+
 - **Pastel gradient orbs** are the brand's strongest atmospheric pattern. Soft radial blooms in mint, peach, lavender, sky, or rose drift through hero bands and feature sections without containing any content — they are pure atmosphere.
 
 ## Shapes
@@ -452,6 +465,7 @@ The system uses **hairline + soft drop**. Cards float above the off-white canvas
 ## Do's and Don'ts
 
 ### Do
+
 - Reserve `{colors.primary}` (ink pill) for primary CTAs.
 - Use Waldenburg Light at weight 300 for every display headline. Never bold.
 - Use Inter at +0.15-0.18px tracking for body — the editorial dialect.
@@ -459,6 +473,7 @@ The system uses **hairline + soft drop**. Cards float above the off-white canvas
 - Use the pill shape for every CTA and badge.
 
 ### Don't
+
 - Don't introduce a saturated brand action color. Ink pill is the only CTA color.
 - Don't bold display copy. Display sits at weight 300 — bolding shifts the brand voice from editorial to consumer-marketing.
 - Don't use gradient orbs as button fills, text colors, or component backgrounds. They are pure atmosphere.
@@ -478,10 +493,12 @@ The system uses **hairline + soft drop**. Cards float above the off-white canvas
 | Wide | > 1280px | Content caps at 1200px. |
 
 ### Touch Targets
+
 - Primary pill at 40px height — at WCAG AA, padded for AAA.
 - Voice icon circles 32px — padded row creates effective 48px tap zone.
 
 ### Collapsing Strategy
+
 - Top nav switches to hamburger below 768px.
 - Feature grid: 3-up → 2-up → 1-up.
 - Gradient orbs reduce diameter at every breakpoint but never disappear.

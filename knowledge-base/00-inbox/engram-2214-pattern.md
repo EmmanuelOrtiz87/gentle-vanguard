@@ -9,7 +9,7 @@ type: pattern
 
 **What**: Two optimizations applied: LRU cache for .state.json reads and auto WAL checkpoint in db-init
 
-**Where**: 
+**Where**:
 - apps/web-dashboard/server/real-data.ts — added LRU cache (~20 lines)
 - src/database/db-init.ts — added WAL checkpoint block (~9 lines)
 

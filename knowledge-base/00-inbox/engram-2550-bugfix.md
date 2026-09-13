@@ -35,6 +35,7 @@ type: bugfix
 - `checkDashboardHealthWithRetry(retries, delay)` → Con retry
 
 **CLI**:
+
 ```bash
 npx tsx src/dashboard-health-checker.ts
 ```

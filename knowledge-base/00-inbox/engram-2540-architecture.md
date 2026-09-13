@@ -9,12 +9,13 @@ type: architecture
 
 **What**: Created src/dashboard-cmd-launcher.ts - CMD-native WebSocket server launcher
 **Why**: PowerShell caused ChildProcess.kill errors, blocking dashboard startup
-**Where**: 
+**Where**:
 - New: src/dashboard-cmd-launcher.ts (175 lines)
 - Modified: package.json (dashboard:start script)
 - Replaced: PowerShell-based quick-start.ts
 
 **Technical Solution**:
+
 ```typescript
 // Before (PowerShell - FAIL):
 execFile('powershell', ['-Command', ...]) // ChildProcess.kill error

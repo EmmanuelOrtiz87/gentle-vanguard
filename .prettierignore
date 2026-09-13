@@ -40,3 +40,5 @@ test-agent-broken.json
 
 # test fixtures: hand-crafted, must not be reformatted
 tests/fixtures/**
+policies/
+config/policies/

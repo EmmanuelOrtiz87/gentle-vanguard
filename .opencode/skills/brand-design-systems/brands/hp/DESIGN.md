@@ -345,12 +345,14 @@ The system breaks into three voice modes: a **white commercial body** for produc
 > **No Interaction sub-section.** Hover colors are silently filtered. Allowed sub-sections: Brand & Accent, Surface, Text, Semantic.
 
 ### Brand & Accent
+
 - **HP Electric Blue** (`{colors.primary}` — `#024ad8`): the system's lone signal — primary CTA fill, link color, chevron-decoration fill, active sub-nav indicator. Reserved.
 - **Bright Blue** (`{colors.primary-bright}` — `#296ef9`): a slightly lighter variant used inside dark slabs (testimonial-card buttons, dark-band CTA links) where the deeper blue would muddy.
 - **Deep Navy** (`{colors.primary-deep}` — `#0e3191`): pressed state for the primary CTA and the visited-link color.
 - **Soft Blue** (`{colors.primary-soft}` — `#c9e0fc`): pale-blue surface used inside customer-story cards and selection chips.
 
 ### Surface
+
 - **Canvas** (`{colors.canvas}` — `#ffffff`): the universal page background. White, full opacity.
 - **Paper** (`{colors.paper}` — `#ffffff`): card surfaces — same white as canvas, with hairline borders or shadows providing the lift.
 - **Cloud** (`{colors.cloud}` — `#f7f7f7`): the lightest gray section band, used for alternating-row backgrounds and product-feature card groups.
@@ -360,6 +362,7 @@ The system breaks into three voice modes: a **white commercial body** for produc
 - **Storm Mist / Sea / Deep** (`{colors.storm-mist}`, `{colors.storm-sea}`, `{colors.storm-deep}` — `#8ebdce`, `#7fadbe`, `#356373`): the teal-storm tones reserved for the printer-plan illustration backdrop and supporting infographic accents.
 
 ### Text
+
 - **Ink** (`{colors.ink}` — `#1a1a1a`): the universal text color on white surfaces — headlines, body, button labels, navigation.
 - **Ink Deep** (`{colors.ink-deep}` — `#000000`): pure black used for the wordmark and 1px hairline strokes around badge outlines.
 - **Ink Soft** (`{colors.ink-soft}` — `#292929`): an alternate near-black used inside dark-navy slabs as a subtle textural shift.
@@ -368,6 +371,7 @@ The system breaks into three voice modes: a **white commercial body** for produc
 - **Graphite** (`{colors.graphite}` — `#636363`): smaller-print color, used for legal lines and timestamp metadata.
 
 ### Semantic
+
 - **Bloom Deep** (`{colors.bloom-deep}` — `#b3262b`) + **Bloom Wine** (`{colors.bloom-wine}` — `#5a1313`): error and discount-emphasis colors. The deep brick reads as "sale" or "destructive" depending on placement.
 - **Storm Deep** (`{colors.storm-deep}` — `#356373`): used as a neutral status accent (e.g., printer-plan tier "Versatile" tier color).
 
@@ -612,6 +616,7 @@ Hero photography sits in `{rounded.xl}` (16px) frames with no border. Product fa
 ## Do's and Don'ts
 
 ### Do
+
 - Reserve `{colors.primary}` for the primary CTA, link color, and `chevron-decoration` motif — at most twice per viewport
 - Set every headline in Forma DJR Micro at weight 500 with line-height 1.0 — resist the urge to bump weight at hero scale
 - Use `{rounded.xl}` (16px) for cards and photo frames; `{rounded.md}` (4px) for buttons and inputs — keep the two-tier split sharp
@@ -622,6 +627,7 @@ Hero photography sits in `{rounded.xl}` (16px) frames with no border. Product fa
 - Frame product photography inside `{rounded.xl}` containers; never use full-bleed circular masks
 
 ### Don't
+
 - Don't introduce secondary saturated colors outside `{colors.primary}` family + the `bloom-coral` sale-tag and `storm` printer-plan accents
 - Don't apply heavy material shadows — depth is via color contrast (cloud vs. white) and Soft Lift only
 - Don't round buttons above `{rounded.md}` (4px); a soft 8px+ button reads as a different brand

@@ -31,8 +31,8 @@ core_rules:
     text: '`mem_search "lessons learned"` at session start'
   - id: workload-guard
     text:
-      'Review Workload Guard: `node --import tsx src/security/workload-guard.ts` before multi-file impl >400
-      lines'
+      'Review Workload Guard: `node --import tsx src/security/workload-guard.ts` before multi-file
+      impl >400 lines'
   - id: tool-discipline
     text: 'Tool output discipline: limit read/grep/bash results to 50 lines'
   - id: json-validity
@@ -81,7 +81,8 @@ settings:
 break_glass:
   trigger: '3+ turns w/o completion, loop detected, or output truncated'
   command:
-    'node --import tsx src/resilience/self-diagnosis.ts --profile "<p>" --chat-level "<l>" --turn-count <N>'
+    'node --import tsx src/resilience/self-diagnosis.ts --profile "<p>" --chat-level "<l>"
+    --turn-count <N>'
   override_to: 'lleno/chat-balanced'
   notify: '[BREAK GLASS] motivo: {reason}'
 

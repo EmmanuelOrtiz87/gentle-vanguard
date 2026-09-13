@@ -11,14 +11,14 @@ type: architecture
 
 **Why**: Se necesitaban datos reales para presentar al board directivo. Antes la pipeline existía (42 scripts en TELEMETRY-METRICS/) pero con cero data fluyendo — los scripts esperaban fuentes de datos que nunca se implementaron.
 
-**Where**: 
+**Where**:
 - config/session-autostart.config.json — +dashboard-render step
 - scripts/utilities/session-manager.ps1 — +dashboard-render + collector en End-Session
 - scripts/utilities/session-metrics-tracker.ps1 — fix: costPer1M $15→$10
 - scripts/utilities/TELEMETRY-METRICS/consolidate-telemetry.ps1 — +fallback a working pipeline
 - scripts/utilities/generate-board-report.ps1 — NEW
 
-**Learned**: 
+**Learned**:
 1. El pipeline real y funcional está en scripts/metrics/ (collector, dashboard-render, live-feed), NO en scripts/utilities/TELEMETRY-METRICS/ que es un approach paralelo legacy
 2. El costo rate estaba inconsistente: $15 en session-metrics-tracker vs $10 en collector/dashboard-render/generate-dashboard. Todas unificadas a $10
 3. La pipeline no se había "encendido" nunca — los pasos autostart existían pero el dashboard-render no estaba en el pipeline

@@ -11,7 +11,7 @@ type: pattern
 
 **Why**: El error original `Invalid input for tool engram_mem_context: JSON parsing failed` ocurría porque el agente enviaba JSON malformado. PowerShell's `ConvertFrom-Json` es demasiado permisivo y acepta JSON inválido.
 
-**Where**: 
+**Where**:
 - `scripts/utilities/json-validator.ps1` - Validador principal
 - `scripts/utilities/pre-process-input.ps1` - Integración con pipeline
 - `scripts/utilities/tests/json-validator.tests.ps1` - Tests (10 casos, 100% pass)

@@ -11,7 +11,7 @@ type: architecture
 
 **Why**: El stack necesitaba una base de conocimiento dedicada para almacenar conocimiento acumulado a largo plazo, más allá de Engram (memoria sessionada) y archivos .md dispersos.
 
-**Where**: 
+**Where**:
 - `knowledge-base/` - Vault principal (87 notas)
 - `scripts/utilities/knowledge-base/` - Scripts de gestión
 - `config/knowledge-base-config.json` - Configuración

@@ -27,6 +27,7 @@ type: architecture
 - Expected impact: 40-60% reduction in output tokens (ultra mode), 20-30% input reduction, 25-35% cost savings via caching
 
 **Commands**:
+
 ```bash
 npm run optimize:output -- --input "text" --profile ultra
 npm run optimize:chat -- --level chat-compact --input "text"

@@ -13,7 +13,7 @@ type: decision
 
 **Where**: config/token-budget-guard.json (v2.0.0), config/token-budget-limits.json (DEPRECATED), config/orchestrator.json, config/timeout-config.json, src/token-budget-guard.ts, apps/web-dashboard/server/websocket-server.ts
 
-**Learned**: 
+**Learned**:
 - token-budget-guard.ts now reads from token-budget-guard.json first (Priority 1), falls back to orchestrator.json (Priority 2)
 - Dashboard health API now has 9th component "budget" exposing dailyLimit, perSessionLimit, perAgentLimit, usedToday, usedPercent, softThreshold, hardThreshold
 - CSV counter was reset (was 42K from dev runs, now 3200 = 3%)

@@ -19,7 +19,7 @@ type: architecture
 - `scripts/utilities/codegraph-post-modification-sync.ps1` — NEW: post-modification hook (3-file threshold, triggers: manual/post-commit/branch-switch)
 - `scripts/utilities/codegraph-metrics-tracker.ps1` — NEW: usage metrics (record/summary/reset per tool)
 - `scripts/utilities/codegraph-ci-validate.ps1` — NEW: CI validation with codegraph affected
-- `.codegraph/config.json` — added *.ps1, *.md, *.yaml, *.yml, *.toml to include patterns
+- `.codegraph/config.json` — added *.ps1,*.md, *.yaml,*.yml, *.toml to include patterns
 - `.atl/skill-registry.md` — reassigned codegraph-skill from (unassigned) to CODEGRAPH - Code Intelligence
 - `CLAUDE.md` — added Core Rule #12 (CodeGraph integration) and 5 Key References for CodeGraph scripts
 

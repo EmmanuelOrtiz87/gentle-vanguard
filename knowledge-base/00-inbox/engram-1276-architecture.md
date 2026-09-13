@@ -11,7 +11,7 @@ type: architecture
 
 **Why**: User requested to take project to next level with all optimizations, best practices, norms, rules — leave everything functional, configured, detailed, documented
 
-**Where**: 
+**Where**:
 - `rules/NORMATIVAS-AI-SAFETY.md` — OWASP LLM Top 10, hallucination guard, prompt injection, bias
 - `rules/NORMATIVAS-COST-OPTIMIZATION.md` — API cost governance, provider routing, token budgets
 - `rules/NORMATIVAS-DISASTER-RECOVERY.md` — RPO/RTO, backup tiers, recovery procedures, offline mode
@@ -29,7 +29,7 @@ type: architecture
 - `src/architecture/resilience/ResilienceManager.ts` — fixed unused config param, unused error var, console.log→console.warn, no-explicit-any, strict-boolean-expressions
 - Updated: `rules/NORMATIVES.md` (v1.1.0), `docs/AGENTS.md`, `rules/DEVELOPMENT-STANDARDS.md`, `config/quality-gates.json`
 
-**Learned**: 
+**Learned**:
 - ESLint strict-boolean-expressions is aggressive — every nullable in conditional must be explicitly handled
 - ESLint 9 uses flat config incompatible with .eslintrc.json — had to pin to ESLint 8
 - Dockerfile.go template confused Go module — added //go:build ignore

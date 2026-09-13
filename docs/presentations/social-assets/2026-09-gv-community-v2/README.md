@@ -10,4 +10,5 @@
 - Reddit: 1200x800
 - LinkedIn: 1200x627
 
-Cada pieza combina copy corto, diagramas del workflow y capturas reales de Academy. Las leyendas listas para publicar están en [CAPTIONS.md](./CAPTIONS.md).
+Cada pieza combina copy corto, diagramas del workflow y capturas reales de Academy. Las leyendas
+listas para publicar están en [CAPTIONS.md](./CAPTIONS.md).

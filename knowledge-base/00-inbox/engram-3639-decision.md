@@ -18,6 +18,7 @@ type: decision
 ## Análisis Comparativo - Estado 2026-09-03
 
 ### 1. GENTLE-AI (Gentleman Programming) v2.5.0
+
 **Estado**: Stable release, ecosistema consolidado
 
 **Componentes principales que YA tenemos cubiertos:**
@@ -38,6 +39,7 @@ type: decision
 7. **Topología de agentes revisada**: Delegación full vs solo-agent
 
 ### 2. AGENT GOVERNANCE TOOLKIT (Microsoft)
+
 **Estado**: Public Preview v4.1.0, enterprise-grade
 
 **Capacidades que NO tenemos y podrían sumar valor:**

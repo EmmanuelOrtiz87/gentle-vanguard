@@ -27,7 +27,11 @@ function present(...values: Array<string | undefined>): boolean {
 
 function cliAvailable(command: string): boolean {
   try {
-    const result = spawnSync(command, ['--version'], { timeout: 3500, windowsHide: true, stdio: 'ignore' });
+    const result = spawnSync(command, ['--version'], {
+      timeout: 3500,
+      windowsHide: true,
+      stdio: 'ignore',
+    });
     return result.status === 0;
   } catch {
     return false;
@@ -55,43 +59,91 @@ export function listProviderStatuses(input: ProviderHubInput = {}): ProviderStat
 
   return [
     {
-      id: 'opencode', label: 'OpenCode', connection: 'cli', state: opencode ? 'ready' : 'not-detected',
-      configured: opencode, source: opencode ? 'sesión local / oc-keyring' : 'CLI no detectado', model: input.stackModel,
-      note: opencode ? 'Usa la cuenta activa del CLI. Rotación con oc-keyring.' : 'Instalá o configurá el CLI de OpenCode.',
+      id: 'opencode',
+      label: 'OpenCode',
+      connection: 'cli',
+      state: opencode ? 'ready' : 'not-detected',
+      configured: opencode,
+      source: opencode ? 'sesión local / oc-keyring' : 'CLI no detectado',
+      model: input.stackModel,
+      note: opencode
+        ? 'Usa la cuenta activa del CLI. Rotación con oc-keyring.'
+        : 'Instalá o configurá el CLI de OpenCode.',
     },
     {
-      id: 'google-account', label: 'Cuenta Google', connection: 'oauth', state: 'needs-oauth',
-      configured: false, source: 'OAuth oficial aún no vinculado a Content OS',
+      id: 'google-account',
+      label: 'Cuenta Google',
+      connection: 'oauth',
+      state: 'needs-oauth',
+      configured: false,
+      source: 'OAuth oficial aún no vinculado a Content OS',
       note: 'El login Google identifica la cuenta, pero Gemini requiere una autorización de API compatible.',
     },
     {
-      id: 'gemini', label: 'Google Gemini', connection: 'api', state: geminiKey ? 'ready' : 'needs-credential',
-      configured: Boolean(geminiKey), source: geminiKey ? 'API key local/env' : 'sin API key', model: input.geminiModel,
-      note: geminiKey ? 'Validar modelos disponibles antes de generar.' : 'Google login no reemplaza una credencial de Gemini API.',
+      id: 'gemini',
+      label: 'Google Gemini',
+      connection: 'api',
+      state: geminiKey ? 'ready' : 'needs-credential',
+      configured: Boolean(geminiKey),
+      source: geminiKey ? 'API key local/env' : 'sin API key',
+      model: input.geminiModel,
+      note: geminiKey
+        ? 'Validar modelos disponibles antes de generar.'
+        : 'Google login no reemplaza una credencial de Gemini API.',
     },
     {
-      id: 'openai', label: 'OpenAI-compatible', connection: 'api', state: openaiKey && openaiBase ? 'ready' : 'needs-credential',
-      configured: Boolean(openaiKey && openaiBase), source: openaiKey && openaiBase ? 'base URL + key local/env' : 'falta base URL o key', model: input.openaiModel,
+      id: 'openai',
+      label: 'OpenAI-compatible',
+      connection: 'api',
+      state: openaiKey && openaiBase ? 'ready' : 'needs-credential',
+      configured: Boolean(openaiKey && openaiBase),
+      source: openaiKey && openaiBase ? 'base URL + key local/env' : 'falta base URL o key',
+      model: input.openaiModel,
       note: 'Requiere endpoint y credencial compatibles con la API seleccionada.',
     },
     {
-      id: 'anthropic', label: 'Claude / Anthropic', connection: 'api', state: anthropic ? 'ready' : 'needs-credential',
-      configured: anthropic, source: anthropic ? 'ANTHROPIC_API_KEY' : 'sin API key', note: 'Disponible mediante API oficial; login de Claude no se reutiliza.',
+      id: 'anthropic',
+      label: 'Claude / Anthropic',
+      connection: 'api',
+      state: anthropic ? 'ready' : 'needs-credential',
+      configured: anthropic,
+      source: anthropic ? 'ANTHROPIC_API_KEY' : 'sin API key',
+      note: 'Disponible mediante API oficial; login de Claude no se reutiliza.',
     },
     {
-      id: 'minimax', label: 'MiniMax', connection: 'api', state: minimax ? 'ready' : 'needs-credential',
-      configured: minimax, source: minimax ? 'MINIMAX_API_KEY' : 'sin API key', note: 'Adaptador API pendiente de activación en CMS.',
+      id: 'minimax',
+      label: 'MiniMax',
+      connection: 'api',
+      state: minimax ? 'ready' : 'needs-credential',
+      configured: minimax,
+      source: minimax ? 'MINIMAX_API_KEY' : 'sin API key',
+      note: 'Adaptador API pendiente de activación en CMS.',
     },
     {
-      id: 'zai', label: 'z.ai / GLM', connection: 'api', state: zai ? 'ready' : 'needs-credential',
-      configured: zai, source: zai ? 'ZAI_API_KEY / GLM_API_KEY' : 'sin API key', note: 'Adaptador API pendiente de activación en CMS.',
+      id: 'zai',
+      label: 'z.ai / GLM',
+      connection: 'api',
+      state: zai ? 'ready' : 'needs-credential',
+      configured: zai,
+      source: zai ? 'ZAI_API_KEY / GLM_API_KEY' : 'sin API key',
+      note: 'Adaptador API pendiente de activación en CMS.',
     },
     {
-      id: 'github-copilot', label: 'GitHub Copilot', connection: 'oauth', state: copilot ? 'needs-oauth' : 'not-detected',
-      configured: false, source: copilot ? 'GitHub CLI detectado' : 'GitHub CLI no detectado', note: 'El login de GitHub no se convierte automáticamente en API de Copilot.',
+      id: 'github-copilot',
+      label: 'GitHub Copilot',
+      connection: 'oauth',
+      state: copilot ? 'needs-oauth' : 'not-detected',
+      configured: false,
+      source: copilot ? 'GitHub CLI detectado' : 'GitHub CLI no detectado',
+      note: 'El login de GitHub no se convierte automáticamente en API de Copilot.',
     },
     {
-      id: 'local', label: 'GV local', connection: 'local', state: 'ready', configured: true, source: 'runtime local',
+      id: 'local',
+      label: 'GV local',
+      connection: 'local',
+      state: 'ready',
+      configured: true,
+      source: 'runtime local',
       note: 'Fallback sin cuenta externa, red ni cuota de proveedor.',
     },
   ];

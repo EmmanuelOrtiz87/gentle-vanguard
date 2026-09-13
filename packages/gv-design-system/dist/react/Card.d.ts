@@ -3,10 +3,10 @@ import './Card.css';
 export type CardVariant = 'glass' | 'solid' | 'outline';
 export type CardPadding = 'none' | 'sm' | 'md' | 'lg';
 export interface CardProps extends HTMLAttributes<HTMLDivElement> {
-    variant?: CardVariant;
-    padding?: CardPadding;
-    interactive?: boolean;
-    children: ReactNode;
+  variant?: CardVariant;
+  padding?: CardPadding;
+  interactive?: boolean;
+  children: ReactNode;
 }
 /**
  * Card — Gentle-Vanguard v2 surface component.
@@ -19,5 +19,7 @@ export interface CardProps extends HTMLAttributes<HTMLDivElement> {
  *   </Card>
  *   <Card interactive onClick={...}>Clickable card</Card>
  */
-export declare const Card: import("react").ForwardRefExoticComponent<CardProps & import("react").RefAttributes<HTMLDivElement>>;
+export declare const Card: import('react').ForwardRefExoticComponent<
+  CardProps & import('react').RefAttributes<HTMLDivElement>
+>;
 //# sourceMappingURL=Card.d.ts.map

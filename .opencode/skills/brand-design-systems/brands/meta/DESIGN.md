@@ -367,6 +367,7 @@ Optimistic VF — Meta's variable display face — anchors the entire system, ra
 > Source pages: meta.com/ (homepage), /ai-glasses/ray-ban-meta-skyler-gen-2/ (PDP), /quest/quest-3s/buy-now/ (configurator), /ai-glasses/prescription/ (lens upsell). Token coverage was identical across all four pages — the design system is genuinely unified.
 
 ### Brand & Accent
+
 - **Cobalt Primary** ({colors.primary}): The buy-now CTA color. Used on every "Add to cart", "Configure", "Pre-order" button inside the commerce flow and the right-rail purchase panel.
 - **Deep Cobalt** ({colors.primary-deep}): Pressed-state and dark-surface variant of the cobalt primary; also the active link color.
 - **Soft Cobalt** ({colors.primary-soft}): Translucent background tint for informational callouts (`{colors.primary-soft}` at 15% alpha).
@@ -375,12 +376,14 @@ Optimistic VF — Meta's variable display face — anchors the entire system, ra
 - **Oculus Purple** ({colors.oculus-purple}): VR product accent — used inside Quest-branded surfaces for category emphasis.
 
 ### Surface
+
 - **Canvas White** ({colors.canvas}): Page background and primary card surface.
 - **Soft Cloud** ({colors.surface-soft}): Subtle product-thumbnail and warranty-card background; also the search-pill rest state.
 - **Hairline Gray** ({colors.hairline}): 1px input border and form-control divider.
 - **Hairline Soft** ({colors.hairline-soft}): Quieter divider used on cards, footer separators, and section breaks.
 
 ### Text
+
 - **Deep Ink** ({colors.ink-deep}): Primary headline and body text on light surfaces.
 - **Ink** ({colors.ink}): Standard body and secondary headline text.
 - **Charcoal** ({colors.charcoal}): Tertiary body text and form-button labels.
@@ -389,6 +392,7 @@ Optimistic VF — Meta's variable display face — anchors the entire system, ra
 - **Stone** ({colors.stone}): Disabled or de-emphasized labels.
 
 ### Semantic
+
 - **Success** ({colors.success}): "In stock", "Free returns" affirmations.
 - **Attention** ({colors.attention}): Mid-priority alerts and timed callouts.
 - **Warning** ({colors.warning}): Promotional banners ("Get 25% off…") and limited-time tags.
@@ -398,6 +402,7 @@ Optimistic VF — Meta's variable display face — anchors the entire system, ra
 ## Typography
 
 ### Font Family
+
 **Optimistic VF** is Meta's proprietary variable display face. Fallbacks: Montserrat, Helvetica, Arial, Noto Sans. The variable axes carry from 300 (light heading-md, used for editorial intro headlines like "Look forward") through 500 (display, hero, heading-sm) up to 700 (subtitle, body emphasis, button labels). Stylistic sets `ss01` and `ss02` are switched on across every heading role — they soften the geometry and give the type a slightly humanist breathing.
 
 A secondary Helvetica fallback chain is used for technical microcopy (12px) inside spec sheets and footer fine print.
@@ -423,6 +428,7 @@ A secondary Helvetica fallback chain is used for technical microcopy (12px) insi
 | `{typography.link-md}` | 16px | 700 | 1.50 | -0.16px | — | Inline navigation links |
 
 ### Principles
+
 - Negative letter-spacing on body roles (`-0.14px` to `-0.16px`) tightens the type fractionally — Optimistic VF was designed for this snug-but-not-condensed setting.
 - Editorial subheads use the 300 weight to introduce visual rest between the 500-weight display headlines and the 400-weight body, creating a three-tier visual rhythm.
 - All headings carry `ss01, ss02` stylistic sets together — the design treats them as a paired alternates package, never one without the other.
@@ -431,17 +437,20 @@ A secondary Helvetica fallback chain is used for technical microcopy (12px) insi
 ## Layout
 
 ### Spacing System
+
 - **Base unit**: 4px increment with 8px as the dominant primary step.
 - **Tokens**: `{spacing.xxs}` (4px) · `{spacing.xs}` (8px) · `{spacing.sm}` (10px) · `{spacing.md}` (12px) · `{spacing.base}` (16px) · `{spacing.lg}` (20px) · `{spacing.xl}` (24px) · `{spacing.xxl}` (32px) · `{spacing.xxxl}` (40px) · `{spacing.section-sm}` (48px) · `{spacing.section}` (64px) · `{spacing.section-lg}` (80px) · `{spacing.hero}` (120px).
 - **Section rhythm**: Marketing sections separate at `{spacing.section-lg}` (80px); product detail sections compress to `{spacing.section}` (64px); FAQ stacks tighten further to `{spacing.xxl}` (32px).
 - **Card internal padding**: Standard `{spacing.xxl}` (32px); icon-feature tiles compress to `{spacing.xl}` (24px); promo-strip cards expand to `{spacing.section}` (64px) for hero presence.
 
 ### Grid & Container
+
 - Marketing page max-width sits around 1280px with 32–48px gutters.
 - The PDP layout uses a 2-column split: hero gallery (~58% width) + sticky purchase rail (~42%, with `max-width: 380px` on the rail).
 - Three-up feature grids ("Why buy from Meta") use a 24px column gap; six-up product thumbnail rows (color/SKU pickers) use a 12px gap.
 
 ### Whitespace Philosophy
+
 Whitespace is product-photography-first. Hero sections give product imagery 50–70% of the viewport height; copy is given oxygen to breathe in `{spacing.xxl}` to `{spacing.xxxl}` blocks above and below. Inside the configurator, whitespace tightens — the buy-now panel is information-dense, with `{spacing.base}` to `{spacing.lg}` rhythm between option groups.
 
 ## Elevation & Depth
@@ -455,6 +464,7 @@ The system runs predominantly flat. Elevation is reserved for two interaction la
 | 2 (sticky panel) | `rgba(20, 22, 26, 0.3) 0px 1px 4px 0px` | PDP right-rail purchase summary, sticky mobile checkout bar |
 
 ### Decorative Depth
+
 - Photography-as-depth: full-bleed product imagery on `{rounded.xxxl}` cards creates atmospheric layering without shadows.
 - Translucent overlays (`rgba(255, 255, 255, 0.1)` to `rgba(10, 19, 23, 0.12)`) cover dark hero photography to lift legibility of overlaid text.
 - Decorative pastel tints inside accessory cards — soft pink, ice-blue, mint — appear briefly behind product cutouts but are NOT formalized as system tokens (treated as photographic content).
@@ -477,6 +487,7 @@ The system runs predominantly flat. Elevation is reserved for two interaction la
 | `{rounded.circle}` | 50% | Color swatches, circular icon buttons |
 
 ### Photography Geometry
+
 - Product hero photography sits in `{rounded.xxxl}` (32px) frames more often than rectangles.
 - Color/material swatches are perfect circles (`{rounded.circle}`, 32px diameter, 2px white border ring when selected).
 - Square product thumbnails (`aspect-ratio: 1/1`) use `{rounded.xl}` rounding.
@@ -620,6 +631,7 @@ The system runs predominantly flat. Elevation is reserved for two interaction la
 ## Do's and Don'ts
 
 ### Do
+
 - Reserve `{colors.primary}` (cobalt) for buy-now CTAs only — its visual weight is meaningful precisely because it doesn't appear on marketing pages.
 - Use `{colors.ink-button}` (black) for marketing-surface primary CTAs. Pair with `{colors.button-secondary}` ghost outline for the secondary action.
 - Apply `{rounded.full}` to every button, every category pill, every badge, every chip — buttons are NEVER squared in Meta's system.
@@ -628,6 +640,7 @@ The system runs predominantly flat. Elevation is reserved for two interaction la
 - Use the 300-weight `{typography.heading-md}` for editorial subheads — it creates the brand's signature visual rhythm against the 500-weight displays.
 
 ### Don't
+
 - Don't use `{colors.primary}` (cobalt) for marketing-surface primary buttons — it conflicts with Meta's brand-history positioning of black-CTA-on-white-canvas marketing.
 - Don't introduce additional accent colors beyond cobalt + Oculus purple. The hardware brand is deliberately monochromatic outside its product photography.
 - Don't soften the corners of pill buttons below `{rounded.full}`. The pill is a brand signature.
@@ -638,6 +651,7 @@ The system runs predominantly flat. Elevation is reserved for two interaction la
 ## Responsive Behavior
 
 ### Breakpoints
+
 | Name | Width | Key Changes |
 |---|---|---|
 | Mobile (small) | < 480px | Single column. Hero text drops to `{typography.display-lg}` or smaller. Pill tabs collapse into hamburger drawer. PDP gallery stacks above purchase rail; rail becomes sticky bottom bar. |
@@ -647,12 +661,14 @@ The system runs predominantly flat. Elevation is reserved for two interaction la
 | Wide Desktop | ≥ 1360px | Same as desktop with wider hero gutters and larger product photography. |
 
 ### Touch Targets
+
 - Pill buttons render at 40–44px effective height (with the 14px button text + `14px 30px` padding). Above the WCAG AAA 44px floor.
 - Circular icon buttons are 40×40px — at the AA floor; bumps to 44×44px on mobile via override.
 - Color swatch circles are 32×32px. To hit AAA, the swatch carries a 12px clear hit zone around it (effective hit target ~56px).
 - Form inputs render at 44px height to align with primary button height.
 
 ### Collapsing Strategy
+
 - **Promo banner** stays full-width on all breakpoints; truncates with ellipsis on small mobile, retains the inline link affordance.
 - **Pill-tab nav** below 768px collapses into a hamburger drawer; the active tab is rendered as a label inside the closed nav.
 - **PDP layout**: gallery stacks above the purchase summary at < 1024px; the summary becomes a sticky bottom bar with price + "Add to cart" button at < 768px. The full summary remains scrollable above the sticky bar.
@@ -661,6 +677,7 @@ The system runs predominantly flat. Elevation is reserved for two interaction la
 - **Footer**: 6-column desktop layout reflows to 2-column at tablet and accordion-collapsed groups at mobile.
 
 ### Image Behavior
+
 - Product photography uses 1:1 (thumbnails, color pickers), 4:3 (PDP gallery), and 16:9 (homepage promo strips) ratios.
 - Hero photography is full-bleed with `{rounded.xxxl}` corners; lazy-loaded below the fold.
 - Product variant images preserve their `{rounded.lg}` thumbnails across all breakpoints — they never go full-width on mobile.

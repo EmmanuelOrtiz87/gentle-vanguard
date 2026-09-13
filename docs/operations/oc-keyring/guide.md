@@ -105,14 +105,14 @@ oc-keyring open    # abre accounts.json en el editor default
 
 Después de configurar, el picker de modelos muestra **6 grupos nuevos**:
 
-| Provider ID          | Nombre en picker        | Modelos                                      |
-| -------------------- | ----------------------- | -------------------------------------------- |
-| `opencode-zen-A/<m>` | OpenCode Zen · Cuenta A | big-pickle, claude-sonnet-4-5, opus-4-7, ... |
-| `opencode-zen-B/<m>` | OpenCode Zen · Cuenta B | (mismos)                                     |
-| `opencode-go-A/<m>`  | OpenCode Go · Cuenta A  | gpt-5.6-luna, minimax-m3, kimi-k3, ...       |
-| `opencode-go-B/<m>`  | OpenCode Go · Cuenta B  | (mismos)                                     |
-| `opencode-zen-C/<m>` | OpenCode Zen · Cuenta C · Gentle-Vanguard | (catálogo auto-descubierto) |
-| `opencode-go-C/<m>`  | OpenCode Go · Cuenta C · Gentle-Vanguard | (catálogo auto-descubierto) |
+| Provider ID          | Nombre en picker                          | Modelos                                      |
+| -------------------- | ----------------------------------------- | -------------------------------------------- |
+| `opencode-zen-A/<m>` | OpenCode Zen · Cuenta A                   | big-pickle, claude-sonnet-4-5, opus-4-7, ... |
+| `opencode-zen-B/<m>` | OpenCode Zen · Cuenta B                   | (mismos)                                     |
+| `opencode-go-A/<m>`  | OpenCode Go · Cuenta A                    | gpt-5.6-luna, minimax-m3, kimi-k3, ...       |
+| `opencode-go-B/<m>`  | OpenCode Go · Cuenta B                    | (mismos)                                     |
+| `opencode-zen-C/<m>` | OpenCode Zen · Cuenta C · Gentle-Vanguard | (catálogo auto-descubierto)                  |
+| `opencode-go-C/<m>`  | OpenCode Go · Cuenta C · Gentle-Vanguard  | (catálogo auto-descubierto)                  |
 
 Elegir otro = cambiar de cuenta. Instantáneo, sin copy/paste, sin reinicio.
 

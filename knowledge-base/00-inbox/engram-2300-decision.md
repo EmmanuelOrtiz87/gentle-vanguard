@@ -40,7 +40,7 @@ type: decision
 - befc20a6: fix: resolve all lint errors
 - 60a44e4f: feat: Proactive Intelligence Engine
 
-**Where**: 
+**Where**:
 - package.json (136 scripts npm disponibles)
 - config/*.schema.json (4 schemas nuevos)
 - docs/operations/procedures/QUICK-COMMANDS.md

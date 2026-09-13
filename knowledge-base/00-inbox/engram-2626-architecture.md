@@ -11,7 +11,7 @@ type: architecture
 
 **Why**: El usuario pidió unificar criterios visuales/UX, modernizar con tendencias actuales, añadir diagramas interactivos y arreglar que el i18n no traducía nada.
 
-**Where**: 
+**Where**:
 - `docs/presentations/assets/css/gv.css` — design system v2.0 (~700 líneas): tokens OKLCH, aurora gradients, grain noise, glass navbar, spotlight cards, scroll progress, btn-gv, modal, lang selector
 - `docs/presentations/assets/js/gv.js` — effects: navbar scroll, scroll-progress fallback, reveal, spotlight, count-up, tilt, tooltips SVG (`[data-tip]`/`data-group`), modal de diagramas (`initDiagramModal`), typing
 - `docs/presentations/assets/js/i18n.js` — diccionario ~140 claves por idioma (en/es/pt-BR) con `sec_*` para todos los títulos de sección + selector premium `.lang-btn`/`.lang-menu` (position:fixed para evitar recorte por overflow del navbar)

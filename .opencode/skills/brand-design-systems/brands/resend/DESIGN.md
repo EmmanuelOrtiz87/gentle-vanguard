@@ -300,11 +300,13 @@ canvas, framed like print insets in a black-bordered magazine page.
 ## Colors
 
 ### Brand & Accent
+
 - **Primary White** (`{colors.primary}` — `#fcfdff`): the brand's de facto accent. Reserved for `{component.button-primary}` (white pill on black canvas), Domaine display headlines, and the active text colour. White is the loudest possible colour on this canvas — that's the signature.
 - **Primary On** (`{colors.primary-on}` — `#000000`): label colour on top of `{colors.primary}` surfaces. Black text on white pill is the brand's CTA pattern.
 - **Surface Light** (`{colors.surface-light}` — `#f1f7fe`): a subtle blue-tinted off-white used as the active/pressed state of `{component.button-primary}`.
 
 ### Surface
+
 - **Canvas** (`{colors.canvas}` — `#000000`): the default page background. True black, never near-black.
 - **Surface Card** (`{colors.surface-card}` — `#0a0a0c`): the standard inset card surface, just lighter than canvas to register a step up in elevation.
 - **Surface Elevated** (`{colors.surface-elevated}` — `#101012`): a second elevation step used on featured pricing tiers and ghost button surfaces.
@@ -314,6 +316,7 @@ canvas, framed like print insets in a black-bordered magazine page.
 - **Divider Soft** (`{colors.divider-soft}` — `rgba(255,255,255,0.04)`): low-contrast dividers between footer columns.
 
 ### Text
+
 - **Ink** (`{colors.ink}` — `#fcfdff`): primary text colour on the dark canvas. Faintly blue-cool to feel like printed paper rather than pure white pop.
 - **Body** (`{colors.body}` — `rgba(252,253,255,0.86)`): long-form body text where pure ink would feel too sharp.
 - **Charcoal** (`{colors.charcoal}` — `rgba(252,253,255,0.7)`): captions, secondary nav labels.
@@ -324,6 +327,7 @@ canvas, framed like print insets in a black-bordered magazine page.
 - **On-Light Mute** (`{colors.on-light-mute}` — `rgba(0,0,51,0.7)`): secondary text inside email mockups.
 
 ### Semantic
+
 - **Accent Orange** (`{colors.accent-orange}` — `#ff801f`) + glow (`{colors.accent-orange-glow}` — `rgba(255,89,0,0.22)`): atmospheric warm wash anchored to "Email reimagined" / customer story sections. Solid orange never appears as a button or surface — only the glow.
 - **Accent Yellow** (`{colors.accent-yellow}` — `#ffc53d`): used in inline highlight strokes and "first-class developer experience" key callouts.
 - **Accent Blue** (`{colors.accent-blue}` — `#3b9eff`) + glow (`{colors.accent-blue-glow}` — `rgba(0,117,255,0.34)`): inline link colour and the cool atmospheric wash on the "Integrate this weekend" section.
@@ -364,6 +368,7 @@ When proprietary families cannot be licensed, **Söhne** or **Tiempos Headline**
 | `{typography.code-md}` | 13px | 400 | 1.6 | 0 | Code blocks, inline code. |
 
 ### Principles
+
 - Display sizes always run at `lineHeight: 1.0` with negative letter-spacing — the Domaine Display headlines pack into solid typographic blocks rather than open prose lines.
 - Body weight stays at 400 across `{typography.body-lg}` and `{typography.body-md}`. The serif/sans family change carries hierarchy, not weight bumps.
 - ABC Favorit always runs with `ss01 / ss04 / ss11` engaged; Inter never carries OpenType features. Code in Geist Mono never carries ligatures.
@@ -376,12 +381,14 @@ When Domaine Display is unavailable, clamp `lineHeight` to 1.0 explicitly and ap
 ## Layout
 
 ### Spacing System
+
 - **Base unit**: 4px, with the working scale on multiples of 4 / 8 / 16.
 - **Tokens**: `{spacing.xxs}` 2px · `{spacing.xs}` 4px · `{spacing.sm}` 8px · `{spacing.md}` 12px · `{spacing.lg}` 16px · `{spacing.xl}` 24px · `{spacing.xxl}` 32px · `{spacing.xxxl}` 48px · `{spacing.section}` 96px · `{spacing.band}` 128px.
 - Section padding: `{spacing.section}` (96px) vertical between bands; `{spacing.band}` (128px) on the hero stripe and closing footer transition.
 - Card internal padding: `{spacing.xxl}` (32px) on `{component.feature-card}`, `{component.pricing-tier}`, and `{component.code-window}`.
 
 ### Grid & Container
+
 - **Max content width** ≈ 1200px on body sections.
 - **Feature grid**: 3 columns at desktop, 2 at tablet, 1 at mobile.
 - **Pricing**: 3-tier grid centred at desktop; centre tier promotes to `{component.pricing-tier-featured}` (one-step-elevated surface).
@@ -389,6 +396,7 @@ When Domaine Display is unavailable, clamp `lineHeight` to 1.0 explicitly and ap
 - **Email mockup band**: a single white card (640px max width) centred in the dark canvas with generous vertical padding to read like a print magazine inset.
 
 ### Whitespace Philosophy
+
 - Whitespace is editorial and generous — full-bleed sections breathe at 96–128px so Domaine Display headlines have room to register at scale.
 - Inside cards, padding stays at 32px so feature copy and code wells have a consistent rhythm with the outer grid.
 - Hairline `{colors.hairline}` and `{colors.hairline-strong}` carry the role drop shadows would in a brighter system; the dark canvas suppresses traditional shadow depth entirely.
@@ -406,6 +414,7 @@ When Domaine Display is unavailable, clamp `lineHeight` to 1.0 explicitly and ap
 The system has **no traditional drop shadow language**. Every surface either gets a translucent-white hairline border or sits inside an atmospheric glow. The dark canvas absorbs shadow naturally; surfaces register depth via temperature and luminance shifts rather than blur.
 
 ### Decorative Depth
+
 - **Atmospheric section glows** — six accent colours each with a paired glow token (orange, yellow, blue, green, red, plus a deep slate for "everything in your context"). Each section opens with a single radial wash anchored at the top edge of the section, falling off to canvas black within ~600px vertical distance. Never two glows in the same section.
 - **Email card insets** — the "Beyond experience" mockup band lifts a single white email card off the black canvas, giving it the only true light-on-dark contrast in the system. The card uses no shadow; the contrast itself is the elevation.
 - **Code window traffic lights** — `{component.code-window}` shells include a row of three coloured dots (red `{colors.accent-red}`, yellow `{colors.accent-yellow}`, green `{colors.accent-green}`) at the top — the only place all three semantic colours appear together as solid surfaces.
@@ -425,6 +434,7 @@ The system has **no traditional drop shadow language**. Every surface either get
 | `{rounded.full}` | 9999px | Pills, status dots, contributor avatars. |
 
 ### Photography Geometry
+
 - The system uses almost no photography. Visual interest comes from typography + atmospheric glows + code wells + the white email-card insets.
 - When portraits appear (testimonial avatars), they are circular (`{rounded.full}`) at 32px, sitting inline with body copy.
 - Email mockup cards run at 4:5 portrait aspect with `{rounded.lg}` corners.
@@ -519,6 +529,7 @@ The system has **no traditional drop shadow language**. Every surface either get
 ## Do's and Don'ts
 
 ### Do
+
 - Use `{colors.canvas}` (true black) as the default page background. Every public page lives here.
 - Reserve `{component.button-primary}` (white pill) as the only solid bright surface. One per viewport at most.
 - Set hero headlines in **Domaine Display** at 76–96px with `lineHeight: 1.0` and `ss01 / ss04 / ss11` features engaged.
@@ -529,6 +540,7 @@ The system has **no traditional drop shadow language**. Every surface either get
 - Use the white email-mockup inset sparingly — it's the only deliberately-light surface and should feel like a print pull-quote.
 
 ### Don't
+
 - Don't use a near-black canvas. The brand sits on `#000000`, not `#0a0a0a`.
 - Don't apply solid colour to atmospheric accent tokens. `{colors.accent-orange}` is for inline highlights only — its glow form is for backdrops.
 - Don't add drop shadows to feature cards or code wells. Translucent white borders carry depth on this canvas.
@@ -552,11 +564,13 @@ The system has **no traditional drop shadow language**. Every surface either get
 | Mobile | ≤ 425px | All grids 1-up, hero clamps to 44px, section padding `{spacing.section}` collapses to 64px. |
 
 ### Touch Targets
+
 - All buttons ship at minimum 36px tall on desktop, scaling to 44px on mobile via padding adjustment. WCAG AAA met on mobile.
 - `{component.text-input}` is 40px tall — comfortable but not large. Mobile scales to 48px via padding.
 - `{component.sub-nav-pill}` stays at 36px on desktop, 40px on mobile.
 
 ### Collapsing Strategy
+
 - Top-level nav collapses to hamburger at < 1024px; the wordmark and `{component.button-primary}` stay anchored.
 - Hero `{typography.display-xxl}` clamps: 96px → 76px → 56px → 44px across the breakpoint ladder.
 - Pricing 3-up stacks vertically at < 1024px with the featured tier remaining centre-stacked.
@@ -564,6 +578,7 @@ The system has **no traditional drop shadow language**. Every surface either get
 - Atmospheric glows scale with section width but maintain the same opacity — they fade naturally at small viewports.
 
 ### Image Behavior
+
 - Email mockup cards reflow at 1:1 aspect on mobile to remain readable.
 - Atmospheric glows are CSS gradients — no asset cost, no breakpoint variation.
 - Customer testimonial avatars stay 32px circular regardless of breakpoint.

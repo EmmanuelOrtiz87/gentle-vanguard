@@ -2,15 +2,19 @@
 
 ## Objetivo
 
-Este paquete reemplaza la familia de assets antigua por una familia **100% SVG** de la nueva identidad Gentle Vanguard.
+Este paquete reemplaza la familia de assets antigua por una familia **100% SVG** de la nueva
+identidad Gentle Vanguard.
 
-El sistema que consume estos assets no necesita interpretar una imagen PNG/JPG: cada logo e icono está construido con **paths SVG, gradients y shapes vectoriales**.
+El sistema que consume estos assets no necesita interpretar una imagen PNG/JPG: cada logo e icono
+está construido con **paths SVG, gradients y shapes vectoriales**.
 
 ## Corrección del símbolo
 
-La referencia nueva mostraba el GV con un desequilibrio visual: mayor margen a la izquierda y riesgo de que la V pareciera cortada.
+La referencia nueva mostraba el GV con un desequilibrio visual: mayor margen a la izquierda y riesgo
+de que la V pareciera cortada.
 
 La versión v2:
+
 - centra el GV matemática y visualmente;
 - mantiene la G y la V completas;
 - reserva 15–20% de safe area;
@@ -71,8 +75,7 @@ assets/
 
 ### Android
 
-`icons/android-foreground.svg`
-`icons/android-background.svg`
+`icons/android-foreground.svg` `icons/android-background.svg`
 
 ### UI con color controlado por CSS
 
@@ -98,6 +101,7 @@ Gradiente:
 ## Reglas
 
 No:
+
 - cortar G o V;
 - estirar el símbolo;
 - cambiar proporciones;
@@ -106,6 +110,7 @@ No:
 - sustituir el SVG por un screenshot.
 
 Sí:
+
 - escalar proporcionalmente;
 - utilizar SVG directamente;
 - generar PNG/ICO/ICNS desde el SVG cuando una plataforma lo exija;
@@ -135,18 +140,18 @@ Favicon:
 ## React / Vite
 
 ```jsx
-import gv from "./assets/brand/gentle-vanguard/v2/svg/icons/gv-master-gradient.svg";
+import gv from './assets/brand/gentle-vanguard/v2/svg/icons/gv-master-gradient.svg';
 
-<img src={gv} alt="Gentle Vanguard" />
+<img src={gv} alt="Gentle Vanguard" />;
 ```
 
 ## Next.js
 
 ```jsx
-import Image from "next/image";
-import gv from "@/assets/brand/gentle-vanguard/v2/svg/icons/gv-master-gradient.svg";
+import Image from 'next/image';
+import gv from '@/assets/brand/gentle-vanguard/v2/svg/icons/gv-master-gradient.svg';
 
-<Image src={gv} alt="Gentle Vanguard" width={48} height={48} />
+<Image src={gv} alt="Gentle Vanguard" width={48} height={48} />;
 ```
 
 ## Flutter
@@ -162,18 +167,22 @@ SvgPicture.asset(
 ## Android
 
 Usar:
+
 - foreground: `android-foreground.svg`
 - background: `android-background.svg`
 
-Si el build nativo exige Vector Drawable XML, importar el SVG en Android Studio. El SVG continúa siendo la fuente maestra.
+Si el build nativo exige Vector Drawable XML, importar el SVG en Android Studio. El SVG continúa
+siendo la fuente maestra.
 
 ## iOS
 
-Mantener el SVG como fuente de diseño y exportar los PNG requeridos por Xcode desde él. No crear variantes dibujadas manualmente por tamaño.
+Mantener el SVG como fuente de diseño y exportar los PNG requeridos por Xcode desde él. No crear
+variantes dibujadas manualmente por tamaño.
 
 ## PWA
 
-El master continúa siendo SVG. Para máxima compatibilidad del manifest, generar desde él PNG 192×192 y 512×512 cuando el navegador/instalador no acepte SVG.
+El master continúa siendo SVG. Para máxima compatibilidad del manifest, generar desde él PNG 192×192
+y 512×512 cuando el navegador/instalador no acepte SVG.
 
 ## Integración en el proyecto local
 
@@ -189,11 +198,13 @@ Por lo tanto, para tu proyecto:
 C:\Workspace_local\gentle-vanguard\assets\brand\gentle-vanguard\v2\
 ```
 
-No se mezclan los archivos con la versión vieja. Esto permite mantener `legacy` durante la transición.
+No se mezclan los archivos con la versión vieja. Esto permite mantener `legacy` durante la
+transición.
 
 ## Verificación automática
 
-Todos los SVG de este paquete fueron generados sin etiquetas `<image>`, por lo que no dependen de PNG/JPG incrustados.
+Todos los SVG de este paquete fueron generados sin etiquetas `<image>`, por lo que no dependen de
+PNG/JPG incrustados.
 
 El sistema debe considerar:
 

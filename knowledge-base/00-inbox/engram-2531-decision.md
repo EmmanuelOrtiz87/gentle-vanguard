@@ -39,6 +39,7 @@ type: decision
 ### ✅ SISTEMA ADAPTIVE STEPS INTEGRADO
 
 Todas las herramientas ahora incluyen:
+
 ```json
 "adaptiveSteps": {
   "enabled": true,

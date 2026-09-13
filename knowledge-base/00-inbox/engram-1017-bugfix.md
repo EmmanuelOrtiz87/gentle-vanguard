@@ -9,7 +9,7 @@ type: bugfix
 
 **What**: Fixed session autostart pipeline execution and identified token-usage-notifier path resolution issue.
 
-**Why**: 
+**Why**:
 1. El autostart pipeline fallaba silenciosamente con error ChildProcess.kill porque el timeout de 120s era insuficiente para 25 pasos.
 2. El token-usage-notifier guardaba datos en .session/token-usage.json pero el script buscaba en scripts/.session/token-usage.json (path incorrecto).
 3. El skill session-workflow-skill existe pero la herramienta skill de OpenCode no lo encuentra porque el sistema de skills no esta registrado en OpenCode (limitacion de la herramienta, no del archivo).

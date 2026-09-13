@@ -12,8 +12,8 @@ generan una lectura de puerta hacia adelante. Es la opcion de menor riesgo y mej
 
 ### B / Command Frame
 
-El G+V vive dentro de un marco modular. Comunica sistema, control, observabilidad y arquitectura.
-Es la opcion mas institucional para software, consultoria y equipos tecnicos.
+El G+V vive dentro de un marco modular. Comunica sistema, control, observabilidad y arquitectura. Es
+la opcion mas institucional para software, consultoria y equipos tecnicos.
 
 ### C / Orbital Signal
 
@@ -28,4 +28,5 @@ energia para Academy, workshops y redes sociales. Es la opcion mas expresiva.
 - Coherencia con v2 Premium y el tono de empresa de ingenieria.
 - Distancia suficiente de simbolos genericos de IA.
 
-**Recomendacion preliminar:** A si se prioriza continuidad; B si se prioriza autoridad institucional.
+**Recomendacion preliminar:** A si se prioriza continuidad; B si se prioriza autoridad
+institucional.

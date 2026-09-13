@@ -9,7 +9,7 @@ type: architecture
 
 **What**: Implementada arquitectura unificada para conectar pipeline con dashboard
 **Why**: El dashboard mostraba datos vacíos porque el pipeline guardaba en un formato/lugar y el dashboard esperaba en otro
-**Where**: 
+**Where**:
 - Nuevo módulo: src/core/session-context-log.ts (fuente de verdad única)
 - Pipeline: src/session-cleanup-start.ts (guarda en context-log)
 - Dashboard: apps/web-dashboard/server/database/metrics-writer.ts (lee de context-log)

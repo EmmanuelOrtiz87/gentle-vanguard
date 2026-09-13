@@ -17,6 +17,7 @@ type: decision
 5. Skip de conteos de archivos recursivos en fast mode
 
 **Comparativa de performance**:
+
 | Metrica | Original | Optimizado | Mejora |
 |---------|----------|------------|--------|
 | Tiempo | 4.6s | 1.16s | 75% |

@@ -262,6 +262,7 @@ Type voice runs **BMW Type Next Latin** in two cuts: regular for display + nav l
 ## Colors
 
 ### Brand & Accent
+
 - **Primary** (`{colors.primary}` — #ffffff): The system's primary type and CTA color. Used for h1/h2/h3 display, body text on dark, and primary button labels (the buttons themselves are transparent or canvas-colored — the white text + outline IS the button).
 - **M Blue Light** (`{colors.m-blue-light}` — #0066b1): The first stop in the M tricolor stripe. Used on M-badge accents and motorsport chrome.
 - **M Blue Dark** (`{colors.m-blue-dark}` — #1c69d4): The middle stop. The same hex as `{colors.bmw-blue}` — BMW's heritage corporate blue, repurposed as the middle band of the M stripe.
@@ -269,6 +270,7 @@ Type voice runs **BMW Type Next Latin** in two cuts: regular for display + nav l
 - **Electric Blue** (`{colors.electric-blue}` — #0653b6): A separate electric-vehicle accent used on M xDrive electric model pages. Distinct from the heritage blue — feels colder, more digital.
 
 ### Surface
+
 - **Canvas** (`{colors.canvas}` — #000000): The default page floor across every marketing surface. True black.
 - **Surface Soft** (`{colors.surface-soft}` — #0d0d0d): A barely-different-from-black used for spec table cells and footer-adjacent strips.
 - **Surface Card** (`{colors.surface-card}` — #1a1a1a): Cards, secondary buttons, icon-button backgrounds.
@@ -276,22 +278,26 @@ Type voice runs **BMW Type Next Latin** in two cuts: regular for display + nav l
 - **Carbon Gray** (`{colors.carbon-gray}` — #2b2b2b): Carbon-fiber-inspired surface tone used on technical-spec cards.
 
 ### Hairlines & Borders
+
 - **Hairline** (`{colors.hairline}` — #3c3c3c): The 1px divider tone on dark surfaces. Used between body sections, between table rows, around card outlines.
 - **Hairline Strong** (`{colors.hairline-strong}` — #262626): Same hex as `{colors.surface-elevated}` — borders feel like one-step elevations rather than ink lines.
 
 ### Text
+
 - **Ink / On Dark** (`{colors.on-dark}` — #ffffff): All headline and primary text on dark canvas.
 - **Body** (`{colors.body}` — #bbbbbb): Default running-text color (slightly cooler than pure white). Used for body paragraphs and secondary metadata.
 - **Body Strong** (`{colors.body-strong}` — #e6e6e6): Emphasized body / lead paragraph.
 - **Muted** (`{colors.muted}` — #7e7e7e): Footer links, breadcrumbs, captions.
 
 ### Semantic
+
 - **Warning** (`{colors.warning}` — #f4b400): Used very sparingly on technical-warning callouts.
 - **Success** (`{colors.success}` — #0fa336): Order-confirmation states (rare on marketing surfaces).
 
 ## Typography
 
 ### Font Family
+
 **BMW Type Next Latin** is BMW's licensed display + body typeface. The system uses two cuts: regular and Light. The fallback stack walks `-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif`.
 
 The split is a deliberate weight-pair:
@@ -319,16 +325,19 @@ The contrast between heavy display and light body is BMW's editorial signature �
 | `{typography.nav-link}` | 14px | 400 | 1.4 | 0.5px | Top-nav menu items |
 
 ### Principles
+
 The system contrasts heavy headlines (700) against very light body (300) at all times — the gap is the editorial signature. Letter-spacing is non-trivial: button labels and category labels carry 1.5px tracking that makes them feel "machined" rather than "typed." Display headlines stay at 0 letter-spacing — BMW Type's natural cap-height handles spacing on large sizes.
 
 UPPERCASE display is the default voice for h1/h2 — sentence case appears on body and intro paragraphs but rarely on headlines. The all-caps treatment is a brand-voice signal, not a stylistic choice.
 
 ### Note on Font Substitutes
+
 If BMW Type Next Latin is unavailable, **Inter** (variable) at 700/300 is the closest open-source substitute. Adjust display headline tracking to -0.5px to match BMW Type's tighter spacing at large sizes. **Saira Condensed** is an alternative for headlines if a slightly more compressed feel is desired.
 
 ## Layout
 
 ### Spacing System
+
 - **Base unit:** 4px.
 - **Tokens:** `{spacing.xxs}` 4px · `{spacing.xs}` 8px · `{spacing.sm}` 12px · `{spacing.md}` 16px · `{spacing.lg}` 24px · `{spacing.xl}` 40px · `{spacing.xxl}` 64px · `{spacing.section}` 96px.
 - **Section padding (vertical):** `{spacing.section}` (96px) between major editorial bands.
@@ -337,12 +346,14 @@ If BMW Type Next Latin is unavailable, **Inter** (variable) at 700/300 is the cl
 - **Gutters:** `{spacing.lg}` (24px) between cards in 3-up grids; `{spacing.md}` (16px) inside footer columns.
 
 ### Grid & Container
+
 - **Max content width:** ~1440px centered on marketing pages — wider than typical SaaS to give photography breathing room.
 - **Editorial body:** Single 12-column grid; photo bands bleed full-bleed (no max-width).
 - **Card grids:** 3-up at desktop, 2-up at tablet, 1-up at mobile.
 - **Footer:** 4-column link list at desktop, 2-up at tablet, 1-up at mobile.
 
 ### Whitespace Philosophy
+
 BMW M trusts photography to do the visual work. Whitespace around photography is restrained — the cars fill the frame, and copy sits below or beside them in tightly-aligned columns. Where whitespace appears (between body sections, around CTAs), it's always uniform `{spacing.section}` (96px). The system never adds atmospheric backdrops, gradients, or decoration — empty space stays as empty black canvas.
 
 ## Elevation & Depth
@@ -357,6 +368,7 @@ BMW M trusts photography to do the visual work. Whitespace around photography is
 The system uses no drop shadows and no layered chrome. Depth comes entirely from photography (subject + lens + lighting) and the contrast between black canvas and slightly-elevated `{colors.surface-card}`.
 
 ### Decorative Depth
+
 - **M Stripe Divider** (`{component.m-stripe-divider}`): A 4px-tall horizontal divider carrying the M tricolor (`{colors.m-blue-light}` → `{colors.m-blue-dark}` → `{colors.m-red}`). Used on motorsport chrome, model-detail headers, and brand-identity moments. The stripe is the system's only true "decorative" element — used sparingly to mark significance.
 - **Carbon-fiber surfaces**: The technical-spec page uses `{colors.carbon-gray}` (#2b2b2b) cells with subtle texture overlay. This is a single-page treatment, not a system-wide pattern.
 - **Photographic depth**: Full-bleed cars are the depth. Lighting in the photography (track lights, sunset rim-light) does the elevation work that drop shadows would do in a SaaS system.
@@ -376,6 +388,7 @@ The system uses no drop shadows and no layered chrome. Depth comes entirely from
 The radius hierarchy is "almost always 0, sometimes circular." This binary radius decision is a deliberate brand-language choice — sharp rectangles read as engineered precision; circles read as functional controls. Nothing in between.
 
 ### Photography Geometry
+
 Hero photography fills full-width with no rounding. Photo cards inside grids retain `{rounded.none}` corners, edge-to-edge images. Carbon-wheel detail shots and motorsport-pit photos use 16:9 or 21:9 cinema-aspect ratios. Driver portraits in racing-team grids use 4:5 portrait crops, also with sharp corners.
 
 ## Components
@@ -435,6 +448,7 @@ Hero photography fills full-width with no rounding. Photo cards inside grids ret
 ## Do's and Don'ts
 
 ### Do
+
 - Anchor every page with full-bleed automotive photography. The cars are the brand voltage; chrome backs off.
 - Use UPPERCASE display headlines in `{typography.display-xl}` or `{typography.display-lg}`. Sentence-case display reads as off-brand.
 - Pair heavy display (700) with light body (300). The weight contrast is the editorial signature.
@@ -444,6 +458,7 @@ Hero photography fills full-width with no rounding. Photo cards inside grids ret
 - Use `{spacing.section}` (96px) between major editorial bands for grid-aligned vertical rhythm.
 
 ### Don't
+
 - Don't introduce a brand color outside the M tricolor (`{colors.m-blue-light}` / `{colors.m-blue-dark}` / `{colors.m-red}`) and the heritage `{colors.bmw-blue}`.
 - Don't bold body type. Body stays at 300 (Light) — bumping to 400 or 500 makes the page feel marketing-bombastic instead of European-engineered.
 - Don't use rounded buttons. The rectangular silhouette IS the brand. Rounded corners read as consumer-tech, not motorsport.
@@ -464,12 +479,14 @@ Hero photography fills full-width with no rounding. Photo cards inside grids ret
 | Wide | > 1440px | Same as desktop with more breathing room; max content 1440px |
 
 ### Touch Targets
+
 - `{component.button-primary}` renders at 48 × 48px minimum — meets WCAG AAA.
 - `{component.button-icon}` and `{component.carousel-arrow}` are exactly 48 × 48 — comfortably above the 44 × 44 minimum.
 - `{component.text-input}` height is 48px.
 - Category tabs render as text-only labels with 12px vertical padding; effective tap area meets 44px with surrounding spacing.
 
 ### Collapsing Strategy
+
 - Top nav collapses to a hamburger sheet at < 768px; the menu opens as a full-screen black overlay with the M tricolor stripe at the top.
 - Photography stays full-bleed at every breakpoint — never collapses to a margin'd container.
 - Card grids reduce columns rather than scaling cards down; photography retains its native aspect ratio.
@@ -477,6 +494,7 @@ Hero photography fills full-width with no rounding. Photo cards inside grids ret
 - The M-stripe divider stays at 4px height across all breakpoints.
 
 ### Image Behavior
+
 - Hero photography crops responsively — wider crops at desktop, vertical crops on mobile.
 - Lifestyle and motorsport photos retain native aspect ratios; the system never letterboxes or pillarboxes.
 - The M wordmark + tricolor logo scales proportionally with viewport width.

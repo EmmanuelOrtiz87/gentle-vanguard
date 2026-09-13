@@ -27,6 +27,7 @@ type: bugfix
 
 **Reset Manual Token Budget**:
 Para resetear tokens (no hay comando automático):
+
 ```
 # Opción 1: Prune manual de token_usage en Nexus
 npm run db:prune  # limpia datos >90 días

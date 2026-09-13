@@ -19,7 +19,7 @@ type: decision
 - Tests: ✅ 19 passed, 0 failed
 - gv-doctor: ✅ 11/13 PASS (2 WARN no bloqueantes)
 
-**Nuevos Tests**: 
+**Nuevos Tests**:
 - health-check.test.ts (15 tests)
 - session-autostart.test.ts (10 tests optimizados)
 - token-budget-guard.test.ts (13 tests)

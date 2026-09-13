@@ -292,25 +292,30 @@ Every interactive CTA renders as a generously rounded pill (`{rounded.pill-lg}` 
 ## Colors
 
 ### Brand & Accent
+
 - **Vodafone Red** (`{colors.primary}` — `#e60000`): The single brand accent. Every primary CTA pill, every speechmark logo, every conversion target. The most iconic red in telecom — never desaturated, never used at scale for body fills (reserved for high-attention surfaces).
 
 ### Surface
+
 - **Canvas** (`{colors.canvas}` — `#ffffff`): The default light content background.
 - **Canvas Soft** (`{colors.canvas-soft}` — `#f2f2f2`): A near-white tint used as the badge-chip background.
 - **Ink** (`{colors.ink}` — `#25282b`): The brand's near-black surface — used as the dark hero band, the nav background, and the footer fill. Doubles as the primary text color on light surfaces.
 
 ### Text
+
 - **Ink** (`{colors.ink}` — `#25282b`): Every heading and body paragraph on light surfaces.
 - **Body** (`{colors.body}` — `#7e7e7e`): Secondary body text on light surfaces — captions, metadata, supporting copy.
 - **Mute** (`{colors.mute}` — `#bebebe`): The lowest-priority text color — placeholder text, low-key footer links.
 - **On Dark** (`{colors.on-dark}` — `#ffffff`): All text on `{colors.ink}` surfaces (hero, footer, nav).
 
 ### Semantic
+
 The brand does not maintain a separate semantic palette. The primary red doubles as validation / destructive signal when needed; success / warning use are reserved for in-product contexts and are not part of the documented marketing system.
 
 ## Typography
 
 ### Font Family
+
 A single custom face carries the entire system: **Vodafone**, the brand's proprietary display sans. The face spans weights 300 (light), 400 (regular), 600, 700, and 800 — every role in the system pulls from this one family. There is no mono companion; technical labels (rare on the marketing surface) borrow the same face at smaller sizes.
 
 The icomoon icon-font is loaded for proprietary glyphs but does not render as a typographic role.
@@ -338,12 +343,14 @@ The icomoon icon-font is loaded for proprietary glyphs but does not render as a 
 | `{typography.button-md}` | 18px | 400 | 28px | 0 | Default button label. |
 
 ### Principles
+
 - **Weight 800 + uppercase = hero voice.** This is the entire reason the brand reads as a billboard rather than a tech site.
 - **Weight 300 = the calmer secondary voice.** Used at 40 – 48 px for sub-displays; never below 24 px to keep legibility.
 - **Single family throughout.** The brand never mixes a serif or a mono into the typographic system. Consistency is the calm.
 - **Tracking stays tight at display sizes.** `-1px` at 144 px is the brand's calibration; reverting to neutral tracking softens the stencil look.
 
 ### Note on Font Substitutes
+
 The Vodafone display sans is proprietary. Open-source substitutes:
 - **Display sans** — *Inter* weight 800 at hero scale with `letter-spacing: -1px` is the closest free match. *Geist* weight 700–800 is the second-best.
 - **Lighter display weight (300)** — *Inter* weight 300 holds its line-height well at 48 px display sizes.
@@ -351,6 +358,7 @@ The Vodafone display sans is proprietary. Open-source substitutes:
 ## Layout
 
 ### Spacing System
+
 - **Base unit**: 4 px (mostly multiples of 4; a few 5/7 px appear inside icon-padding compensation).
 - **Tokens**: `{spacing.xxs}` 2 px · `{spacing.xs}` 4 px · `{spacing.sm}` 8 px · `{spacing.md}` 12 px · `{spacing.lg}` 16 px · `{spacing.xl}` 20 px · `{spacing.2xl}` 24 px · `{spacing.3xl}` 32 px.
 - **Section padding**: hero bands and content bands use `{spacing.3xl}` 32 px gutters; vertical spacing inside hero is fluid (fill-the-band).
@@ -358,11 +366,13 @@ The Vodafone display sans is proprietary. Open-source substitutes:
 - **Inline gap**: button rows and chip rows use `{spacing.md}` 12 px between siblings.
 
 ### Grid & Container
+
 - Marketing content uses a wide container (effectively edge-to-edge with `{spacing.3xl}` gutters on desktop, shrinking on mobile).
 - Story-card grids: 2-up at desktop, 1-up at mobile.
 - Hero photography fills the viewport; the headline overlays at the top-left.
 
 ### Whitespace Philosophy
+
 The hero's massive display headline owns the whole top of the page; whitespace below is generous to let the second band breathe. Inside content cards, headline and copy hug close (`{spacing.sm}` 8 px gap), then a wider gap (`{spacing.3xl}`) before the next card. The footer band is dark and dense.
 
 ### Responsive Strategy
@@ -377,15 +387,18 @@ The hero's massive display headline owns the whole top of the page; whitespace b
 | Ultra-wide | ≥ 1400px | Container caps at ~1400 px; bands stay edge-to-edge in colour. |
 
 #### Touch Targets
+
 The `button-primary` pill renders at ~52 px tall (12 px vertical padding + 28 px line-height). All buttons comfortably meet WCAG AAA at every breakpoint.
 
 #### Collapsing Strategy
+
 - **Nav**: full link row at desktop. Collapses to a hamburger menu at mobile; the menu opens as a dark overlay with the same link list stacked.
 - **Hero**: the massive display headline scales fluidly. At mobile, the photography crop tightens to the figure's face only.
 - **Story-card grid**: 2-up → 1-up at the breakpoint above.
 - **Speechmark logo orb**: stays at consistent size relative to surrounding content; never shrinks below ~48 px.
 
 #### Image Behavior
+
 - **Hero photography**: full-bleed 16:9 or 4:3 portraits at desktop; tighter crops at mobile.
 - **Story-card thumbnails**: 16:9 landscape inside `{rounded.card}` 6 px chrome.
 - **Speechmark orb**: always rendered as the red SVG quote-mark icon, never substituted.
@@ -402,6 +415,7 @@ The `button-primary` pill renders at ~52 px tall (12 px vertical padding + 28 px
 The brand does not use soft drop shadows; depth comes from polarity-flip between `{colors.ink}` and `{colors.canvas}` bands.
 
 ### Decorative Depth
+
 - **Editorial photography**: the hero photo (real-person portrait or environment shot) is the brand's only true atmospheric effect.
 - **Speechmark logo orb as visual anchor**: the red orb hosting the quote-mark icon acts as a single point of focal-depth in the centre of the otherwise-flat content rhythm.
 
@@ -420,6 +434,7 @@ The brand does not use soft drop shadows; depth comes from polarity-flip between
 | `{rounded.full}` | 9999px | Circular icon containers (e.g., video play/pause). |
 
 ### Photography Geometry
+
 - Hero portraits: edge-to-edge 16:9 or 4:3 with no internal frame.
 - Story-card thumbnails: 16:9 landscape inside `{rounded.card}` chrome.
 - Speechmark logo orb: square with `{rounded.sm}` corners (visually a tilted-square mark; the SVG mark itself fills the orb).
@@ -518,10 +533,10 @@ The brand does not use soft drop shadows; depth comes from polarity-flip between
 **`ex-toast`** — Toast notification surface — feature-card shape + medium shadow.
 - Properties: `backgroundColor`, `rounded`, `padding`, `typography`
 
-
 ## Do's and Don'ts
 
 ### Do
+
 - Reserve `{colors.primary}` Vodafone Red for primary CTAs and the `speechmark-logo-orb`. Every conversion target uses the red pill.
 - Set hero headlines in `{typography.display-hero}` weight 800 UPPERCASE with tight `-1px` tracking. That stencil look IS the brand voice.
 - Use `{rounded.pill-lg}` 60 px on every interactive pill. The brand never uses square corners on CTAs.
@@ -530,6 +545,7 @@ The brand does not use soft drop shadows; depth comes from polarity-flip between
 - Render the speechmark logo orb at consistent size relative to surrounding content — it's the brand's centre of gravity on every page.
 
 ### Don't
+
 - Don't introduce a second accent colour. The brand operates with red + ink + grayscale only.
 - Don't render headlines in sentence case at hero scale. Hero display IS uppercase weight 800.
 - Don't render the primary CTA as a square rectangle. The 60 px pill is non-negotiable.

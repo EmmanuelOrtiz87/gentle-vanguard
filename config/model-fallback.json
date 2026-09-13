@@ -12,37 +12,65 @@
   "agentFallbacks": {
     "ORCHESTRATOR": {
       "primary": "opencode/ling-3.0-flash-fin-free",
-      "chain": ["opencode/nemotron-3.5-lightning-free", "opencode/mimo-v2.5-free", "opencode/big-pickle"],
+      "chain": [
+        "opencode/nemotron-3.5-lightning-free",
+        "opencode/mimo-v2.5-free",
+        "opencode/big-pickle"
+      ],
       "providerPriority": ["opencode", "ollama", "lm-studio2"]
     },
     "BA": {
       "primary": "opencode/ling-3.0-flash-fin-free",
-      "chain": ["opencode/nemotron-3.5-lightning-free", "opencode/mimo-v2.5-free", "ollama/qwen2.5"],
+      "chain": [
+        "opencode/nemotron-3.5-lightning-free",
+        "opencode/mimo-v2.5-free",
+        "ollama/qwen2.5"
+      ],
       "providerPriority": ["opencode", "ollama"]
     },
     "SAD": {
       "primary": "opencode/ling-3.0-flash-fin-free",
-      "chain": ["opencode/nemotron-3.5-lightning-free", "opencode/mimo-v2.5-free", "ollama/qwen2.5"],
+      "chain": [
+        "opencode/nemotron-3.5-lightning-free",
+        "opencode/mimo-v2.5-free",
+        "ollama/qwen2.5"
+      ],
       "providerPriority": ["opencode", "ollama"]
     },
     "DEV": {
       "primary": "opencode/ling-3.0-flash-fin-free",
-      "chain": ["opencode/nemotron-3.5-lightning-free", "opencode/mimo-v2.5-free", "ollama/qwen2.5"],
+      "chain": [
+        "opencode/nemotron-3.5-lightning-free",
+        "opencode/mimo-v2.5-free",
+        "ollama/qwen2.5"
+      ],
       "providerPriority": ["opencode", "ollama"]
     },
     "QA": {
       "primary": "opencode/ling-3.0-flash-fin-free",
-      "chain": ["opencode/nemotron-3.5-lightning-free", "opencode/mimo-v2.5-free", "ollama/qwen2.5"],
+      "chain": [
+        "opencode/nemotron-3.5-lightning-free",
+        "opencode/mimo-v2.5-free",
+        "ollama/qwen2.5"
+      ],
       "providerPriority": ["opencode", "ollama"]
     },
     "OPS": {
       "primary": "opencode/ling-3.0-flash-fin-free",
-      "chain": ["opencode/nemotron-3.5-lightning-free", "opencode/mimo-v2.5-free", "ollama/qwen2.5"],
+      "chain": [
+        "opencode/nemotron-3.5-lightning-free",
+        "opencode/mimo-v2.5-free",
+        "ollama/qwen2.5"
+      ],
       "providerPriority": ["opencode", "ollama"]
     },
     "GOV": {
       "primary": "opencode/ling-3.0-flash-fin-free",
-      "chain": ["opencode/nemotron-3.5-lightning-free", "opencode/mimo-v2.5-free", "ollama/qwen2.5"],
+      "chain": [
+        "opencode/nemotron-3.5-lightning-free",
+        "opencode/mimo-v2.5-free",
+        "ollama/qwen2.5"
+      ],
       "providerPriority": ["opencode", "ollama"]
     },
     "DOC": {
@@ -57,7 +85,11 @@
     },
     "PREMORTEM": {
       "primary": "opencode/ling-3.0-flash-fin-free",
-      "chain": ["opencode/nemotron-3.5-lightning-free", "opencode/mimo-v2.5-free", "ollama/qwen2.5"],
+      "chain": [
+        "opencode/nemotron-3.5-lightning-free",
+        "opencode/mimo-v2.5-free",
+        "ollama/qwen2.5"
+      ],
       "providerPriority": ["opencode", "ollama"]
     },
     "MKT": {
@@ -72,11 +104,20 @@
     },
     "FINANCE": {
       "primary": "opencode/ling-3.0-flash-fin-free",
-      "chain": ["opencode/nemotron-3.5-lightning-free", "opencode/mimo-v2.5-free", "ollama/qwen2.5"],
+      "chain": [
+        "opencode/nemotron-3.5-lightning-free",
+        "opencode/mimo-v2.5-free",
+        "ollama/qwen2.5"
+      ],
       "providerPriority": ["opencode", "ollama"]
     }
   },
-  "universalFallbacks": ["opencode/nemotron-3.5-lightning-free", "opencode/mimo-v2.5-free", "ollama/qwen2.5", "ollama/llama3"],
+  "universalFallbacks": [
+    "opencode/nemotron-3.5-lightning-free",
+    "opencode/mimo-v2.5-free",
+    "ollama/qwen2.5",
+    "ollama/llama3"
+  ],
   "agentTypeFallback": {
     "description": "When a specific agent type fails, use the integrated universal fallback agents.",
     "rule": "Try general first, then explore for analysis tasks.",

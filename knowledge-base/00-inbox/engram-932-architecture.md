@@ -9,7 +9,7 @@ type: architecture
 
 **What**: Implementacion completa de las 12 practicas del articulo Cursor Agent Best Practices (cursor.com/es/blog/agent-best-practices) en nuestro stack
 **Why**: Optimizar integracion con Cursor y alinearla con las mejores practicas del equipo de Cursor
-**Where**: 
+**Where**:
 - .cursor/rules/ (core-workflow.md, commands.md, code-style.md) - reglas modulares
 - .cursor/commands/ (pr.md, review.md, status.md, test.md, fix-issue.md, update-deps.md) - 6 comandos reutilizables
 - .cursor/plans/ - directorio para Plan Mode saves

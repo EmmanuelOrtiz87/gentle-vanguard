@@ -53,6 +53,21 @@ desacopladas (`apps/` = repo git anidada local-only).
    si toca el hub).
 5. Apps desacopladas (`apps/`): cada app copia el logo/tokens que consume (snapshot); NO se
    re-refactoriza centralizadamente — la homologación se hizo en la migración 2026-09-02.
+6. **Footer homologado (2026-09-08)**: TODAS las apps usan el mismo patrón —
+   `<span class="gv-footer-brand">Gentle<span>Vanguard</span></span> · <tagline app> — vX.Y.Z · <año>`.
+   CSS canónico: `.gv-footer-brand { color: var(--gv-text, #e8eef4); font-weight: 800 }` +
+   `.gv-footer-brand span { background: var(--gv-gradient); background-clip: text; color: transparent }`
+   ("Gentle" blanco, "Vanguard" gradiente v2). Contenido extra app-específico (quick links, Labs) va
+   DESPUÉS del bloque estándar. NOTA: `--gv-text-brand` (#a78bfa, púrpura) NO es válido para el
+   brand del footer — el blanco canónico es `--gv-text`.
+7. **Wordmark topbar — especificidad (2026-09-08)**: el CSS legacy v1 congelado
+   (`assets/gv-design-system.css`) trae `.gv-brand span { color: var(--gv-primary) }` (0,1,1), que
+   pinta "Gentle" cyan en cualquier app que cargue ese stylesheet. Las apps que lo cargan deben usar
+   `.gv-brand .gv-wordmark { color: #e8eef4 }` (0,2,0) o equivalente de mayor especificidad. No
+   editar el v1 congelado.
+8. **Favicon obligatorio por app (2026-09-08)**: toda app con server propio debe servir
+   `/favicon.svg` (monograma GV, `apps/<app>/public/favicon.svg`). Referencia: ruta añadida en
+   `apps/command-center/server.ts`. Un 404 de favicon rompe la identidad en la tab del navegador.
 
 ## 5. Cumplimiento
 

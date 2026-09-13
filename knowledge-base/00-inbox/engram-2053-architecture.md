@@ -11,7 +11,7 @@ type: architecture
 
 **Why**: User requirement to operate with all tools available — if a capability is missing, build it natively into the stack rather than relying on external tools.
 
-**Where**: 
+**Where**:
 - src/mcp/mcp-lsp-server.ts — 8 LSP tools (LanguageService API)
 - src/summarize-wipe.ts — context compaction engine
 - src/error-memory.ts — error memory pattern with embeddings
@@ -22,7 +22,7 @@ type: architecture
 - config/mcp-registry.json — 3 MCP servers registered
 - config/session-autostart.config.json — summarize-wipe pipeline step
 
-**Learned**: 
+**Learned**:
 - LanguageService API is more reliable than tsserver IPC for MCP integration
 - TF-IDF tokenizer must be shared across skill-router, response-cache, and error-memory for consistency
 - TextSpan positions (start/length) need getLineAndCharacterOfPosition for line:col display

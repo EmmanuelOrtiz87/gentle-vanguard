@@ -18,7 +18,7 @@ type: architecture
 - opencode.json: modelo cambiado glm-5→qwen-3.6-plus (6 ocurrencias, 4x ahorro)
 - scripts/utilities/* → subdirectorios DETECT/, SESSION/, TOKEN/, HANDOFF/, PERFORMANCE-OPTIMIZATION/
 
-**Learned**: 
+**Learned**:
 - PowerShell 7.6.1 parser rechaza [WORD] al inicio de strings entre comillas dobles en funciones — usar lambdas inline
 - OpenCode envía historial completo + system prompt + tool schemas cada turno — crecimiento lineal inevitable
 - Ahorro total estimado: 5-8x reducción de costos

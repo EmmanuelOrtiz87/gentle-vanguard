@@ -18,7 +18,7 @@ type: architecture
 - `src/guardrail-orchestrator.ts`: added `/unknown agent/i` and `/agent.*not (found|registered|configured)/i` signatures to `config` category (real learning: "Unknown agent: X" was falling into `unknown`, 2 of 3 real incidents)
 - `tests/unit/guardrail-orchestrator.test.ts`: updated + added test cases
 
-**Learned**: 
+**Learned**:
 - Commit `227883ad` on main.
 - The incident log `.session/guardrails/incidents.jsonl` now accumulates real data (learning loop operational).
 - Windows test flakiness: running guardrail-orchestrator.test.ts + anti-loop-guard.test.ts together occasionally fails with EPERM on temp dir cleanup (subprocess file-handle race). Passes individually and on retry — pre-existing infra issue, not logic.

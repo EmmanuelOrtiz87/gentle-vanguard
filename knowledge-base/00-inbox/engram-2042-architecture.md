@@ -13,7 +13,7 @@ type: architecture
 
 **Where**: Key affected files: src/team-orchestrator.ts, src/skills/skill-router.ts, src/nexus/NexusDatabase.ts, apps/web-dashboard/src/components/
 
-**Learned**: 
+**Learned**:
 - Semantic tool selection with FAISS can reduce tokens by ~89% (from 1557 to 275 per call) and prevent 86.4% of tool-selection hallucinations — highest-impact, lowest-effort win.
 - Parallel swarm mode (Leader-Worker with Git worktrees) is the #1 speed bottleneck — team-orchestrator.ts is sequential.
 - Error memory pattern (bug → root cause → fix, read before proposing changes) eliminates repeated debugging — simple to implement in Nexus.

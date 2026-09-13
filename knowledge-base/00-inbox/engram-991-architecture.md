@@ -13,7 +13,7 @@ type: architecture
 
 **Where**: scripts/utilities/engram_mem_session_end.ps1 (NEW), scripts/utilities/generate-session-summary.ps1 (NEW), scripts/utilities/session-manager.ps1 (integrated both), config/auto-delegation.json (removed SESSION-CLOSE), skills/session-workflow-skill/SKILL.md (triggers expanded), rules/NORMATIVAS-SESSION.md (0 manual steps documented)
 
-**Learned**: 
+**Learned**:
 1. engram.exe CLI no tiene comando `session end` — la alternativa es `engram save 'Session end: {id}' --type session` + actualizar session file.
 2. Dual routing (SESSION + SESSION-CLOSE) era no-determinista por orden de iteración de propiedades PowerShell. Fix: consolidar todo en SESSION.
 3. Los built-in tools (mem_session_summary, mem_session_end) no tienen script fallback — ahora sí.

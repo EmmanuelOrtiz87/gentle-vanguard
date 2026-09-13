@@ -11,7 +11,7 @@ type: architecture
 
 **Why**: Close remaining roadmap items: mesh REST endpoints for cross-workspace MCP orchestration + connect knowledge-query to mem_search CLI.
 
-**Where**: 
+**Where**:
 - new: apps/web-dashboard/server/mesh-api.ts (3 handlers: GET /api/mesh, POST discover, POST sync)
 - modified: apps/web-dashboard/server/websocket-server.ts (3 new routes)
 - modified: apps/web-dashboard/src/components/MultiRepoView.tsx (rewritten for real mesh data, Discover/Sync/Refresh buttons)

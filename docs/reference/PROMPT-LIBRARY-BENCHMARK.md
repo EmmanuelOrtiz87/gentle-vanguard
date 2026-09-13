@@ -73,14 +73,14 @@ supera con capacidades de plataforma:
 
 Iteración basada en el uso real de la pantalla de Gemas:
 
-1. **Chat multi-proveedor dentro de la app**: cada gema se usa en un chat embebido (Gem Space)
-   con el **modelo del stack** (`opencode run -m big-pickle`, sin requisitos) o **Gemini** (API
-   key validada en vivo). Respuestas etiquetadas con proveedor + modelo usado.
+1. **Chat multi-proveedor dentro de la app**: cada gema se usa en un chat embebido (Gem Space) con
+   el **modelo del stack** (`opencode run -m big-pickle`, sin requisitos) o **Gemini** (API key
+   validada en vivo). Respuestas etiquetadas con proveedor + modelo usado.
 2. **Validación de API key en vivo**: al guardar la key se comprueba contra la API de Gemini
    (feedback `✅`/`❌`); el estado muestra los modelos disponibles.
-3. **Import real de gemas de Google** (experimental, cookie de sesión): lista tus gemas
-   (incluidas las predefinidas ocultas) y las importa localmente — el usuario ya no necesita
-   salir de la app para ver lo que tiene en Gemini.
+3. **Import real de gemas de Google** (experimental, cookie de sesión): lista tus gemas (incluidas
+   las predefinidas ocultas) y las importa localmente — el usuario ya no necesita salir de la app
+   para ver lo que tiene en Gemini.
 4. **UX corregida**: dos filas de filtros etiquetadas (Origen + Categoría), cards clickeables →
    modal de detalle con el prompt completo y acciones, chat prominente con toggle de proveedor.
 5. **Fallback de modelos Gemini**: ante 404/503 reintenta modelos estables verificados

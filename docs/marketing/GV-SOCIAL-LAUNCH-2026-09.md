@@ -5,8 +5,8 @@
 
 ## 1. Posicionamiento
 
-Gentle-Vanguard no se presenta como otra colección de herramientas de IA. Se presenta como una
-ruta para aprender, decidir y construir mejor con IA:
+Gentle-Vanguard no se presenta como otra colección de herramientas de IA. Se presenta como una ruta
+para aprender, decidir y construir mejor con IA:
 
 - **Academy:** formación desde cero hasta ingeniería, producción e investigación.
 - **Stack:** orquestación local-first para trabajar con asistentes y agentes de IA.
@@ -24,13 +24,13 @@ Mensajes alternativos para probar:
 
 ## 2. Audiencias y ofertas de entrada
 
-| Audiencia | Entrada | Siguiente paso |
-|---|---|---|
-| Público general | Workshop “IA en tu día a día” | Curso IA — De 0 a 100 |
-| Profesionales y emprendedores | Workshop “Productividad con IA” | Marketing con IA o asesoría de adopción |
-| Docentes | Workshop “IA para enseñar y crear material” | Ruta de Academy + workshop privado |
-| Programadores | Workshop “De la idea al sistema de IA” | IA Nivel 2, Nivel 3 o consultoría |
-| Equipos y organizaciones | Diagnóstico breve | Arquitectura, auditoría o capacitación in-company |
+| Audiencia                     | Entrada                                     | Siguiente paso                                    |
+| ----------------------------- | ------------------------------------------- | ------------------------------------------------- |
+| Público general               | Workshop “IA en tu día a día”               | Curso IA — De 0 a 100                             |
+| Profesionales y emprendedores | Workshop “Productividad con IA”             | Marketing con IA o asesoría de adopción           |
+| Docentes                      | Workshop “IA para enseñar y crear material” | Ruta de Academy + workshop privado                |
+| Programadores                 | Workshop “De la idea al sistema de IA”      | IA Nivel 2, Nivel 3 o consultoría                 |
+| Equipos y organizaciones      | Diagnóstico breve                           | Arquitectura, auditoría o capacitación in-company |
 
 ## 3. Embudo mínimo viable
 
@@ -64,32 +64,32 @@ Durante 30 días:
 - 1 sesión de análisis semanal: retención, guardados, comentarios, clics y registros.
 
 Distribución recomendada del esfuerzo: 60% contenido útil, 20% prueba social/proceso, 15% oferta y
-5% experimentos. No comprar anuncios hasta tener al menos 10 piezas orgánicas y una página o formulario
-de registro funcionando.
+5% experimentos. No comprar anuncios hasta tener al menos 10 piezas orgánicas y una página o
+formulario de registro funcionando.
 
 ## 6. Rol por plataforma
 
-| Canal | Función | Formato principal | CTA |
-|---|---|---|---|
-| TikTok | Descubrimiento y alcance | 15–30 s, demostración, mito/realidad | “Guardalo” / “Link en bio” |
-| Instagram | Marca, comunidad y prueba visual | Reels, carruseles, stories | “Respondé IA” |
-| Facebook | Público general y grupos | Flyer, evento, video corto | “Reservá tu lugar” |
-| WhatsApp Business | Conversión y seguimiento | Catálogo, estados, respuestas rápidas | “Escribí WORKSHOP” |
-| LinkedIn | Autoridad profesional | Casos, arquitectura, opinión técnica | “Solicitá un diagnóstico” |
-| X | Conversación técnica | Hilos, ideas y lanzamientos | “Leé el caso” |
-| Reddit | Confianza por aporte | Tutorial, build log, debate | “Feedback bienvenido” |
+| Canal             | Función                          | Formato principal                     | CTA                        |
+| ----------------- | -------------------------------- | ------------------------------------- | -------------------------- |
+| TikTok            | Descubrimiento y alcance         | 15–30 s, demostración, mito/realidad  | “Guardalo” / “Link en bio” |
+| Instagram         | Marca, comunidad y prueba visual | Reels, carruseles, stories            | “Respondé IA”              |
+| Facebook          | Público general y grupos         | Flyer, evento, video corto            | “Reservá tu lugar”         |
+| WhatsApp Business | Conversión y seguimiento         | Catálogo, estados, respuestas rápidas | “Escribí WORKSHOP”         |
+| LinkedIn          | Autoridad profesional            | Casos, arquitectura, opinión técnica  | “Solicitá un diagnóstico”  |
+| X                 | Conversación técnica             | Hilos, ideas y lanzamientos           | “Leé el caso”              |
+| Reddit            | Confianza por aporte             | Tutorial, build log, debate           | “Feedback bienvenido”      |
 
 ## 7. Calendario de la primera semana
 
-| Día | Pieza | Idea |
-|---|---|---|
-| Lunes | Video | “La IA no falla por falta de herramientas; falla por falta de contexto.” |
-| Martes | Carrusel | “5 tareas que podés delegar hoy sin ser programador.” |
-| Miércoles | Flyer | Workshop gratuito: IA en tu día a día. |
-| Jueves | Video | “Prompt corto vs. prompt con contexto: mirá la diferencia.” |
-| Viernes | Post LinkedIn | “Qué significa local-first en un stack de IA.” |
-| Sábado | Story | Encuesta: “¿Qué te frena más: tiempo, herramientas o miedo a equivocarte?” |
-| Domingo | Invitación | Recordatorio del workshop y caja de preguntas. |
+| Día       | Pieza         | Idea                                                                       |
+| --------- | ------------- | -------------------------------------------------------------------------- |
+| Lunes     | Video         | “La IA no falla por falta de herramientas; falla por falta de contexto.”   |
+| Martes    | Carrusel      | “5 tareas que podés delegar hoy sin ser programador.”                      |
+| Miércoles | Flyer         | Workshop gratuito: IA en tu día a día.                                     |
+| Jueves    | Video         | “Prompt corto vs. prompt con contexto: mirá la diferencia.”                |
+| Viernes   | Post LinkedIn | “Qué significa local-first en un stack de IA.”                             |
+| Sábado    | Story         | Encuesta: “¿Qué te frena más: tiempo, herramientas o miedo a equivocarte?” |
+| Domingo   | Invitación    | Recordatorio del workshop y caja de preguntas.                             |
 
 ## 8. Workshop gratuito de adquisición
 
@@ -98,8 +98,8 @@ de registro funcionando.
 Duración sugerida: 60 minutos. Resultado: cada participante se va con tres tareas de su vida o
 trabajo convertidas en flujos asistidos por IA y un checklist de seguridad básica.
 
-Estructura: 10 min contexto, 15 min demostración, 20 min ejercicio, 10 min preguntas, 5 min invitación
-a la ruta Academy.
+Estructura: 10 min contexto, 15 min demostración, 20 min ejercicio, 10 min preguntas, 5 min
+invitación a la ruta Academy.
 
 ### Workshop 2: Productividad con IA
 
@@ -179,17 +179,17 @@ usar.
 
 ## 13. Prompts para un generador raster futuro
 
-Usar la marca oficial como referencia visual y mantener textos cortos. No pedir que el modelo invente
-logos o URLs.
+Usar la marca oficial como referencia visual y mantener textos cortos. No pedir que el modelo
+invente logos o URLs.
 
 **Perfil:** “Use case: logo-brand. Square social profile image for Gentle-Vanguard, dark charcoal
 background, official GV monogram centered inside a generous circular safe area, restrained cyan to
 purple light, premium dark-tech identity, crisp edges, no extra text, no watermark, no copied logo.”
 
-**Workshop público:** “Use case: ads-marketing. Vertical 4:5 campaign artwork for a free AI
-workshop for the general public, realistic modern classroom with diverse adults and a projected
-abstract AI workflow, dark charcoal and cyan-purple brand palette, clear negative space for short
-Spanish headline, cinematic but credible, no fake logos, no tiny text.”
+**Workshop público:** “Use case: ads-marketing. Vertical 4:5 campaign artwork for a free AI workshop
+for the general public, realistic modern classroom with diverse adults and a projected abstract AI
+workflow, dark charcoal and cyan-purple brand palette, clear negative space for short Spanish
+headline, cinematic but credible, no fake logos, no tiny text.”
 
 **Arquitectura para programadores:** “Use case: ads-marketing. Vertical campaign image showing a
 realistic software architecture review: engineer, diagrams, code and connected AI components,

@@ -17,7 +17,7 @@ type: bugfix
 - Número canónico del watchtower: **113 checks / 26 componentes** (verificado en `src/core/watchtower/checks-*.ts`; 26 componentes contados de comentarios `Component:`, 113 checks = 112 PASS + 1 WARN real).
 - CRITICAL_SKILLS en `src/integrations/zcode-sync.ts` = **23 skills** (referencia canónica).
 - Versión actual del stack = **v4.0.0**.
-- GOTCHA: los bloques de código Markdown dentro de las cadenas JS de `data/*.js` usan backticks ESCAPADOS (`\`\`\``). Al editar con `edit`, si se reemplaza por backticks literales (`` ``` ``) se rompe la sintaxis del archivo. Siempre verificar con `node --check` tras editar.
+- GOTCHA: los bloques de código Markdown dentro de las cadenas JS de `data/*.js` usan backticks ESCAPADOS (`\`\`\``). Al editar con`edit`, si se reemplaza por backticks literales (`` ``` ``) se rompe la sintaxis del archivo. Siempre verificar con`node --check` tras editar.
 - Correcciones aplicadas: 12→23 skills (8 refs), v3.x→v4.0.0 (6 refs), 95/97 checks→113 (muchas refs en 10 archivos), 21→26 componentes.
 - Validación: todos los `data/*.js` pasan `node --check` (0 FAIL), la app sirve y renderiza (DOM 13K chars), typecheck EXIT=0, lint EXIT=0.
 

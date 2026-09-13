@@ -10,7 +10,7 @@ type: pattern
 **What**: Modernicé docs/presentations/architecture.html y quickstart.html con el nuevo design system compartido (gv.css v2.0 + gv.js v2.0), siguiendo el patrón de index.html.
 **Why**: Tarea solicitada: eliminar bloques <style> duplicados y actualizar datos reales del stack.
 **Where**: docs/presentations/architecture.html, docs/presentations/quickstart.html
-**Learned**: 
+**Learned**:
 - gv.css ya cubre: section-card, hero, glow, nav-blur, fade-in, stat-n, badge-gv/*, feature-table, info-trigger, arch-layer, progress-bar-custom/fill, section-title, cmd-block, flow-step/arrow, card-glow, gv-timeline, bento, marquee, tilt, svg-diagram, btn-gv/alt, scroll-progress, aurora, hero-badge.
 - En architecture.html conservé SOLO .card-dao y .sh en el <style> específico. En quickstart.html solo .step-num y .table-cmd.
 - Patrón body: <body class="grain"> + .scroll-progress + .aurora (3 spans).

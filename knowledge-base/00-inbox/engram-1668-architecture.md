@@ -13,7 +13,7 @@ type: architecture
 
 **Where**: Entire Gentle-Vanguard v8.0.1
 
-**Learned**: 
+**Learned**:
 - TypeScript: 0 errors (20 TS files in src/)
 - Watchtower: 78/78 PASS, 0 WARN, 0 FAIL
 - Eval tests: 80/80 PASS (5 quality gate suites)

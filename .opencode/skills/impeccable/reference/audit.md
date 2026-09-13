@@ -76,9 +76,11 @@ Run the bundled detector and verify each finding in context. Look for repeated i
 **Rating bands**: 18-20 Excellent (minor polish), 14-17 Good (address weak dimensions), 10-13 Acceptable (significant work needed), 6-9 Poor (major overhaul), 0-5 Critical (fundamental issues)
 
 ### Implementation Integrity Verdict
+
 **Start here.** Pass/fail: does the implementation express a coherent product-specific system? Cite verified evidence and detector findings.
 
 ### Executive Summary
+
 - Audit Health Score: **??/20** ([rating band])
 - Total issues found (count by severity: P0/P1/P2/P3)
 - Top 3-5 critical issues

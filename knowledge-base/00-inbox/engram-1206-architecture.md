@@ -13,9 +13,9 @@ type: architecture
 
 **Where**: scripts/mcp/skill-server.ts, dist/scripts/mcp/skill-server.js, opencode.json#mcp.skill-server, rules/NORMATIVA-PNPM-SECURITY.md, package.json (engines + packageManager + build:mcp)
 
-**Learned**: 
+**Learned**:
 - @modelcontextprotocol/sdk v1.29.0 works with TypeScript 6.0 and ES modules
-- ROOT path must go 3 levels up from dist/scripts/mcp/ 
+- ROOT path must go 3 levels up from dist/scripts/mcp/
 - pnpm migration is straightforward: remove package-lock.json + node_modules, run pnpm install --ignore-scripts
 - Registry parser needed filtering to exclude non-skill rows (paths, "File" agent, etc.)
 - Server responds correctly to tools/list and tools/call via stdio JSON-RPC

@@ -26,11 +26,7 @@
     "soft_white": "#F8FAFC",
     "black": "#050A14"
   },
-  "gradient": [
-    "#6E4DEB",
-    "#7B63E8",
-    "#06B6D4"
-  ],
+  "gradient": ["#6E4DEB", "#7B63E8", "#06B6D4"],
   "bbox_source_trace": {
     "x": 45,
     "y": 26,

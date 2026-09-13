@@ -13,7 +13,7 @@ type: architecture
 
 **Where**: Ver `mem_session_summary` del 2026-07-08 para detalle completo de ~30 archivos creados/modificados.
 
-**Learned**: 
+**Learned**:
 - 622 PS1 scripts activos en el repo; solo 3 valían migración a TS (health-check, session-autostart, watchtower)
 - Config consolidation evitó tener 2 archivos de routing con schemas diferentes
 - TypeScript 6.0 compila dashboard React sin problemas

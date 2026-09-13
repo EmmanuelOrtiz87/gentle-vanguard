@@ -17,6 +17,7 @@ type: pattern
 - MAX: 30,000 tokens (OVERFLOW) - Force action
 
 **Usage**:
+
 ```bash
 npx tsx src/compaction-monitor.ts --status  # Show status table
 npx tsx src/compaction-monitor.ts --check   # JSON output
@@ -24,6 +25,7 @@ npx tsx src/compaction-monitor.ts --alert    # Alert only if threshold
 ```
 
 **Configuration Required**:
+
 ```json
 // opencode.json
 "compaction": { "auto": false, "prune": false }
@@ -34,6 +36,7 @@ npx tsx src/compaction-monitor.ts --alert    # Alert only if threshold
 
 **Manual Compaction**:
 Use skill context-engineering when monitor shows WARN/CRITICAL:
+
 ```bash
 skill load context-engineering
 ```

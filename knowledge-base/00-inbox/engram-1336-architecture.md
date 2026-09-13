@@ -9,7 +9,7 @@ type: architecture
 
 **What**: Implemented the complete Community Skills system for Gentle-Vanguard
 
-**Where**: 
+**Where**:
 - Created: `.github/ISSUE_TEMPLATE/skill-contribution.yml`
 - Created: `.github/workflows/community-skill-review.yml`
 - Updated: `apps/web-dashboard/server/marketplace-api.ts` — replaced mock data with real skills/ directory scanning, added `validateSkillStructure()`, `CreateSkillPayload` interface, `getSkillContent()`

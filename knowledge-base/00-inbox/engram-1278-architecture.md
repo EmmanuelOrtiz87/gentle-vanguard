@@ -11,7 +11,7 @@ type: architecture
 
 **Why**: Required hardening of CI/CD pipeline, code quality enforcement, cross-module Go support, and comprehensive test coverage.
 
-**Where**: 
+**Where**:
 - `.github/workflows/` — 8 new workflows (js-ts-quality, python-quality, coverage, commitlint, markdown-lint, npm-audit, stale, labeler, openapi-validate)
 - `rules/` — 4 new normativas (AI-SAFETY, COST-OPTIMIZATION, DISASTER-RECOVERY, INCIDENT-MANAGEMENT)
 - `go.work` — workspace reconciling root + model-router-tui modules
@@ -23,7 +23,7 @@ type: architecture
 - `.devcontainer/devcontainer.json` — multi-language dev container
 - `commitlint.config.js` — conventional commit enforcement
 
-**Learned**: 
+**Learned**:
 - Go modules with `package main` at root don't support sub-packages in same module. Solution: `go.work` + separate `go.mod` in subdirectory.
 - ESLint 8.x flat config incompatible with `.eslintrc.json` — pinned to 8.57.
 - `generate-from-template.py` has Python 3.14 dataclass incompatibility (KW_ONLY in non-module context). Tests use static file analysis instead of import.

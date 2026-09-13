@@ -13,7 +13,7 @@ type: architecture
 
 **Where**: Full stack — dashboard, engram, ML embeddings, watchtower, governance, multi-workspace, cloud
 
-**Learned**: 
+**Learned**:
 - v4.1 focus: Dashboard real-time alerts, Engram auto-compaction, Watchtower predictive, ML embeddings incremental
 - v5.0 focus: Multi-workspace sync, Azure Container Apps, CI/CD, Prometheus/Grafana, agent collaboration
 - Priority order: Dashboard → Engram → Watchtower → ML → Multi-workspace → Cloud → CI/CD

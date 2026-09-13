@@ -11,7 +11,7 @@ type: architecture
 
 **Why**: Validate our judgment process against official Gentle AI sources and implement missing features
 
-**Where**: 
+**Where**:
 - src/rollback-orchestrator.ts (lint fixes)
 - src/snapshot-manager.ts (lint fixes)
 - scripts/utilities/ops/REVIEW/receipt-manager.ts (NEW)

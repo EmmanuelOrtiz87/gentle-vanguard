@@ -467,6 +467,7 @@ The system uses a Notion-Sans typeface (Inter-based) across every UI surface —
 > Source pages: notion.com/ (homepage), /enterprise, /product/ai, /product/agents, /startups, /pricing. Token coverage was identical across all six pages.
 
 ### Brand & Primary
+
 - **Notion Purple** ({colors.primary}): Signature primary CTA color — the unmistakable "Get Notion free" pill button. Reserved for the dominant CTA only.
 - **Purple Pressed** ({colors.primary-pressed}): Pressed-state variant
 - **Purple Deep** ({colors.primary-deep}): Deeper variant for emphasis
@@ -477,6 +478,7 @@ The system uses a Notion-Sans typeface (Inter-based) across every UI surface —
 - **Link Blue Pressed** ({colors.link-blue-pressed}): Pressed-state link blue
 
 ### Brand Color Spectrum (echoes live product database properties)
+
 - **Brand Pink** ({colors.brand-pink}): Pink accent
 - **Brand Pink Deep** ({colors.brand-pink-deep}): Deeper pink
 - **Brand Orange** ({colors.brand-orange}): Orange accent
@@ -490,6 +492,7 @@ The system uses a Notion-Sans typeface (Inter-based) across every UI surface —
 - **Brand Brown** ({colors.brand-brown}): Brand brown for "earthy" tints
 
 ### Card Tints (Pastel Feature Card Backgrounds)
+
 - **Tint Peach** ({colors.card-tint-peach}): Pale peach
 - **Tint Rose** ({colors.card-tint-rose}): Pale rose-pink
 - **Tint Mint** ({colors.card-tint-mint}): Pale mint-green
@@ -501,6 +504,7 @@ The system uses a Notion-Sans typeface (Inter-based) across every UI surface —
 - **Tint Gray** ({colors.card-tint-gray}): Neutral surface
 
 ### Surface
+
 - **Canvas White** ({colors.canvas}): Page background and primary card surface
 - **Surface** ({colors.surface}): Subtle section backgrounds, search-pill rest, featured pricing tier
 - **Surface Soft** ({colors.surface-soft}): Quieter section divisions
@@ -509,6 +513,7 @@ The system uses a Notion-Sans typeface (Inter-based) across every UI surface —
 - **Hairline Strong** ({colors.hairline-strong}): Stronger 1px border for inputs
 
 ### Text
+
 - **Ink Deep** ({colors.ink-deep}): Pure black for emphasis
 - **Ink** ({colors.ink}): Primary headlines and body text
 - **Charcoal** ({colors.charcoal}): Body emphasis (Notion's signature warm-charcoal)
@@ -520,6 +525,7 @@ The system uses a Notion-Sans typeface (Inter-based) across every UI surface —
 - **On Dark Muted** ({colors.on-dark-muted}): Reduced-opacity white
 
 ### Semantic
+
 - **Success** ({colors.semantic-success}): Confirmation green
 - **Warning** ({colors.semantic-warning}): Mid-priority alerts (orange)
 - **Error** ({colors.semantic-error}): Validation errors (red)
@@ -527,6 +533,7 @@ The system uses a Notion-Sans typeface (Inter-based) across every UI surface —
 ## Typography
 
 ### Font Family
+
 **Notion Sans** (primary): Notion's custom Inter-based variable typeface. Fallbacks: Inter, -apple-system, system-ui, 'Segoe UI', Helvetica, sans-serif. Humanist-geometric character used across every UI surface.
 
 ### Hierarchy
@@ -549,6 +556,7 @@ The system uses a Notion-Sans typeface (Inter-based) across every UI surface —
 | `{typography.button-md}` | 14px | 500 | 1.30 | 0 | Button labels |
 
 ### Principles
+
 - Tight hero leading (1.05) on 80px display
 - Negative letter-spacing on display sizes (-2px to -0.5px)
 - Generous body leading (1.55) for documentation readability
@@ -557,16 +565,19 @@ The system uses a Notion-Sans typeface (Inter-based) across every UI surface —
 ## Layout
 
 ### Spacing System
+
 - **Base unit**: 4px (8px primary increment)
 - **Tokens**: `{spacing.xxs}` (4px) through `{spacing.hero}` (120px)
 - **Section rhythm**: Marketing pages use `{spacing.section-lg}` (96px); pricing tightens to `{spacing.section}` (64px)
 
 ### Grid & Container
+
 - 1280px max-width with 32px gutters
 - Pricing: 4-tier card row at desktop with dense comparison table
 - Homepage: centered hero with workspace mockup below buttons; alternating colorful feature card sections
 
 ### Whitespace Philosophy
+
 Marketing surfaces use generous breathing room between feature card bands. Workspace mockup card on hero gets full-width treatment with deep drop shadow.
 
 ## Elevation & Depth
@@ -580,6 +591,7 @@ Marketing surfaces use generous breathing room between feature card bands. Works
 | 4 (modal) | `rgba(15, 15, 15, 0.16) 0px 16px 48px -8px` | Modals, dropdowns |
 
 ### Decorative Depth
+
 - Hero workspace mockup card uses deep diffuse drop shadow (Level 3) — significant elevation against the navy band
 - Pastel feature cards carry their own visual weight via tint backgrounds
 - Sticky-note dot illustrations and mesh wires add atmospheric decoration to navy hero
@@ -757,6 +769,7 @@ Notion's geometry is sober-editorial — `{rounded.md}` (8px) buttons distinguis
 ## Do's and Don'ts
 
 ### Do
+
 - Use `{colors.primary}` (purple) as the dominant CTA across all surfaces — it's the brand's recognizable signal
 - Pair deep navy hero bands ({colors.brand-navy}) with the purple button + decorative sticky-note dots
 - Use pastel feature card tints (peach, rose, mint, lavender, sky, yellow) generously
@@ -767,6 +780,7 @@ Notion's geometry is sober-editorial — `{rounded.md}` (8px) buttons distinguis
 - Use the workspace mockup card on hero bands to show actual product UI
 
 ### Don't
+
 - Don't use the purple for body text or large background surfaces
 - Don't use pill-shaped buttons; Notion's geometry is rectangular-sober
 - Don't mix link-blue ({colors.link-blue}) with primary-purple ({colors.primary}) — they have distinct roles
@@ -776,6 +790,7 @@ Notion's geometry is sober-editorial — `{rounded.md}` (8px) buttons distinguis
 ## Responsive Behavior
 
 ### Breakpoints
+
 | Name | Width | Key Changes |
 |---|---|---|
 | Mobile (small) | < 480px | Single column. Hero 36px. Pricing 1-up. |
@@ -785,11 +800,13 @@ Notion's geometry is sober-editorial — `{rounded.md}` (8px) buttons distinguis
 | Wide Desktop | ≥ 1280px | Full 80px hero presentation. |
 
 ### Touch Targets
+
 - Buttons render at 40–44px effective height
 - Form inputs render at 44px height
 - Pill tabs ~32px → 44px on mobile
 
 ### Collapsing Strategy
+
 - **Promo banner** stays full-width; truncates at < 480px
 - **Top nav** below 1024px collapses to hamburger
 - **Hero band**: workspace mockup card moves below text/buttons on mobile
@@ -799,6 +816,7 @@ Notion's geometry is sober-editorial — `{rounded.md}` (8px) buttons distinguis
 - **Footer**: 6-column desktop → 3-column tablet → accordion mobile
 
 ### Image Behavior
+
 - Workspace mockup card maintains aspect ratio
 - Pastel illustrations inside feature cards scale proportionally
 - Customer logo wall: wordmarks at consistent 60–80px height

@@ -11,11 +11,11 @@ type: bugfix
 
 **Why**: El error 503 indica que el proveedor LLM (incluso el modelo nativo opencode/deepseek-v4-flash-free) está experimentando alta carga y su cola de requests está llena. Esto causa que las llamadas a herramientas MCP (engram) se queden colgadas.
 
-**Where**: 
+**Where**:
 - Config actualizado: config/model-health.json - nueva firma "QueueFull" con pattern "request queue is full|503.*queue|streaming.*failed.*503|queue.*capacity"
 - Estado actual: opencode/deepseek-v4-flash-free marcado como unhealthy (cooldown 60min)
 
-**Learned**: 
+**Learned**:
 - El error 503 afecta tanto a modelos externos (kimi-2-5 via Bedrock) como al modelo nativo opencode cuando hay alta demanda
 - El sistema de healer ahora detecta y marca estos modelos como unhealthy, pero NO puede auto-switch a otro modelo si TODOS están fallando
 - Workaround: esperar al cooldown (60min) o usar timeout más agresivo en llamadas MCP

@@ -15,12 +15,12 @@ type: bugfix
 
 **Why**: User demanded 100% functional stack with no errors/warnings/gaps/omissions.
 
-**Where**: 
+**Where**:
 - `src/dashboard-start.ts` - Full dashboard launcher
 - `src/temp-file-registry.ts` - Registry CLI
 - `config/session-autostart.config.json` - Missing initialization step
 
-**Learned**: 
+**Learned**:
 - The autostart pipeline has `lazy: true` for dashboard-ws-start but it wasn't actually starting
 - Temp-file-registry has no auto-initialization step in the config
 - Watchtower autoheal was enabled but doesn't auto-start the dashboard, only monitors

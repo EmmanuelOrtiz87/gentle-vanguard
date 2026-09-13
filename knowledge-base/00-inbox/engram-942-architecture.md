@@ -11,7 +11,7 @@ type: architecture
 
 **Why**: READMEs had been reduced to minimal stubs losing Mermaid diagrams, architecture, delegation rules, agent ecosystem, skill catalog, CI/CD pipeline, development commands.
 
-**Where**: 
+**Where**:
 - README.md (private repo)
 - gentle-vanguard-public/README.md (public repo)
 - rules/README-GOVERNANCE.md (new — mandatory sections, prohibited actions, modification protocol)
@@ -20,7 +20,7 @@ type: architecture
 - hooks/pre-commit.ps1 (modified — integrated README governance check)
 - CHANGELOG.md (added v2.18.0 entry)
 
-**Learned**: 
+**Learned**:
 - Agent count is 17 (Orchestrator + 16 sub-agents). GITFLOW and SCRIPT are routing profiles, not agents. hallucinationGuardLevels is a config entry, not an agent.
 - Validation script must exclude non-agent profiles from count: hallucinationGuardLevels, GITFLOW, SCRIPT
 - Public repo CI/CD table must include sync-public.yml

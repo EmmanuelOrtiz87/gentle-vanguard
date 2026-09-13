@@ -87,6 +87,7 @@ const HeavyChart = lazy(() => import('./HeavyChart'));
 ### Rendering Performance
 
 **Avoid Layout Thrashing**:
+
 ```javascript
 // ❌ Bad: Alternating reads and writes (causes reflows)
 elements.forEach(el => {
@@ -117,6 +118,7 @@ elements.forEach((el, i) => {
 ### Animation Performance
 
 **GPU Acceleration**:
+
 ```css
 /* ✅ GPU-accelerated (fast) */
 .animated {
@@ -139,6 +141,7 @@ elements.forEach((el, i) => {
 - Avoid long-running JavaScript during animations
 
 **Intersection Observer**:
+
 ```javascript
 // Efficiently detect when elements enter viewport
 const observer = new IntersectionObserver((entries) => {
@@ -190,6 +193,7 @@ const observer = new IntersectionObserver((entries) => {
 ## Core Web Vitals Optimization
 
 ### Largest Contentful Paint (LCP < 2.5s)
+
 - Optimize hero images
 - Inline critical CSS
 - Preload key resources
@@ -197,12 +201,14 @@ const observer = new IntersectionObserver((entries) => {
 - Server-side rendering
 
 ### Interaction to Next Paint (INP < 200ms)
+
 - Break up long tasks
 - Defer non-critical JavaScript
 - Use web workers for heavy computation
 - Reduce JavaScript execution time
 
 ### Cumulative Layout Shift (CLS < 0.1)
+
 - Set dimensions on images and videos
 - Don't inject content above existing content
 - Use `aspect-ratio` CSS property

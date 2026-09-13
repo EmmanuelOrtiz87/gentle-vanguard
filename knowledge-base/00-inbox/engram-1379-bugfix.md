@@ -11,7 +11,7 @@ type: bugfix
 
 **Why**: PowerShell parser rejects variable names with hyphens unless wrapped in `${braces}`. These were all pre-existing parse errors preventing scripts from running.
 
-**Where**: 
+**Where**:
 - scripts/core/sync-stack.ps1 (`$gentle-vanguardInstall`)
 - scripts/project/sync-docs.ps1 (`$gentle-vanguardRoot`)
 - scripts/utilities/utils/UTILITIES/stack-on-demand.ps1 (`$gentle-vanguardRoot`)

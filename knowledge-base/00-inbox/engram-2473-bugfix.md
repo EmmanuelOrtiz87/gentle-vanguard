@@ -13,7 +13,7 @@ type: bugfix
 
 **Where**: src/core/, src/mcp/, src/skills/, src/security/ (38 renames, 100% pure = no content change), src/cli/gv.ts:150, update-health-check.cjs. Commit a0295512 on release/v3.5.0.
 
-**Learned**: 
+**Learned**:
 1. git config core.ignorecase=true HIDES case mismatches between git index and working tree on Windows — always verify with `git ls-files` + .NET Directory.GetDirectories (case-sensitive) or `git ls-tree`.
 2. The LOCAL disk is the source of truth (src/core lowercase); git had uppercase from an old commit. Do NOT normalize imports — align git to disk.
 3. Verify remote availability with `gh api repos/OWNER/REPO/contents/<path>?ref=<branch>` — returned 404 before fix, works after.

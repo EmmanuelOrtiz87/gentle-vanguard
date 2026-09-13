@@ -460,6 +460,7 @@ Whitespace carries the feeling of "plenty of space in the café." Section paddin
 ## 7. Do's and Don'ts
 
 ### Do
+
 - Use Neutral Warm (`#f2f0eb`) or Ceramic (`#edebe9`) as page canvas instead of pure white — the warm cream is the signature
 - Map the green tiers to their intended surface role — Starbucks Green for headings, Green Accent for CTAs, House Green for deep bands, Uplift for decorative
 - Keep tracking tight at `-0.01em` / `-0.16px` on SoDoSans across the whole system
@@ -472,6 +473,7 @@ Whitespace carries the feeling of "plenty of space in the café." Section paddin
 - Let the cream canvas breathe between content cards — use whitespace, not dividers
 
 ### Don't
+
 - Don't use pure white as the page canvas — the warm cream temperature is load-bearing
 - Don't pick "one brand green" — the four-green system is intentional; using only `#006241` everywhere flattens the brand
 - Don't use Gold as a general-purpose accent — it's a Rewards signal only

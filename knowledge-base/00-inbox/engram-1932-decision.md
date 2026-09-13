@@ -11,7 +11,7 @@ type: decision
 
 **Why**: El usuario solicitó una revisión exhaustiva del stack para identificar gaps, optimizar componentes y asegurar que todas las herramientas estén operativas al 100%.
 
-**Where**: 
+**Where**:
 - Directorios renombrados: src/core, src/security, src/skills, src/mcp, src/infrastructure, src/convergence, src/multitenant, src/autonomous-review, src/mcp-native, src/trust-layer
 - Archivos actualizados: 20+ archivos con referencias corregidas
 - Configuraciones: config/mcp-config.sd.json, config/skill-mcp.json

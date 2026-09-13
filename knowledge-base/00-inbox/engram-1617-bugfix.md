@@ -13,7 +13,7 @@ type: bugfix
 
 **Where**: scripts/recovery/schema-integrity.ts (rewrote to read-only), scripts/recovery/db-health-check.ts (new), scripts/recovery/db-restore.ts (new), rules/RECOVERY-NORMATIVA.md (updated), config/session-autostart.config.json (added db-health-check step)
 
-**Learned**: 
+**Learned**:
 - NEVER create scripts that auto-modify database schemas without per-table validation
 - The 'data' column is NOT part of canonical CodeGraph schema — it was incorrectly added
 - WAL checkpoint TRUNCATE compacts WAL files (CodeGraph had 4.7MB WAL)

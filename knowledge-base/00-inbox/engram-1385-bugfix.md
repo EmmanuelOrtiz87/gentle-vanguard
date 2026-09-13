@@ -13,7 +13,7 @@ type: bugfix
 
 **Where**: .session/engram-rag/_export-tmp.json (local, no trackeado), .secretlintignore (nuevo), .secretlintrc.json (actualizado con ignores)
 
-**Learned**: 
+**Learned**:
 - .gitignore no es suficiente — secretlint escanea archivos locales no trackeados también
 - Siempre agregar runtime dirs a secretlint ignores
 - El token debe ser ROTADO en GitHub Settings → Developer settings → Personal access tokens

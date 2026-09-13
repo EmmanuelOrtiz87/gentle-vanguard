@@ -11,7 +11,7 @@ type: bugfix
 
 **Why**: Multiple systemic issues from Phase 1 cleanup: deleted PS1 scripts still referenced by tests/detectors, require() calls in ESM modules causing crashes, shell:true with args triggering Node.js deprecation warnings, and cascading duplication corruption in PS1 files
 
-**Where**: 
+**Where**:
 - src/engram-integrity-check.ts, event-sourcing.ts, tracing-instrument.ts, correction-rules-engine.ts: require() → ESM imports
 - src/mcp-gateway.ts: shell:true with args → concatenated command string
 - 8 test files under tests/unit/ and tests/integration/: session-autostart.ps1 → session-autostart.ts
@@ -22,7 +22,7 @@ type: bugfix
 
 **Learned**: The cascading duplication pattern is: `catch { Write-Debug "Exception caught: param(` or `catch { Write-Debug "Exception caught: #` — the unclosed string literal swallows the entire file as a string, creating fractal duplication. The file should be reconstructed by keeping: (1) the clean header/param section before the first corruption, and (2) the unique logic section after the last corruption boundary. The duplicated sections between corruptions are pure copies.
 
-**Verified**: 
+**Verified**:
 - Engram integrity: 5/5 PASS (was failing with require error)
 - MCP gateway: no DEP0190 warnings
 - TypeScript typecheck: clean

@@ -13,7 +13,7 @@ type: bugfix
 
 **Where**: scripts/utilities/DEPLOYMENT/sync-to-public.ps1, rules/NORMATIVAS-RELEASE.md (section 4.1, 4.2), scripts/utilities/DEPLOYMENT/check-public-repo-health.ps1 (nuevo)
 
-**Learned**: 
+**Learned**:
 - `git ls-remote --symref origin HEAD` solo da la default branch. Para todas: `git branch -r`.
 - `git reset --hard origin/$branch` antes de sync por rama es más confiable que stash/pop (que falla con branch switching)
 - Las operaciones de copia deben ejecutarse DENTRO del loop de branches, no antes

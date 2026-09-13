@@ -11,7 +11,7 @@ type: architecture
 
 **Why**: El usuario pidió: (1) resolver todo lo pendiente para subir al repo y normalizar main/develop, (2) llevar prompt-studio al nivel de analytics/archify/academy con una sección nativa de "Gemas" (reemplazando "Guías"), con login Google y CRUD.
 
-**Where**: 
+**Where**:
 - Commits main: 833af859 (security stack ADR-027/28/29), 904e12c1 (ops/velocidad/delegación/release), 1dfe0b26 (docs/KB/churn). Ambos remotos en 1dfe0b26.
 - docs/reference/PROMPT-STUDIO-GEMS.md (research Gems + diseño v4) y PROMPT-LIBRARY-BENCHMARK.md (sección v4) en develop (98308642, pusheado).
 - apps/prompt-studio/server/server.ts (backend v4), src/App.tsx + i18n.ts (frontend v4) — app desacoplada (git propio, gitignored).

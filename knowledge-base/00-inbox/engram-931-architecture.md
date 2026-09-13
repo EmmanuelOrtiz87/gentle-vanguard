@@ -9,7 +9,7 @@ type: architecture
 
 **What**: Completada integración total de tool detection, plugins, enhanced detection, MCP bridge, SDD cleanup y homologación en startup
 **Why**: Request del usuario para dejar todo funcional, integrado y homologado — resolver warnings, pendientes y parciales
-**Where**: 
+**Where**:
 - scripts/utilities/session-autostart.cmd — Phase 0.5 mejorada (exporta env vars), Phase 7 (plugin init), Phase 8 (enhanced detect)
 - config/plugins.json — enabledPlugins: ["example-hello-world"]
 - adapters/mcp-bridge/ — TS build exitoso (npm install + tsc), dist/server.js generado

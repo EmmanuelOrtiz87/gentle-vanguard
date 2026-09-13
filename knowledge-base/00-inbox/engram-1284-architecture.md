@@ -11,14 +11,14 @@ type: architecture
 
 **Why**: Previous releases had repeated gaps: VERSION file not updated (stuck at 2.24.0), installer not rebuilt (old .exe from May 21 synced to public), README badges stale, public repo sync forgotten. Lessons learned were saved to engram but not enforced as rules.
 
-**Where**: 
+**Where**:
 - scripts/utilities/DEPLOYMENT/release-automation.ps1
 - rules/NORMATIVAS-RELEASE.md
 - .github/workflows/release.yml (updated with validate job)
 - VERSION (2.24.0→2.26.0)
 - docs/AGENTS.md (added references)
 
-**Learned**: 
+**Learned**:
 1. Lessons learned MUST become normativas — engram-only storage is not enough. Created NORMATIVAS-RELEASE.md with 8 binding rules.
 2. Release process must be automation-first: one command validates all (VERSION, README badges, CHANGELOG, footer, installer) before proceeding.
 3. Installer MUST be rebuilt every release — the .exe bundles encrypted scripts. Old .exe ships stale code.

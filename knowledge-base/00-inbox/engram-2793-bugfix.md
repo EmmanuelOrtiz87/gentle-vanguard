@@ -17,7 +17,7 @@ type: bugfix
 
 **Root Cause**: The opencode tool (or our pre-processing) is not truncating conversation history. Each assistant/user message exchange adds to context exponentially.
 
-**Where**: 
+**Where**:
 - token_transactions table shows 394 sessions, top 15 sessions >15M input each
 - All sessions are agent='orchestrator', not subagents
 - No evidence of sliding window, context compaction, or automatic truncation

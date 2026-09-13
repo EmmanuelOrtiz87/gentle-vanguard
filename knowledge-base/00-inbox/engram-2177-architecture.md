@@ -28,7 +28,7 @@ type: architecture
 - real-data.ts: Integración con dashboard backend
 - useMetrics.ts: Frontend con recarga corregida (bug de infinite loop)
 
-**Files**: 
+**Files**:
 - src/core/session-context-log.ts
 - src/core/session-metrics-tracker.ts
 - src/core/metrics-aggregator.ts

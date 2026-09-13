@@ -340,16 +340,19 @@ The single shape signature is the pill. Every interactive element rounds to `{ro
 ## Colors
 
 ### Brand & Accent
+
 - **Ink Black** (`{colors.primary}` — `#000000`): The brand's only conversion colour. Every primary CTA pill, the footer fill, every dark promo band, every nav login button. The system has no secondary accent.
 - **Surface Pressed** (`{colors.surface-pressed}` — `#e2e2e2`): The pressed-state fill for white pills — a soft grey that's used only in active / pressed states.
 - **Black Elevated** (`{colors.black-elevated}` — `#282828`): A near-black used on hover for the translucent white tab-toggle pill. Documented as a system colour because it appears on a recurring brand control.
 
 ### Surface
+
 - **Canvas** (`{colors.canvas}` — `#ffffff`): The default page background.
 - **Canvas Soft** (`{colors.canvas-soft}` — `#efefef`): The soft gray fill for category chips, form-input rows inside the ride-request card, and subtle pill buttons.
 - **Canvas Softer** (`{colors.canvas-softer}` — `#f3f3f3`): A slightly lighter gray used as a nested-input fill on white surfaces.
 
 ### Text
+
 - **Ink** (`{colors.ink}` — `#000000`): Every heading and body paragraph on light surfaces.
 - **Body** (`{colors.body}` — `#5e5e5e`): Secondary text — captions, sub-headings, supporting copy.
 - **Hairline Mid** (`{colors.hairline-mid}` — `#4b4b4b`): A mid-gray used for muted link text inside footer columns and breadcrumb-style nav.
@@ -357,11 +360,13 @@ The single shape signature is the pill. Every interactive element rounds to `{ro
 - **On Dark** (`{colors.on-dark}` — `#ffffff`): All text on `{colors.ink}` surfaces (footer, dark promo bands).
 
 ### Semantic
+
 The brand does not maintain a separate error / success / warning palette in its public marketing surface. Validation cues come from the primary black or from the brand's editorial illustrations. The `#0000ee` link colour is the system's only chromatic — it's the browser-default link blue, appearing in body-copy inline links inside legal / footer text.
 
 ## Typography
 
 ### Font Family
+
 Two custom faces carry the entire system:
 
 1. **A custom geometric display sans** (extracted as `UberMove`) for every headline. Weight 700 only; no italic; no tracking variation. Sizes range from `display-sm` 20 px up to `display-xxl` 52 px on the hero. Line-heights tighten to 1.22 – 1.25 at display sizes for a poured-on-the-page look.
@@ -388,12 +393,14 @@ The two faces share a family DNA but never overlap roles — the display face ne
 | `{typography.button-md}` | 16px | 500 | 20px | Default button label. |
 
 ### Principles
+
 - **Sentence-case is the voice.** No all-caps headlines. Eyebrow tags ("WHY BECOME") are the rare exception.
 - **Weight 700 is for headlines; weight 500 is for buttons and emphasis.** Don't promote button labels to 700.
 - **No tracking flourish.** The display face is never letter-spaced, positive or negative.
 - **Two faces, two roles.** UberMove for display; UberMoveText for everything else. Never cross the streams.
 
 ### Note on Font Substitutes
+
 The two faces are proprietary. Open-source substitutes:
 - **Display sans** — *Inter* weight 700 with `font-feature-settings: "ss01"` enabled comes closest. *Geist* weight 700 is the second-best option.
 - **Text sans** — *Inter* weights 400 / 500 match the geometric width and x-height. *Plus Jakarta Sans* is a softer alternative if the brand wants a less neutral feel.
@@ -401,6 +408,7 @@ The two faces are proprietary. Open-source substitutes:
 ## Layout
 
 ### Spacing System
+
 - **Base unit**: 4 px. Most captured values are multiples of 4 with a few 6-px sub-multiples (10, 14) inside button padding.
 - **Tokens**: `{spacing.xxs}` 4 px · `{spacing.xs}` 6 px · `{spacing.sm}` 8 px · `{spacing.md}` 12 px · `{spacing.lg}` 16 px · `{spacing.xl}` 20 px · `{spacing.2xl}` 24 px · `{spacing.3xl}` 32 px.
 - **Section padding**: marketing bands sit at `{spacing.3xl}` 32 px top/bottom on tighter pages and `{spacing.3xl} {spacing.3xl}` for hero bands; promo cards inset at `{spacing.2xl}` 24 px.
@@ -408,6 +416,7 @@ The two faces are proprietary. Open-source substitutes:
 - **Inline gap**: button rows, category chip rows, app-store pill rows use `{spacing.md}` 12 px between siblings.
 
 ### Grid & Container
+
 - **Max width**: ~1200 px container; centred with horizontal gutters of `{spacing.3xl}` 32 px on desktop, `{spacing.lg}` 16 px on mobile.
 - **Column patterns**:
   - Promo-card rows: 2-up at desktop (image left + content right, alternating sides), 1-up at mobile.
@@ -416,6 +425,7 @@ The two faces are proprietary. Open-source substitutes:
   - App-download pills: 2-up at desktop (Rider + Driver), 1-up at mobile.
 
 ### Whitespace Philosophy
+
 Card-to-card spacing carries the rhythm — between two stacked promo cards there's roughly a full `{spacing.3xl}` 32 px gutter; inside a card the headline / paragraph / CTA stack is tight (`{spacing.sm}` 8 px between siblings). The black promo bands and the footer have no internal hairlines — content sits on flat ink with white text.
 
 ### Responsive Strategy
@@ -431,15 +441,18 @@ Card-to-card spacing carries the rhythm — between two stacked promo cards ther
 | Desktop-Large | ≥ 1136px | Container caps at ~1200 px; bands stay edge-to-edge while content centres. |
 
 #### Touch Targets
+
 The pill `button-primary` renders at ~44 px tall (10 px vertical padding + 24 px label line-height); the larger `button-large-rounded` at ~56 px. Both meet WCAG AAA at all breakpoints. Category chips inflate to ≥ 44 px tall through extra padding on touch viewports.
 
 #### Collapsing Strategy
+
 - **Nav**: full link row + Help / Log in / Sign up pills at desktop. Collapses to logo + hamburger at mobile; menu overlays full-screen with the same link list stacked.
 - **Ride-request form card**: at desktop, the form sits inside a max-490-px `{rounded.xl}` card with shadow. At mobile, full-width with edge-to-edge.
 - **Promo cards**: at desktop, image-left + content-right (or alternating). At mobile, image always above content.
 - **Annual showcase card**: scales from a 2:3 desktop frame to a 4:3 mobile frame; date text resizes proportionally.
 
 #### Image Behavior
+
 - **Editorial illustrations**: 4:3 or 16:9 hard-edge rectangles; never cropped to a circle, never tilted. Aspect preserved.
 - **Photography**: same — square or landscape; framed inside `{rounded.xl}` card chrome.
 - **Maps in ride-request flow**: full-bleed inside a card; rounded corners follow the parent card.
@@ -455,6 +468,7 @@ The pill `button-primary` renders at ~44 px tall (10 px vertical padding + 24 px
 | Level 3 — Pill Float | `rgba(0, 0, 0, 0.16) 0px 2px 8px 0px` | The floating white pill button (the one that floats over hero photography). |
 
 ### Decorative Depth
+
 - **Black bands as polarity-flip depth**: the brand uses pure black `{colors.primary}` mid-page bands to break the white-on-white rhythm. The polarity shift IS the depth cue.
 - **Editorial illustrations as in-card depth**: every promo card has a single 4:3 illustration as its left or right column. The illustration's visual weight is part of the card's elevation read.
 - **Pill geometry as micro-depth**: `{rounded.pill}` 999 px applied at varying button heights creates a stack of nested pills that reads as visual hierarchy.
@@ -474,6 +488,7 @@ The pill `button-primary` renders at ~44 px tall (10 px vertical padding + 24 px
 | `{rounded.full}` | 9999px | Identical effect to `{rounded.pill}` for circular icon containers. |
 
 ### Photography Geometry
+
 - **Editorial illustrations**: 4:3 landscape inside promo cards; 16:9 for full-width showcase frames.
 - **Driver / rider portraits**: 4:5 portrait crop; framed by `{rounded.xl}` 16 px card chrome.
 - **Annual showcase image**: 2:3 portrait at desktop, scaling to 4:3 at mobile. The image fills the card; the headline overlays the bottom.
@@ -615,10 +630,10 @@ The pill `button-primary` renders at ~44 px tall (10 px vertical padding + 24 px
 **`ex-toast`** — Toast notification surface — feature-card shape + medium shadow.
 - Properties: `backgroundColor`, `rounded`, `padding`, `typography`
 
-
 ## Do's and Don'ts
 
 ### Do
+
 - Reserve `{colors.primary}` (`#000000`) for every primary CTA pill. One black pill per visible viewport is the brand's whole conversion story.
 - Use `{rounded.pill}` 999 px on every interactive element (buttons, chips, app pills). The pill IS the brand's geometric signature.
 - Render cards in `{rounded.xl}` 16 px — promo cards, content cards, the ride-request form card, the annual-showcase card all share this radius.
@@ -627,6 +642,7 @@ The pill `button-primary` renders at ~44 px tall (10 px vertical padding + 24 px
 - Anchor every promo card with a 4:3 editorial illustration; never use generic stock imagery.
 
 ### Don't
+
 - Don't introduce a second brand accent colour (orange, blue, green). The brand's entire UI is black-and-white plus grayscale; new accents flatten the system.
 - Don't render the primary CTA as a `{rounded.xl}` rectangle except inside the larger ride-request flow (where `button-large-rounded` is the documented exception).
 - Don't use all-caps display headlines. Sentence-case is the voice; uppercase is restricted to rare eyebrow tags.

@@ -13,7 +13,7 @@ type: architecture
 
 **Where**: scripts/utilities/dashboard/dashboard-{common,ws-autostart,start,stop}.ps1, apps/web-dashboard/vite.config.ts, .opencode/skills/dashboard/SKILL.md, AGENTS.md
 
-**Learned**: 
+**Learned**:
 - Get-NetTCPConnection with -ErrorAction SilentlyContinue is fast and reliable for port detection on Windows; fallback to TcpListener test bind for edge cases
 - $pid is a reserved PowerShell automatic variable (cannot be reassigned); always use $procId instead
 - Start-Process with npx.cmd (batch file) works reliably via cmd /c "set VAR=val && npx.cmd args" pattern on Windows

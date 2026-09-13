@@ -10,7 +10,7 @@ type: bugfix
 **What**: Fixed dashboard PDF/PNG export and presentation slide layouts
 **Why**: PDF showed "file not found" (temp HTML with window.print() interfered with --print-to-pdf); PNG showed "No active section" popup (wrong JS selector .section.active instead of .sec.active)
 **Where**: scripts/metrics/metrics-server.ps1
-**Learned**: 
+**Learned**:
 - --print-to-pdf uses @media print automatically, no JS window.print() needed
 - --screenshot uses screen media, need CSS inject for hidden sections
 - JS querySelector('.section.active') fails when class is .sec.active

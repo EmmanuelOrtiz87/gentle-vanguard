@@ -11,7 +11,7 @@ type: decision
 
 **Why**: User requested the title banner be visible in both CLI and TUI interfaces for consistent branding.
 
-**Where**: 
+**Where**:
 - scripts/utilities/model-router-tui/main.go — renderBanner() (full 6-line), renderCompactBanner() (1-line title + subtitle), added to all 10 view functions
 - scripts/utilities/session-autostart.cmd — added 6-line echo banner before session start
 - scripts/utilities/session-autostart.ps1 — added Write-Host colored banner

@@ -13,7 +13,7 @@ type: bugfix
 
 **Where**: apps/web-dashboard/pnpm-workspace.yaml (overrides + minimumReleaseAgeExclude + allowBuilds), apps/web-dashboard/package.json (onlyBuiltDependencies), apps/web-dashboard/pnpm-lock.yaml (regenerado)
 
-**Learned**: 
+**Learned**:
 1. El fix NO fue individual por paquete sino un upgrade mayor combinado: vite 6.4.3 resuelve los 3 advisories de vite + el de esbuild (vite 6 pincha esbuild 0.24+); react-router 8.3.0 resuelve el CSRF.
 2. El build pasó sin problemas con vite 6.4.3 + @vitejs/plugin-react 4.7.0 + react-router 8.3.0 (17 chunks, 3.30s). Los major-bumps eran seguros en este proyecto.
 3. Tests 32/32 pass, typecheck/lint/test:config de la raíz todos verdes tras el upgrade.

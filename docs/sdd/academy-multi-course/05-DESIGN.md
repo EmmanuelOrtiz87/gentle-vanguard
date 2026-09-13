@@ -92,7 +92,7 @@ apps/academy-web/
 // El orden es el orden de aparición en el catálogo (home).
 window.GV_COURSES = [
   { id: 'gentle-vanguard', path: 'data/courses/gentle-vanguard/' },
-  { id: 'ia-fundamentos',   path: 'data/courses/ia-fundamentos/' }
+  { id: 'ia-fundamentos', path: 'data/courses/ia-fundamentos/' },
 ];
 ```
 
@@ -104,9 +104,9 @@ window.GV_COURSES = [
 // Las keys de UI globales de academy (home, search, etc.) siguen en app.js.
 window.GV_COURSE_I18N = window.GV_COURSE_I18N || {};
 window.GV_COURSE_I18N['gentle-vanguard'] = {
-  es: { fundamentos: 'Fundamentos', /* ... */ },
-  en: { fundamentos: 'Fundamentals', /* ... */ },
-  pt: { fundamentos: 'Fundamentos', /* ... */ }
+  es: { fundamentos: 'Fundamentos' /* ... */ },
+  en: { fundamentos: 'Fundamentals' /* ... */ },
+  pt: { fundamentos: 'Fundamentos' /* ... */ },
 };
 ```
 
@@ -215,8 +215,8 @@ function renderCourseSelector() {
 
 ## Cambios en CSS (si son necesarios)
 
-Si el selector de curso requiere estilos nuevos, agregarlos en `academy-layout.css`
-(NO en los CSS `-v2.css` por el waiver brand y porque el DS v2 es canónico).
+Si el selector de curso requiere estilos nuevos, agregarlos en `academy-layout.css` (NO en los CSS
+`-v2.css` por el waiver brand y porque el DS v2 es canónico).
 
 ```css
 /* En academy-layout.css, agregar al final: */
@@ -235,8 +235,9 @@ Si el selector de curso requiere estilos nuevos, agregarlos en `academy-layout.c
 ## Cambios en `README.md`
 
 Actualizar la descripción para reflejar el modelo multi-curso:
-- "Academia local-first multi-curso" en lugar de "el curso web local-first para
-  aprender Gentle-Vanguard".
+
+- "Academia local-first multi-curso" en lugar de "el curso web local-first para aprender
+  Gentle-Vanguard".
 - Agregar sección "Cursos disponibles" con tabla de cursos actuales.
 - Mantener las advertencias de "no es un LMS".
 
@@ -319,22 +320,23 @@ function migrateLegacyProgress() {
 
 ## Decisiones de diseño (rationale)
 
-| Decisión                                              | Rationale                                                |
-| ----------------------------------------------------- | --------------------------------------------------------- |
-| `data/courses.js` lista plana, no auto-discovery      | Simple, predecible, sin race conditions                    |
-| `course.json` con `files` apunta a paths              | Permite reorganizar archivos sin tocar el manifest        |
-| `i18n.js` por curso (no por track)                    | Reduce fragmentación, un objeto por curso                 |
-| Carga de curso vía `<script>` injection               | Sin fetch async para cada archivo, simple, file:// OK     |
-| `courseId` en URL explícito                           | Evita ambigüedad si dos cursos tuvieran un track con mismo id |
-| Redirects silent en router (no mostrar mensaje)       | UX limpio, no rompe botón "atrás"                         |
-| Glosario por curso (no global)                        | Coherente con el scope de curso                            |
-| Selector en topbar (no en home)                       | Acceso rápido sin pasar por la home                       |
-| `localStorage gv-academy-active-course`               | Consistente con convenciones del stack (`gv-*`)           |
-| Migración idempotente de localStorage                 | Usuarios existentes no pierden progreso                   |
+| Decisión                                         | Rationale                                                     |
+| ------------------------------------------------ | ------------------------------------------------------------- |
+| `data/courses.js` lista plana, no auto-discovery | Simple, predecible, sin race conditions                       |
+| `course.json` con `files` apunta a paths         | Permite reorganizar archivos sin tocar el manifest            |
+| `i18n.js` por curso (no por track)               | Reduce fragmentación, un objeto por curso                     |
+| Carga de curso vía `<script>` injection          | Sin fetch async para cada archivo, simple, file:// OK         |
+| `courseId` en URL explícito                      | Evita ambigüedad si dos cursos tuvieran un track con mismo id |
+| Redirects silent en router (no mostrar mensaje)  | UX limpio, no rompe botón "atrás"                             |
+| Glosario por curso (no global)                   | Coherente con el scope de curso                               |
+| Selector en topbar (no en home)                  | Acceso rápido sin pasar por la home                           |
+| `localStorage gv-academy-active-course`          | Consistente con convenciones del stack (`gv-*`)               |
+| Migración idempotente de localStorage            | Usuarios existentes no pierden progreso                       |
 
 ## Compatibilidad con Obsidian/Engram (futuro)
 
 El manifest `course.json` ya es la unidad de intercambio. Cuando se implemente sync:
+
 1. Cada curso se sincroniza como una carpeta.
 2. El manifest se actualiza con metadata de sync (lastSyncedAt, etc.).
 3. El contenido (`content-*.js`) se puede regenerar desde notas de Obsidian.
@@ -344,8 +346,9 @@ No requiere refactor del shell.
 ## Workload guard
 
 Cada PR se mantiene <400 líneas:
-- **PR 1** (estructura + migración): ~280-350 líneas (mayoría son archivos movidos
-  sin cambios, no cuentan como "changed lines" en el diff estadístico).
+
+- **PR 1** (estructura + migración): ~280-350 líneas (mayoría son archivos movidos sin cambios, no
+  cuentan como "changed lines" en el diff estadístico).
 - **PR 2** (refactor app.js): ~300-400 líneas (cambios en app.js + index.html).
 - **PR 3** (contenido IA): trabajo de contenido, no del shell (sin límite estricto).
 

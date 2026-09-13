@@ -15,6 +15,7 @@ type: decision
 ## STATUS DE SUGERENCIAS (basado en análisis de código):
 
 ### SUGERENCIA 1: User Operating Context ⚠️ PARCIAL
+
 **Estado**: Infraestructura base existe pero SIN capa de "objetivos del usuario"
 - ✅ Work Objectives system existe (src/work-objectives.ts, 467 líneas)
 - ✅ Soporta: título, intención, scope, criterios de éxito, dominio, riesgo
@@ -23,6 +24,7 @@ type: decision
 - ❌ User Operating Context como layer separada NO existe
 
 ### SUGERENCIA 2: Memoria de Decisiones y Acuerdos ⚠️ PARCIAL
+
 **Estado**: Infraestructura técnica fuerte pero NO decisiones humanas
 - ✅ DecisionRecord interface existe (línea 21-29 de work-objectives.ts)
 - ✅ Campos: id, title, rationale, alternatives, reversible, reviewAt, createdAt
@@ -32,6 +34,7 @@ type: decision
 - ❌ NO hay acuerdos explícitos tipo "cuando pase Z, actuar así"
 
 ### SUGERENCIA 3: Modos de Autonomía Graduados ✅ IMPLEMENTADO
+
 **Estado**: Completo y operativo
 - ✅ 5 niveles definidos: observe, suggest, assist, autopilot, guardian
 - ✅ Configuración en config/work-objectives.json (DEFAULT_CONFIG línea 81-91)
@@ -44,9 +47,11 @@ type: decision
 - ✅ AutonomyMode type exportado (línea 16)
 
 ### SUGERENCIA 4: Capa de Vida Diaria / Operaciones Personales ❌ NO IMPLEMENTADO
+
 **Estado**: No existe. No solicitado para operar en esta sesión.
 
 ### SUGERENCIA 5: Plantillas de Dominio ⚠️ PARCIAL
+
 **Estado**: Estructura existe, dominios específicos NO
 - ✅ Model profile switcher exists (src/model-profile-switcher.ts)
 - ✅ Perfiles cheap/balanced/premium con temperature + hallucinationGuard
@@ -61,12 +66,14 @@ type: decision
   - Incident Commander
 
 ## PRÓXIMOS PASOS IDENTIFICADOS:
+
 1. Crear src/user-operating-context.ts (Sugerencia 1)
 2. Extender work-objectives.ts para decisiones humanas explícitas (Sugerencia 2)
 3. Crear templates de dominio en config/domain-templates/ (Sugerencia 5)
 4. Crear CLI unificado: `npm run user:context` para gestión completa
 
 ## RECURSOS EXISTENTES A REUTILIZAR:
+
 - event-sourcing.ts (hash-chain auditing)
 - recommend-agent.ts (routing inteligente)
 - DatabaseManager (Nexus) para persistencia

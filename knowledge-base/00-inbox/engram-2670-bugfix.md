@@ -11,12 +11,12 @@ type: bugfix
 
 **Why**: OpenCode tiene mecanismo de herencia de modelos automática desde orquestador padre
 
-**Where**: 
+**Where**:
 - opencode.json (configuración de 21 agentes)
 - Sistema delegation via `task` tool
 - Model broker con fallback chains configuradas
 
-**Learned**: 
+**Learned**:
 - OpenCode intenta heredar modelo automáticamente de orquestador actual (`littellmott-nuevo/deepseek-v3-2`)
 - El nombre `inherit-from-session/` parece ser pseudo-modelo para "use same as parent"
 - Si falla: "Model not found: inherit-from-session/"
@@ -24,7 +24,7 @@ type: bugfix
 - Añadir `provider: "opencode"` explícitamente
 - Modificar `model-health-registry.json` routing rules
 
-**Fix Aplicado**: 
+**Fix Aplicado**:
 - orchestrator: `no_inherit_model: true`
 - sdd-apply: `no_inherit_model: true`, `provider: "opencode"`
 

@@ -10,7 +10,7 @@ type: bugfix
 **What**: Resuelto el cuelgue de grype en container-scan (red) + integración en hooks y CI. Stack 95/95 health, git limpio.
 **Why**: Grype se colgaba indefinidamente en el chequeo de actualizaciones de red (Windows); el scanner daba exit 2 "toolchain unavailable" y tardaba 99s.
 **Where**: src/container-scan.ts, .lefthook.yml, .github/workflows/reusable-security.yml
-**Learned**: 
+**Learned**:
 1. LA CAUSA RAÍZ: grype intenta chequear actualizaciones de DB/app en cada ejecución (GRYPE_DB_AUTO_UPDATE + GRYPE_CHECK_FOR_APP_UPDATE). Cuando la URL de update es inalcanzable, se cuelga SIN timeout útil. Fix: pasar esas env vars en spawnSync env (no hay flag CLI --offline en grype 0.117.0).
 2. Trivy tiene el mismo problema: necesita --skip-db-update para no colgarse en el fetch de DB. En el entorno: trivy sbom con --skip-db-update funciona en 3.5s, grype con env vars en ~9s.
 3. Solución implementada: Path 1 = grype (con env vars), Path 1b = trivy sbom --skip-db-update (fallback), Path 3 = trivy fs --skip-db-update. El orden de proveedores en scanArtifacts es ahora: grype SBOM → trivy SBOM → syft+grype dir → trivy fs.

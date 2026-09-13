@@ -11,7 +11,7 @@ type: bugfix
 
 **Why**: Dashboard no mostraba datos ni gráficos. Había bugs en funciones bar() y line() con Math.max(...va) que fallaba con strings. Faltaba sección Live y botones de export.
 
-**Where**: 
+**Where**:
 - reports/dashboard.html - fixes de JS y nuevas secciones
 - scripts/metrics/dashboard-render.ps1 - regeneración de datos
 

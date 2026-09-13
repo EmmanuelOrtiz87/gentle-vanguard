@@ -9,7 +9,7 @@ type: decision
 
 **Problem**: Stack relies on OpenCode plugin auto-behavior for session lifecycle. Works on OpenCode, FAILS silently on Claude/Cline/Cursor/etc.
 
-**Root Cause**: 
+**Root Cause**:
 - session-autostart.ts: NO explicit engram_mem_session_start call
 - session-close-orchestrator.ts: Only HTTP API (fallback), no explicit MCP engram_mem_session_end
 - Assumes plugin does it automatically (only true for OpenCode)

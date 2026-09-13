@@ -285,6 +285,7 @@ The brand's strongest visual signature is the **device-mockup hero** — a cente
 ## Colors
 
 ### Brand & Accent
+
 - **Black** (`{colors.primary}` — #000000): Primary CTA fill. Used scarcely.
 - **Black Active** (`{colors.primary-active}` — #1a1a1a): Press state.
 - **Text Link Blue** (`{colors.text-link}` — #0d74ce): Inline body links inside long-form copy. Scoped narrowly — never on CTAs.
@@ -292,6 +293,7 @@ The brand's strongest visual signature is the **device-mockup hero** — a cente
 - **Bright Cyan** (`{colors.accent-link-bright}` — #47c2ff): Used very sparingly inside docs widget links.
 
 ### Surface
+
 - **Canvas** (`{colors.canvas}` — #ffffff): Pure white page floor.
 - **Canvas Soft** (`{colors.canvas-soft}` — #fafafa): Subtle alternating band.
 - **Surface Card** (`{colors.surface-card}` — #ffffff): Pure white card.
@@ -300,14 +302,17 @@ The brand's strongest visual signature is the **device-mockup hero** — a cente
 - **Surface Dark Elevated** (`{colors.surface-dark-elevated}` — #1a1a1a): One step lighter inside dark cards.
 
 ### Atmospheric Backdrop
+
 - **Sky Light** (`{colors.gradient-sky-light}` — #cfe7ff) + **Sky Mid** (`{colors.gradient-sky-mid}` — #a8c8e8): The soft sky-blue gradient wash behind the homepage hero only. Not a brand action color.
 
 ### Hairlines
+
 - **Hairline** (`{colors.hairline}` — #f0f0f3): Default 1px divider.
 - **Hairline Soft** (`{colors.hairline-soft}` — #f5f5f7): Lighter divider.
 - **Hairline Strong** (`{colors.hairline-strong}` — #dcdee0): Stronger panel outline.
 
 ### Text
+
 - **Ink** (`{colors.ink}` — #171717): Display, body emphasis.
 - **Body** (`{colors.body}` — #60646c): Default running-text — slightly cool gray.
 - **Body Strong** (`{colors.body-strong}` — #171717): Same as ink.
@@ -318,6 +323,7 @@ The brand's strongest visual signature is the **device-mockup hero** — a cente
 - **On Dark Soft** (`{colors.on-dark-soft}` — #b0b4ba): Muted off-white on dark.
 
 ### Semantic
+
 - **Warning** (`{colors.accent-warning}` — #ab6400): Warning text inside docs callouts.
 - **Preview** (`{colors.accent-preview}` — #8145b5): "Preview" tag color.
 - **Success** (`{colors.semantic-success}` — #16a34a): Confirmation.
@@ -326,6 +332,7 @@ The brand's strongest visual signature is the **device-mockup hero** — a cente
 ## Typography
 
 ### Font Family
+
 **Inter** is the single sans family across every text role. **JetBrains Mono** carries every code surface. Fallback: `-apple-system, system-ui, sans-serif`.
 
 ### Hierarchy
@@ -348,21 +355,25 @@ The brand's strongest visual signature is the **device-mockup hero** — a cente
 | `{typography.nav-link}` | 14px | 500 | 1.4 | 0 | Top-nav menu |
 
 ### Principles
+
 - **Display weight stays at 600** — confident but not bombastic. Inter at 600 reads cleaner than 700.
 - **Negative letter-spacing on display** — -0.5px to -1.92px tracking.
 - **JetBrains Mono on every code surface.**
 
 ### Note on Font Substitutes
+
 Inter and JetBrains Mono are both freely available — the system uses them directly.
 
 ## Layout
 
 ### Spacing System
+
 - **Base unit:** 4px.
 - **Tokens:** `{spacing.xxs}` 4px · `{spacing.xs}` 8px · `{spacing.sm}` 12px · `{spacing.base}` 16px · `{spacing.md}` 20px · `{spacing.lg}` 24px · `{spacing.xl}` 32px · `{spacing.xxl}` 48px · `{spacing.section}` 96px.
 - **Section padding:** 96px.
 
 ### Grid & Container
+
 - Max content width: ~1200px.
 - Editorial body: 12-column grid.
 - Feature card grids: 2-up at desktop for hero splits, 3-up for benefit grids.
@@ -370,6 +381,7 @@ Inter and JetBrains Mono are both freely available — the system uses them dire
 - Footer: 5-column at desktop.
 
 ### Whitespace Philosophy
+
 Generous editorial pacing. The white canvas does not compete with the hero's gradient sky wash; cards inside dense workflow sections sit close (16-24px gap).
 
 ## Elevation & Depth
@@ -384,6 +396,7 @@ Generous editorial pacing. The white canvas does not compete with the hero's gra
 | Dark inversion | `{colors.surface-dark}` (#171717) | Dark feature cards, code blocks, featured pricing |
 
 ### Decorative Depth
+
 - **Sky-blue gradient backdrop** in the hero only — atmospheric depth without claiming to be a brand color.
 - **Device mockup composite** as page chrome — MacBook + iPhone showing real Expo dev surfaces.
 
@@ -472,6 +485,7 @@ Compact developer-ergonomic radii — 8px CTAs, 12px cards. Pill geometry is res
 ## Do's and Don'ts
 
 ### Do
+
 - Reserve `{colors.primary}` (black) for primary CTAs.
 - Use `{colors.text-link}` (blue) for inline body links only — never on CTAs or buttons.
 - Set every CTA at `{rounded.md}` (8px) — developer dialect.
@@ -480,6 +494,7 @@ Compact developer-ergonomic radii — 8px CTAs, 12px cards. Pill geometry is res
 - Pair the hero with the device-mockup composite — it's the page chrome.
 
 ### Don't
+
 - Don't introduce a saturated brand action color. Black is the only CTA fill.
 - Don't use blue (`{colors.text-link}`) on a CTA. Inline links only.
 - Don't drop display below weight 600 or above 700.
@@ -499,10 +514,12 @@ Compact developer-ergonomic radii — 8px CTAs, 12px cards. Pill geometry is res
 | Wide | > 1280px | Content caps at 1200px. |
 
 ### Touch Targets
+
 - Primary CTA at 40px height — at WCAG AA, padded for AAA.
 - Search input 44px — at AAA.
 
 ### Collapsing Strategy
+
 - Top nav switches to hamburger below 768px.
 - Device mockup MacBook + iPhone collapses to a single iPhone preview on mobile.
 - Feature grid: 3-up → 2-up → 1-up.

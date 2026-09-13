@@ -46,7 +46,7 @@ type: decision
 
 **Why**: To create a unified token optimization system that reduces token usage across the stack while maintaining response quality.
 
-**Where**: 
+**Where**:
 - src/output-compression.ts
 - src/chat-level-enforcer.ts  
 - src/token-optimization-orchestrator.ts

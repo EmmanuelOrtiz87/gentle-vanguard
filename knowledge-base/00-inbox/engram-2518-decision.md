@@ -11,12 +11,12 @@ type: decision
 
 **Why**: Dashboard tenía problemas de persistencia en Windows. Se resolvió ejecutando dashboard-start.ts completo.
 
-**Where**: 
+**Where**:
 - Dashboard: http://localhost:5173/ (Web)
 - WS API: http://localhost:8080/api/metrics
 - Guardian: src/dashboard-guardian.ts (creado)
 
-**Status**: 
+**Status**:
 - PASS: 84 (98.8%)
 - WARN: 1 (model provider - expected)
 - FAIL: 0

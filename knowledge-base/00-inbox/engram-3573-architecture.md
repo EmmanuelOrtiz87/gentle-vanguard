@@ -18,7 +18,7 @@ type: architecture
   - guide.md (moved from docs/operations/oc-keyring-guide.md)
   - rchitecture.md (moved from docs/operations/oc-keyring-architecture.md)
   - changelog.md (moved + v1.0.1 entry)
-  - 	roubleshooting.md (NEW — common issues with solutions)
+  -  roubleshooting.md (NEW — common issues with solutions)
   - lternatives.md (NEW — workarounds for OpenCode rate limits / quotas)
   - usiness-context.md (NEW — business case + security posture)
   - incidents/2026-09-01-zen-free-rate-limit.md (NEW — post-mortem)

@@ -267,10 +267,12 @@ Typography pairs SF Pro Rounded (display headings, weight 500–600) with the op
 > **Source pages:** `/` (home) and `/pricing`. The chrome palette is identical across both — only content changes.
 
 ### Brand & Accent
+
 - **Pure Black** (`{colors.primary}` — `#000000`): the brand. Every primary CTA, every black pill, every link in the nav, and every solid icon. There is no other "brand color."
 - **Ink Deep** (`{colors.ink-deep}` — `#090909`): pressed-state black for the primary pill — a single notch below pure.
 
 ### Surface
+
 - **Canvas** (`{colors.canvas}` — `#ffffff`): the page itself. Nearly every surface in the system.
 - **Soft Surface** (`{colors.surface-soft}` — `#fafafa`): install-snippet pill background, search pill, secondary chip backgrounds, alternating row fill where one is needed.
 - **Surface Dark** (`{colors.surface-dark}` — `#171717`): the dark "Max" pricing card and dark CTA strips. The single inverted surface in the system.
@@ -278,6 +280,7 @@ Typography pairs SF Pro Rounded (display headings, weight 500–600) with the op
 - **Hairline Strong** (`{colors.hairline-strong}` — `#d4d4d4`): rare slightly stronger divider where extra separation is needed (e.g., between unrelated FAQ groups).
 
 ### Text
+
 - **Ink** (`{colors.ink}` — `#000000`): all headlines, primary nav links, button text on light surfaces, prices on pricing cards.
 - **Charcoal** (`{colors.charcoal}` — `#525252`): list-item text and disabled-state secondary copy.
 - **Body** (`{colors.body}` — `#737373`): default body color for paragraph copy, FAQ answers, footer link text — the system's most-used text color after pure black.
@@ -286,6 +289,7 @@ Typography pairs SF Pro Rounded (display headings, weight 500–600) with the op
 - **On Dark Mute** (`{colors.on-dark-mute}` — `rgba(255,255,255,0.7)`): secondary copy inside the dark "Max" pricing card.
 
 ### Semantic
+
 The system has effectively no error/success/warning palette in its public marketing surfaces — there are no validation states, no destructive flows, no banners. The only "semantic" colors are the macOS terminal traffic lights inside the terminal mockup:
 
 - **Terminal Red** (`{colors.terminal-red}` — `#ff5f56`): close-window dot.
@@ -295,11 +299,13 @@ The system has effectively no error/success/warning palette in its public market
 These appear only inside `{component.terminal-card}` and have no other use.
 
 ### Focus
+
 - **Focus Ring** (`{colors.focus-ring}` — `rgba(59,130,246,0.5)`): translucent blue browser-default focus ring around interactive elements. The only blue in the system.
 
 ## Typography
 
 ### Font Family
+
 - **SF Pro Rounded** (display headings) — Apple's rounded geometric sans, used at weights 500 and 600 for headlines from `{typography.display-xl}` (36px) down to `{typography.heading-lg}` (24px). Falls back to `system-ui` → `-apple-system`.
 - **ui-sans-serif** (body, links, buttons, captions) — the operating system's default sans-serif. Carries every non-display text role at 12–20px. Falls back through `system-ui` and platform emoji families.
 - **ui-monospace** (code, install snippet, command tags) — the OS default monospace. Used inside the terminal mockup, the inline `curl` install pill, and any inline `<code>` formatting. Falls back to SFMono-Regular → Menlo → Monaco → Consolas.
@@ -325,20 +331,24 @@ The pairing of SF Pro Rounded display + system sans body + system mono code is i
 | `{typography.button-md}` | 14px | 500 | 1 | 0 | Every button label across the system |
 
 ### Principles
+
 The typography is built for legibility at small sizes on a flat-white canvas. SF Pro Rounded's softened terminals on the heading face do almost all of the brand expression; everything below 20px collapses into the operating system's default sans, which renders identically to the way docs.ollama.com and the Ollama CLI's own help text would appear in a terminal. There is almost no letter-spacing variation, no display-only weights, no italic, and the heading-to-body ratio compresses tightly (36 → 30 → 24 → 20 → 16) so the page reads as a single readable column rather than a marketing pyramid.
 
 ### Note on Font Substitutes
+
 SF Pro Rounded is Apple-licensed and ships only on macOS/iOS. On other systems it falls back to `system-ui` (Segoe UI / Roboto / DejaVu Sans depending on platform) — Ollama explicitly accepts that the heading face will look slightly different on Windows/Linux. The closest open-source substitute is **Nunito** (rounded geometric sans, weights 500/600). For the body face, **Inter** is a near-perfect match for `system-ui` rendered metrics. For code, **JetBrains Mono** or **Fira Code** are the canonical open-source substitutes for `ui-monospace`.
 
 ## Layout
 
 ### Spacing System
+
 - **Base unit:** 8px (with finer 2/4/6px steps available for tight inline gaps)
 - **Tokens (front matter):** `{spacing.xxs}` (2px) · `{spacing.xs}` (4px) · `{spacing.sm}` (8px) · `{spacing.md}` (12px) · `{spacing.lg}` (16px) · `{spacing.xl}` (24px) · `{spacing.xxl}` (32px) · `{spacing.section}` (88px)
 - **Universal section rhythm:** every page uses `{spacing.section}` (88px) as the vertical gap between major content blocks (hero → automate → start local/scale cloud → your data stays yours → get-started footer call). This is the single largest spacing token in the system and it is used liberally.
 - **Card internal padding:** pricing cards sit at `{spacing.xxl}` (32px) all around; FAQ rows use `{spacing.lg}` (16px) vertical with no horizontal padding.
 
 ### Grid & Container
+
 - **Max width:** ~720px content column on the home page (the whole page is laid out as a single narrow reading column with optional 2-column splits inside specific sections).
 - **Pricing grid:** 3-up cards at desktop with a max content width of ~960px; collapses to 1-up below 768px.
 - **Automate-your-work split:** desktop 50/50 left-text/right-terminal-mockup; mobile stacks vertical with the terminal below the text.
@@ -346,6 +356,7 @@ SF Pro Rounded is Apple-licensed and ships only on macOS/iOS. On other systems i
 - **Footer:** single-row of small body-sm links, center-aligned at desktop, wrapping to two rows on narrow screens.
 
 ### Whitespace Philosophy
+
 Whitespace is the entire layout. Sections are separated by 88px of plain white air, never by decorative dividers, never by colored bands. Inside a section, content sits in a tight reading column with no decorative columns, callout boxes, or lifted cards. The site treats the page as a long-form Markdown document, and the air between sections is the equivalent of a blank line in Markdown source.
 
 ## Elevation & Depth
@@ -359,6 +370,7 @@ Whitespace is the entire layout. Sections are separated by 88px of plain white a
 The system has no drop-shadow elevation at all. Nothing lifts, nothing floats, nothing layers. The only depth cue beyond hairline borders is the single dark surface used on the highest-tier pricing card to draw attention to it.
 
 ### Decorative Depth
+
 The site has effectively zero decorative depth in the traditional sense. The "depth" comes entirely from two recurring devices:
 - **The hand-drawn llama mascot** — appearing once at the top of the hero, once at the top of each pricing card, and once next to the lock icon in the "Your data stays yours" section. It is the only illustration in the system.
 - **A single line-drawn lock icon** — used in the data-privacy section. Stroke-only, no fill, drawn in `{colors.ink}`.
@@ -378,6 +390,7 @@ The site has effectively zero decorative depth in the traditional sense. The "de
 The dominant shape vocabulary is just two values: pills (`{rounded.full}`) for everything interactive and 12px (`{rounded.lg}`) for the few cards in the system. There are no medium-radius "soft cards" — surfaces are either pills or rectangles with corners large enough to read as deliberately soft.
 
 ### Photography Geometry
+
 There is no photography. The only image-like elements are:
 - **The llama mascot** — a hand-drawn line illustration, ~80–120px on the hero, ~32–48px when it appears as a pricing-card eyebrow icon.
 - **The lock icon** — single stroke line drawing in the privacy section.
@@ -477,6 +490,7 @@ There is no photography. The only image-like elements are:
 ## Do's and Don'ts
 
 ### Do
+
 - Treat the page like a Markdown document: single reading column, plenty of `{spacing.section}` air between sections, no decorative dividers.
 - Use `{component.button-primary}` (black pill) for every primary action. There is no green, no blue, no brand-tinted CTA.
 - Default to `{rounded.full}` for any interactive element. Cards get `{rounded.lg}` (12px) and that is the only exception.
@@ -486,6 +500,7 @@ There is no photography. The only image-like elements are:
 - Keep the llama mascot the only illustration in the system. It is the brand.
 
 ### Don't
+
 - Don't introduce gradients, drop shadows, or atmospheric backgrounds. The canvas is pure `{colors.canvas}`.
 - Don't add brand colors. The system is `{colors.primary}` (black) on `{colors.canvas}` (white) with `{colors.body}` (gray) text. That is it.
 - Don't soften pills or sharpen cards — pills stay `{rounded.full}`, cards stay `{rounded.lg}`. Don't introduce `{rounded.md}` for buttons or `{rounded.full}` for cards.
@@ -506,9 +521,11 @@ There is no photography. The only image-like elements are:
 | mobile | 640px | Hero headline drops from `{typography.display-xl}` (36px) to ~28px; install-snippet wraps; section padding tightens |
 
 ### Touch Targets
+
 All interactive elements meet WCAG AA at the 36–40px height range. `{component.button-primary}` and `{component.button-secondary}` sit at 36px height with 20px horizontal padding, giving an effective tappable area of ~36×80px which exceeds the 44×44px AAA threshold via the inline padding. `{component.text-input}` sits at 40px. `{component.search-pill}` sits at 36px height with 16px padding. Footer links use `{typography.caption-sm}` (12px) but receive ~12px line-height + ~8px vertical padding for a tappable row of ~32–36px.
 
 ### Collapsing Strategy
+
 - **Primary nav:** desktop horizontal → tablet-narrow hamburger drawer at 768px. The black "Download" CTA stays visible at all widths; it never collapses into the menu.
 - **Search pill:** desktop fixed width ~360px → tablet compressed to ~240px → mobile collapses to icon-only with a full-width overlay on tap.
 - **Pricing grid:** 3-up → 2+1 → 1-up stacked at 850, 768, and below. The dark "Max" card stays in its inverted treatment at every breakpoint.
@@ -518,6 +535,7 @@ All interactive elements meet WCAG AA at the 36–40px height range. `{component
 - **Install-snippet pill:** wraps `curl` text to a second line on narrow screens rather than truncating; the copy-icon stays anchored to the right edge.
 
 ### Image Behavior
+
 The only image asset is the llama mascot (raster PNG at multiple resolutions: 16/32/48/64/180/192/512px). It is rendered at fixed pixel sizes on the hero and pricing cards rather than scaling responsively — the brand asset is treated like a logo, not a hero image.
 
 ## Iteration Guide

@@ -514,7 +514,10 @@ function cmdProposals(args: string[]): CommandResult {
   switch (subcmd) {
     case 'list': {
       if (!existsSync(manifestPath)) {
-        return { success: false, message: 'No propagation manifest found at .design-hub/approved/manifest.json' };
+        return {
+          success: false,
+          message: 'No propagation manifest found at .design-hub/approved/manifest.json',
+        };
       }
       try {
         const manifest = JSON.parse(readFileSync(manifestPath, 'utf-8'));
@@ -523,10 +526,15 @@ function cmdProposals(args: string[]): CommandResult {
         }
         console.log('📦 Approved assets (propagation manifest):');
         console.log('');
-        manifest.forEach((entry: { name?: string; type?: string; source?: string; target?: string }, i: number) => {
-          console.log(`  ${i + 1}. ${entry.name ?? 'unnamed'} (${entry.type ?? 'unknown'})`);
-          console.log(`     ${entry.source ?? '?'} → ${entry.target ?? '?'}`);
-        });
+        manifest.forEach(
+          (
+            entry: { name?: string; type?: string; source?: string; target?: string },
+            i: number,
+          ) => {
+            console.log(`  ${i + 1}. ${entry.name ?? 'unnamed'} (${entry.type ?? 'unknown'})`);
+            console.log(`     ${entry.source ?? '?'} → ${entry.target ?? '?'}`);
+          },
+        );
         console.log('');
         return { success: true, message: `${manifest.length} approved assets listed` };
       } catch (e) {
@@ -560,8 +568,12 @@ function cmdProposals(args: string[]): CommandResult {
       console.log('────────────────────────');
       console.log(`  Official identity: v2.0 APPLICATION FINAL (SVG Asset System v2.0)`);
       console.log(`  ADR:              ADR-0033 (accepted 2026-09-08)`);
-      console.log(`  Official logo:    ${officialLogo.replace(ROOT + '\\', '')} (${existsSync(officialLogo) ? 'present' : 'MISSING'})`);
-      console.log(`  Propagation:      ${manifestExists ? `${manifestCount} assets in manifest` : 'no manifest'}`);
+      console.log(
+        `  Official logo:    ${officialLogo.replace(ROOT + '\\', '')} (${existsSync(officialLogo) ? 'present' : 'MISSING'})`,
+      );
+      console.log(
+        `  Propagation:      ${manifestExists ? `${manifestCount} assets in manifest` : 'no manifest'}`,
+      );
       console.log(`  Brand Editor:     http://127.0.0.1:8095/src/v3-editor/`);
       console.log(`  Proposals:        http://127.0.0.1:8095/src/proposals/`);
       console.log('');
@@ -1171,12 +1183,16 @@ async function main(): Promise<void> {
         console.log('  explain   Explicar la clasificación de riesgo en detalle.');
         console.log('  factors   Listar factores de riesgo archivo por archivo.');
         console.log('  review    Ejecutar review 4R (rdd-4r-review).');
-        console.log('  gates     Validar gates de delivery (post-apply/pre-commit/pre-push/pre-pr/release).');
+        console.log(
+          '  gates     Validar gates de delivery (post-apply/pre-commit/pre-push/pre-pr/release).',
+        );
         console.log('');
         console.log('Options:');
         console.log('  --staged   Solo cambios staged');
         console.log('  --json     Salida JSON (assess/classify)');
-        console.log('  --lens     Lens específica para review (security|maintainability|reliability|resilience)');
+        console.log(
+          '  --lens     Lens específica para review (security|maintainability|reliability|resilience)',
+        );
         console.log('');
         console.log('Exit codes (assess/classify): 0=low · 1=standard · 2=high');
         process.exit(0);

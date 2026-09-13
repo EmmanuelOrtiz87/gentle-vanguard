@@ -13,7 +13,7 @@ type: decision
 
 **Where**:
 - `src/proactive-intelligence-engine.ts` - Motor principal (678 líneas)
-- `src/document-processor.ts` - Procesamiento de documentos multi-formato 
+- `src/document-processor.ts` - Procesamiento de documentos multi-formato
 - `src/data-analyst.ts` - Análisis estadístico y correlaciones
 - `src/pre-process-input.ts` - Integración PIE en pipeline de pre-procesamiento
 - `.opencode/skills/document-processor/SKILL.md` - Skill documentación

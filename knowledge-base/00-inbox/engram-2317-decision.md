@@ -11,7 +11,7 @@ type: decision
 
 **Why**: User requested validation of subagent functionality and analysis of missing coverage for complete stack operation
 
-**Where**: 
+**Where**:
 - opencode.json (subagent configuration)
 - config/auto-delegation.json (routing and profiles)
 - Simulated requests to all 9 configured subagents

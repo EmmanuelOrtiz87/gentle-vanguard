@@ -17,7 +17,7 @@ type: bugfix
 
 **Where**: src/sync-to-public.ts (nuevo), .github/workflows/{sync-public,reusable-governance,dashboard-auto-refresh}.yml
 
-**Learned**: 
+**Learned**:
 - `pnpm tsx` NO es válido — el repo usa `npx tsx` (convención verificada en package.json)
 - El `auto-norm-enforcer.ts` usa args `--check/--apply/--report`, no `-Trigger` del PS1
 - Los scripts de deployment están ENCRIPTADOS (.enc) en scripts/utilities/ops/DEPLOYMENT — no se pueden invocar directamente

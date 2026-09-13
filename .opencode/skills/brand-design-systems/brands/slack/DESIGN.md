@@ -255,6 +255,7 @@ Buttons are pill-shaped at 90px radius with an unusual amount of horizontal padd
 > **Source pages:** home (`/`), `/features/channels`, `/pricing`, `/contact-sales`.
 
 ### Brand & Accent
+
 - **Aubergine** (`{colors.primary}` — `#4a154b`): The brand's primary surface and CTA color. Deep, warm purple with a hint of ruby — used on filled buttons, the featured pricing tier, the footer band, and the brand wordmark.
 - **Aubergine Deep** (`{colors.primary-deep}` — `#481a54`): A near-identical sibling of `{colors.primary}` extracted from a different surface; treat as functionally equivalent.
 - **Aubergine Press** (`{colors.primary-press}` — `#611f69`): Pressed-state lift of the primary, slightly lighter and warmer.
@@ -263,6 +264,7 @@ Buttons are pill-shaped at 90px radius with an unusual amount of horizontal padd
 - **Link Hover** (`{colors.link-hover}` — `#3860be`): A more saturated blue used on link hover state.
 
 ### Surface
+
 - **Canvas White** (`{colors.canvas}` — `#ffffff`): Default content surface.
 - **Canvas Cream** (`{colors.canvas-cream}` — `#f4ede4`): Warm off-white used on hero gradients and feature bands. Adds editorial warmth.
 - **Canvas Lavender** (`{colors.canvas-lavender}` — `#f9f0ff`): Pale lavender tint used as the secondary-button surface and as a soft section band.
@@ -270,12 +272,14 @@ Buttons are pill-shaped at 90px radius with an unusual amount of horizontal padd
 - **Hairline** (`{colors.hairline}` — `#e6e6e6`): 1px borders on cards and table dividers.
 
 ### Text
+
 - **Ink** (`{colors.ink}` — `#1d1d1d`): Primary body text on light surfaces. Just shy of pure black.
 - **Ink Mute** (`{colors.ink-mute}` — `#696969`): Secondary text, captions, helper copy.
 - **On Primary** (`{colors.on-primary}` — `#ffffff`): Text on aubergine surfaces and filled CTAs.
 - **On Aubergine Mute** (`{colors.on-aubergine-mute}` — `#d9bdde`): Secondary text on aubergine surfaces — a desaturated mauve that reads as muted-light.
 
 ### Semantic
+
 - **Error** (`{colors.semantic-error}` — `#cc4117`): Form error and destructive-action color.
 - **Success** (`{colors.semantic-success}` — `#007a5a`): Inline success indicators.
 
@@ -310,27 +314,32 @@ Both faces are proprietary and not freely available. Substitute with **Inter** (
 | `{typography.micro-cap}` | 12px | 700 | 1.0 | 0.96px | All-caps eyebrow |
 
 ### Principles
+
 - **Tight tracking on display.** Negative letter-spacing across 32–64px sizes; the proprietary face is wide by default, the negative tracking pulls it into editorial density.
 - **Body at 1.55 leading.** Slightly relaxed for marketing readability without crossing into airy / 1.7+ territory.
 - **Caps for eyebrows.** All eyebrows render uppercase with positive 0.96–0.144px tracking depending on size.
 
 ### Note on Font Substitutes
+
 Use **Inter** (open-source Google Fonts) for both display and UI tiers — Inter at 700 weight with `-0.768px` letter-spacing closely approximates the brand's display behavior. For maximum brand fidelity, **Lato** is a softer humanist alternative that pairs well at body sizes. Avoid System UI fonts on the body — the brand's subtle warmth disappears at default weights.
 
 ## Layout
 
 ### Spacing System
+
 - **Base unit**: 8px (with 4 / 12 / 16 / 20 / 24 / 28 sub-tokens for fine vertical rhythm).
 - **Tokens**: `{spacing.xs}` 4px · `{spacing.sm}` 8px · `{spacing.md}` 12px · `{spacing.lg}` 16px · `{spacing.xl}` 20px · `{spacing.xxl}` 24px · `{spacing.huge}` 28px.
 - **Section padding**: 64–96px on marketing surfaces; tightens to 48px on transactional pages.
 - **Card internal padding**: 32px on pricing cards; 48px on aubergine band cards.
 
 ### Grid & Container
+
 - Marketing pages center in a ~1240px container with edge-bleeding pastel-mesh gradients escaping the container.
 - Pricing collapses 4-up → 2-up → 1-up at 992 / 768 breakpoints.
 - Statistics row: 3-column grid with massive 50px aubergine display numerals.
 
 ### Whitespace Philosophy
+
 The pastel-mesh gradients fill most of the negative space on marketing pages — sections feel expansive without being literally empty. On transactional pages the gradients drop, and whitespace reverts to traditional 48px-section breathing room.
 
 ## Elevation & Depth
@@ -344,6 +353,7 @@ The pastel-mesh gradients fill most of the negative space on marketing pages —
 | 4 | `box-shadow: rgb(97,31,105) 0 0 0 1px inset` | Aubergine inset border (button focus, special chrome) |
 
 ### Decorative Depth
+
 The brand's depth language is the **pastel-mesh gradient** — peach, lavender, dusty green stops blurred together at large radii to create soft atmospheric backdrops behind product UI screenshots. The gradient is the brand's flavor of "depth without shadows": the eye perceives the product mockup as floating above a luminous backdrop without any literal lift.
 
 ## Shapes
@@ -361,6 +371,7 @@ The brand's depth language is the **pastel-mesh gradient** — peach, lavender, 
 | `{rounded.pill}` | 90px | All buttons |
 
 ### Photography Geometry
+
 The brand uses **product UI screenshots** more than photography. UI mockups sit on top of pastel-mesh gradients at roughly 4:3 aspect, with no shadow but with the gradient providing the "lift" the eye expects. Real photography appears in customer-logo strips and the occasional case-study card, treated as full-bleed inside `{rounded.xl}` containers.
 
 ## Components
@@ -432,6 +443,7 @@ The brand uses **product UI screenshots** more than photography. UI mockups sit 
 ## Do's and Don'ts
 
 ### Do
+
 - Reserve `{colors.primary}` aubergine for filled CTAs, the featured pricing tier, and the closing aubergine band — it's the brand's chromatic monotheism.
 - Use `{rounded.pill}` (90px) for every button across the system — never a rounded-rectangle button.
 - Pair display tiers with negative letter-spacing (`-0.768px` at 64px); the proprietary face needs the tracking pull.
@@ -439,6 +451,7 @@ The brand uses **product UI screenshots** more than photography. UI mockups sit 
 - Use `{colors.link-blue}` for inline links — it's the only chromatic departure from aubergine and is part of the brand voice.
 
 ### Don't
+
 - Don't add a third accent color to the system — the aubergine + blue link combination is exhaustive.
 - Don't shrink button padding below `14px 28px` — the over-padded pill is part of the brand feel.
 - Don't render display tiers at default tracking (0) — without negative letter-spacing the headlines read loose and unedited.
@@ -458,10 +471,12 @@ The brand uses **product UI screenshots** more than photography. UI mockups sit 
 | Mobile | < 768px | Pricing 1-up; hamburger nav; display-xxl drops 64 → 40px |
 
 ### Touch Targets
+
 - Pill buttons hit ≥ 48×48px due to the over-padded geometry. WCAG AAA compliant.
 - Form fields stay at the 44px minimum height.
 
 ### Collapsing Strategy
+
 - Display tiers stair-step 64 → 50 → 32 → 28 → 24 across breakpoints.
 - Pastel-mesh gradients re-tile on mobile to prevent the wash from disappearing entirely.
 - Floating product UI mockups crop to the most actionable inner panel on mobile.
@@ -469,6 +484,7 @@ The brand uses **product UI screenshots** more than photography. UI mockups sit 
 - Top nav collapses to hamburger below 768px; menu inherits canvas color.
 
 ### Image Behavior
+
 Product UI mockups use `srcset` for desktop / tablet / mobile crops; the mobile crop centers on the most actionable inner panel rather than scaling the whole composite down.
 
 ## Iteration Guide

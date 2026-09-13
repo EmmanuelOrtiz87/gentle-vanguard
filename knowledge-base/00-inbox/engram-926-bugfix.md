@@ -11,14 +11,14 @@ type: bugfix
 
 **Why**: Scripts referenced files at paths that no longer existed, causing silent failures or errors at runtime.
 
-**Where**: 
+**Where**:
 - scripts/diagnostics/system-diagnostics.ps1:98,284,291
 - scripts/adaptive/karpathy-enforcer.ps1:11,16-25
 - hooks/post-checkout.ps1:44
 - scripts/validation/update-all.ps1:68,168
 - scripts/utilities/platform-compat.ps1:11
 
-**Learned**: 
+**Learned**:
 - karpathy-enforcer.ps1 had the worst issue: `$repoRoot` was used in the param block default value but NEVER defined anywhere in the script. Fixed by adding repoRoot computation and moving FailureLearningDb init to body.
 - SKILLS-TOOLS/ subdirectory under scripts/utilities/ contains install-engram.ps1 and ensure-tools-active.ps1
 - UTILITIES/ subdirectory under scripts/utilities/ contains auto-init-dev-environment.ps1

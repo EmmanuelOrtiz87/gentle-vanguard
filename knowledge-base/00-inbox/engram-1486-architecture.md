@@ -9,7 +9,7 @@ type: architecture
 
 **What**: Implemented v6.3 Dashboard Multi-Tenant — per-tenant metrics filtering and tenant selector UI in the React dashboard
 **Why**: Allow users to switch between tenants and see only that tenant's scoped data in the dashboard
-**Where**: 
+**Where**:
 - apps/web-dashboard/src/components/TenantSelector.tsx (new — dropdown with useSearchParams)
 - apps/web-dashboard/src/hooks/useMetrics.ts (added tenantId state/param, ?tenantId= fetch URL)
 - apps/web-dashboard/src/types/tenant.ts (new — TenantInfo, TenantMetrics interfaces)

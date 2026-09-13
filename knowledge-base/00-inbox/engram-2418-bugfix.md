@@ -11,11 +11,11 @@ type: bugfix
 
 **Why**: El plugin estaba mal implementado - injectaba el recordatorio de graphify antes de cada comando bash, no solo cuando el usuario escribía /graphify. Según AGENTS.md línea 23: "When the user types /graphify, invoke the skill tool with skill: graphify" - esto es un trigger del usuario, no un plugin automático.
 
-**Where**: 
+**Where**:
 - .opencode/plugins/graphify.js (eliminado)
 - .opencode/opencode.json (eliminada referencia a plugin)
 
-**Learned**: 
+**Learned**:
 - Los plugins de OpenCode se cargan automáticamente al inicio
 - El plugin usaba el hook "tool.execute.before" para inyectar en bash
 - La documentación decía invocar skill, no usar plugin automático

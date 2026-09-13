@@ -13,7 +13,7 @@ type: decision
 
 **Where**: rules/NORMATIVA-PNPM-SECURITY.md, package.json, opencode.json validation scripts
 
-**Learned**: 
+**Learned**:
 - pnpm v11.1.1 available and working
 - All devDependencies installed cleanly with --ignore-scripts
 - build:mcp script added to postinstall but NOT auto-executed (postinstall disabled by --ignore-scripts on future installs). Must run explicitly: pnpm build:mcp

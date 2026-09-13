@@ -21,6 +21,7 @@ type: bugfix
 **Fixes Aplicados**:
 
 1. db-backup.ts (línea 78):
+
    ```typescript
    // ANTES (roto):
    runSyncShell(`sqlite3 "${DB_PATH}" ".backup '${targetPath}'"`, { timeout: 30000 }).stdout;
@@ -32,6 +33,7 @@ type: bugfix
    ```
 
 2. session-close-orchestrator.ts db-backup args (línea 448):
+
    ```typescript
    // ANTES (roto):
    runScript('scripts/database/db-backup.ts', ['--quiet'], 30000);
@@ -41,6 +43,7 @@ type: bugfix
    ```
 
 3. session-close-orchestrator.ts audit-pipeline path (línea 492):
+
    ```typescript
    // ANTES (roto):
    runScript('src/audit-pipeline.ts', [...])
@@ -55,6 +58,7 @@ type: bugfix
 - Overall: FAIL → PASS_WITH_WARNINGS ✅
 
 **Verificación**:
+
 ```
 npx tsx scripts/database/db-backup.ts backup --quiet
 [db-backup] Backup created: ... (0.37 MB) ✅

@@ -13,7 +13,7 @@ type: architecture
 
 **Where**: scripts/team-mode/team-orchestrator.ps1, .session/team-mode/ (runtime logs)
 
-**Learned**: 
+**Learned**:
 - DryRun flag supports testing without execution
 - PowerShell Start-Job/Wait-Job pattern works for parallel sub-agents
 - MCP Skill Server provides skill routing search

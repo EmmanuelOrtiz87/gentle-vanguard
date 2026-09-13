@@ -13,7 +13,7 @@ type: architecture
 
 **Where**: scripts/mcp/skill-server.ts, apps/web-dashboard/* (17 files), .eslintrc.json, .secretlintignore, .secretlintrc.json, .github/workflows/dashboard-ts-ci.yml, rules/adaptive/LEARNED-NORMS.md, .gitignore
 
-**Learned**: 
+**Learned**:
 - ESLint strict-boolean-expressions no es práctica para React/Node legacy — desactivar a nivel subproyecto
 - .session/ y .runtime/ deben estar en .secretlintignore (no solo .gitignore)
 - Non-null assertions siempre reemplazables con type guards

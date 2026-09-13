@@ -285,11 +285,13 @@ Typography is split across three families. **Neue Haas Grotesk Display** at thin
 > **Source pages:** home (`/`), `/start`, `/website/builder`, `/pricing`.
 
 ### Brand & Accent
+
 - **Aloe** (`{colors.aloe-10}` — `#c1fbd4`): The featured-tier and "growth" accent. Used as a pill button background on light surfaces and as a feature-card fill in the pricing comparison band.
 - **Pistachio** (`{colors.pistachio-10}` — `#d4f9e0`): Softer than aloe; used as a wide section band fill on the light track to signal a different category of feature without leaving the green family.
 - **Cool Link Tones** (`{colors.link-cool-1}` `#9dabad`, `{colors.link-cool-2}` `#9797a2`, `{colors.link-cool-3}` `#bdbdca`, `{colors.link-mint}` `#99b3ad`): Muted footer / tertiary link colors used on dark surfaces to create a quiet hierarchy below the primary white type.
 
 ### Surface
+
 - **Canvas Night** (`{colors.canvas-night}` — `#000000`): Pure black hero, cinematic feature pages, footer.
 - **Canvas Night Elevated** (`{colors.canvas-night-elevated}` — `#0a0a0a`): Cards on cinematic surfaces, video frames.
 - **Surface Elevated Dark** (`{colors.surface-elevated-dark}` — `#1e2c31`): Dark teal-shifted surface used on a small subset of dark cards to introduce subtle depth without breaking the black.
@@ -299,6 +301,7 @@ Typography is split across three families. **Neue Haas Grotesk Display** at thin
 - **Hairline Dark** (`{colors.hairline-dark}` — `#1e2c31`): 1px borders on the rare dark cards that have visible chrome.
 
 ### Shade Ladder
+
 - **Shade-30** (`{colors.shade-30}` — `#d4d4d8`): Tag / chip background on light, footer hairline on dark.
 - **Shade-40** (`{colors.shade-40}` — `#a1a1aa`): Tertiary text on light, secondary text on dark.
 - **Shade-50** (`{colors.shade-50}` — `#71717a`): Secondary text on light.
@@ -306,6 +309,7 @@ Typography is split across three families. **Neue Haas Grotesk Display** at thin
 - **Shade-70** (`{colors.shade-70}` — `#3f3f46`): Pressed-state of the primary pill button; deep dark surface accent.
 
 ### Text
+
 - **Ink** (`{colors.ink}` — `#000000`): All text on light canvas.
 - **On Primary** (`{colors.on-primary}` — `#ffffff`): All text on dark canvas + filled-pill labels.
 
@@ -342,27 +346,32 @@ The OpenType `ss03` stylistic set is enabled across every role. It alters specif
 | `{typography.code}` | 16px | 400 | 1.5 | 0 | Code blocks |
 
 ### Principles
+
 - **Display thinness is the brand.** Always render display sizes at weight 330 — never 400+. The thinness is a deliberate editorial choice that makes the giant size feel quiet.
 - **Display in NHGD, body in Inter.** Don't push body roles up to NHGD; don't push display roles down to Inter.
 - **Tracking lifts on display.** The 96px hero gets +2.4px positive tracking — the thin glyphs need air. At 70px and below, tracking returns to 0.
 
 ### Note on Font Substitutes
+
 Open substitutes for Neue Haas Grotesk Display: **Helvetica Now Display** (proprietary) or **Inter Display** at light weights (open-source) are the closest matches. Avoid Helvetica Neue at default weight — it's too heavy for the brand's thin tier. **Inter Variable** is open-source via Google Fonts and is the canonical body face — no substitute needed.
 
 ## Layout
 
 ### Spacing System
+
 - **Base unit**: 8px (with denser sub-units 1, 2, 3, 4 for fine work).
 - **Tokens**: `{spacing.xxs}` 2px · `{spacing.xs}` 4px · `{spacing.sm}` 8px · `{spacing.md}` 12px · `{spacing.lg}` 16px · `{spacing.xl}` 24px · `{spacing.xxl}` 32px · `{spacing.huge}` 64px.
 - **Section padding**: `{spacing.huge}` 64–128px on cinematic marketing pages (extreme negative space is the point); collapses to ~48px on transactional pages where density takes priority.
 - **Card internal padding**: `{spacing.xxl}` 32px on pricing cards; `{spacing.xl}` 24px on compact tag rows.
 
 ### Grid & Container
+
 - Cinematic hero pages use a wide max-width container (~1440–1600px) with edge-bleeding photography that escapes the container.
 - Pricing collapses through 4-up → 2-up → 1-up tiers based on viewport.
 - Body content centers in a ~720–840px reading column on long-form pages.
 
 ### Whitespace Philosophy
+
 The cinematic track treats whitespace as the brand's most valuable asset — sections often have 128–192px of vertical air between content blocks, with photography filling the rest. The transactional track tightens to ~48–64px between bands because users are scanning, comparing, and acting. The contrast between the two whitespace philosophies is part of the brand voice.
 
 ## Elevation & Depth
@@ -376,6 +385,7 @@ The cinematic track treats whitespace as the brand's most valuable asset — sec
 | 4 | `0 25px 50px -12px rgba(0,0,0,0.25)` | Modal / floating panel on light |
 
 ### Decorative Depth
+
 On the cinematic track, depth comes from photography — full-bleed merchant imagery layered behind cards, with subtle inset top-edge highlights creating the illusion of light hitting a glass surface. On the light track, the layered tiny-shadow stack (Level 3) produces a soft, paper-like halo around pricing cards — depth without harshness.
 
 ## Shapes
@@ -392,6 +402,7 @@ On the cinematic track, depth comes from photography — full-bleed merchant ima
 | `{rounded.pill}` | 9999px | All buttons, pill tags, mint chips |
 
 ### Photography Geometry
+
 Photography is full-bleed with no border. On cinematic pages it escapes the container entirely; on transactional pages it sits inside `{rounded.lg}` containers with no shadow. Avatar treatments in customer-logo strips are simple greyscale wordmarks at uniform height (~24–32px), aligned in a single horizontal strip.
 
 ## Components
@@ -467,6 +478,7 @@ Photography is full-bleed with no border. On cinematic pages it escapes the cont
 ## Do's and Don'ts
 
 ### Do
+
 - Reserve `{colors.aloe-10}` and `{colors.pistachio-10}` for the light track only — they don't appear on cinematic black pages.
 - Always use `{rounded.pill}` for buttons; never `{rounded.md}` or `{rounded.lg}`.
 - Render display tiers at weight 330; bumping to 400 or 500 breaks the brand's thin-display signature.
@@ -475,6 +487,7 @@ Photography is full-bleed with no border. On cinematic pages it escapes the cont
 - Pair black canvas with white type and white-stroked outline pills; pair light canvas with black type and filled-black pills.
 
 ### Don't
+
 - Don't introduce a third canvas color — stick to black or light/cream. Greys, beiges, and blues are not in the system.
 - Don't add drop shadows on cinematic dark cards beyond the subtle inset top-highlight; the cinematic track wants flat blackness.
 - Don't shrink display tiers below `{typography.display-md}` (48px) on hero surfaces; below that they read as section heads, not display.
@@ -493,16 +506,19 @@ Photography is full-bleed with no border. On cinematic pages it escapes the cont
 | Mobile | < 768px | Pricing 1-up; hamburger nav; display-xxl drops to ~56–64px |
 
 ### Touch Targets
+
 - Pill buttons hit ≥ 44×44px on mobile via 12px vertical padding × 16px line-height. WCAG AAA compliant.
 - Form fields stay at the 44px minimum height across all breakpoints.
 
 ### Collapsing Strategy
+
 - Display sizes scale down through the breakpoint stair: 96 → 70 → 55 → 48 → 36px on mobile.
 - Cinematic photography crops aggressively at smaller widths, prioritizing focal subject over edge-bleed.
 - Pricing tiers stair-step 4-up → 2-up → 1-up; the featured aloe tier stays visually distinguished at every step.
 - Top nav collapses to hamburger below 768px; menu inherits canvas polarity.
 
 ### Image Behavior
+
 Photography uses responsive `srcset` with art-direction crops at major breakpoints. Mobile crops favor close subjects; wide crops favor environmental / storefront context.
 
 ## Iteration Guide

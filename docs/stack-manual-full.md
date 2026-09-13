@@ -171,8 +171,8 @@ Orquestador central de health checks, auto-healing y monitoreo continuo. Unifica
 ### Checks
 
 - **Dashboard WS**: API 200 OK, watchdog PID alive, WS PID alive
-- **Apps Registry** (29 comps.): las 9 apps del stack vía Command Center (:8090) — presencia en
-  el registro, start.sh/stop.sh en cada app, y coherencia de estado (puerto vivo sin pid =
+- **Apps Registry** (29 comps.): las 9 apps del stack vía Command Center (:8090) — presencia en el
+  registro, start.sh/stop.sh en cada app, y coherencia de estado (puerto vivo sin pid =
   adoptado/zombie → WARN). Ver `docs/apps/APPS-INDEPENDENCE-AUDIT-2026-09-12.md`.
 - **CodeGraph**: index exists, nodes count, age
 - **ML Embeddings**: ml-index.json, embedding files, skill-embeddings.json

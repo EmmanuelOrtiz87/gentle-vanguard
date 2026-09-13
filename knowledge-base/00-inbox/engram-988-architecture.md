@@ -13,7 +13,7 @@ type: architecture
 
 **Where**: scripts/utilities/session-manager.ps1 (Clear-OrphanedSessions), config/session-autostart.config.json (statusesToClean), scripts/utilities/detect-tool.ps1 (return→exit 0), scripts/utilities/session-autostart.ps1 (Invoke-Expression→&), scripts/utilities/pre-close-validator.ps1 (auto-commit requires -AutoResolve -Force now), rules/NORMATIVAS-SESSION.md (optimized protocols), CLAUDE.md (Phase A/B consolidated)
 
-**Learned**: 
+**Learned**:
 1. Clear-OrphanedSessions only targeted "active" status — orphaned sessions were invisible to cleanup. Fix: also handle "orphaned" and "ended" statuses by deleting files >24h old.
 2. Invoke-Expression doesn't propagate $LASTEXITCODE reliably. Fix: use & directly.
 3. Script-level `return` in PowerShell doesn't set $LASTEXITCODE. Fix: use `exit 0`.

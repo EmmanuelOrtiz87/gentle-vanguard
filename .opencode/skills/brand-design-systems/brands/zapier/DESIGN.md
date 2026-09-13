@@ -311,13 +311,16 @@ Cards are universally `{rounded.md}` 12 px. Buttons share the same 12 px radius 
 ## Colors
 
 ### Brand & Accent
+
 - **Zapier Orange** (`{colors.primary}` — `#ff4f00`): The single brand accent. Every primary CTA pill, every conversion target. The saturated orange IS the brand.
 
 ### Surface
+
 - **Canvas** (`{colors.canvas}` — `#fffefb`): Warm off-white page background.
 - **Canvas Soft** (`{colors.canvas-soft}` — `#f8f4f0`): Cream-tinted soft surface for cards / inset regions.
 
 ### Text
+
 - **Ink** (`{colors.ink}` — `#201515`): Deep coffee — every heading and primary text.
 - **Ink Soft** (`{colors.ink-soft}` — `#2f2a26`): Near-black with brown warmth.
 - **Ink Mid** (`{colors.ink-mid}` — `#36342e`): Mid-emphasis text.
@@ -326,11 +329,13 @@ Cards are universally `{rounded.md}` 12 px. Buttons share the same 12 px radius 
 - **Mute** (`{colors.mute}` — `#c5c0b1`): Lowest-priority text — fine print, low-emphasis captions.
 
 ### Semantic
+
 The brand doesn't surface a separate semantic palette on its marketing pages. Status / validation cues borrow from the ink + orange hierarchy.
 
 ## Typography
 
 ### Font Family
+
 Two faces ladder the system:
 1. **Degular Display** — proprietary geometric display sans used for hero headlines at weight 500. The brand's typographic signature.
 2. **Inter** — used for sub-displays, body, links, buttons, and eyebrows. Weights 400 / 500 / 600 / 700 are present.
@@ -357,11 +362,13 @@ Two faces ladder the system:
 | `{typography.button-sm}` | 14.4px | 700 | 14.4px | 0.144px | Small button label. |
 
 ### Principles
+
 - **Degular Display 500 for hero, Inter for everything else.** Strict role separation.
 - **Positive tracking on the Degular eyebrow** — `1 px` at 14 px is the brand's signature label style.
 - **Sentence-case headlines.** The brand never uppercases display sizes.
 
 ### Note on Font Substitutes
+
 Degular Display is proprietary. Open-source substitutes:
 - **Display** — *Inter* weight 500 at hero scale comes closest. *Mona Sans* weight 500 is a softer alternative.
 - **Sub-display + body** — *Inter* is the brand's actual second face.
@@ -369,12 +376,14 @@ Degular Display is proprietary. Open-source substitutes:
 ## Layout
 
 ### Spacing System
+
 - **Base unit**: 4 px.
 - **Tokens**: `{spacing.xxs}` 2 px · `{spacing.xs}` 4 px · `{spacing.sm}` 8 px · `{spacing.md}` 12 px · `{spacing.lg}` 16 px · `{spacing.xl}` 24 px · `{spacing.2xl}` 32 px · `{spacing.3xl}` 48 px · `{spacing.4xl}` 64 px.
 - **Section padding**: bands use `{spacing.4xl}` 64 px top/bottom.
 - **Card interior**: cards at `{spacing.xl}` 24 px.
 
 ### Grid & Container
+
 - Marketing container ~1280 px wide; centred with gutters.
 - Hero: split at desktop (headline left, illustration right); stacked at mobile.
 - Pricing tier grid: 3 / 4-up at desktop.
@@ -390,9 +399,11 @@ Degular Display is proprietary. Open-source substitutes:
 | Desktop | ≥ 1024px | Full grids; hero split. |
 
 #### Touch Targets
+
 Buttons render ~48 px tall (12 vertical padding + 27 line). WCAG AAA met.
 
 #### Image Behavior
+
 The brand uses illustrative SVGs of zaps / workflows + product screenshots inside `{rounded.md}` framed cards. Photography is rare.
 
 ## Elevation & Depth
@@ -518,10 +529,10 @@ The brand uses illustrative SVGs of zaps / workflows + product screenshots insid
 **`ex-toast`** — Toast notification surface — feature-card shape + medium shadow.
 - Properties: `backgroundColor`, `rounded`, `padding`, `typography`
 
-
 ## Do's and Don'ts
 
 ### Do
+
 - Reserve `{colors.primary}` Zapier orange for every primary CTA. The saturated orange IS the conversion signature.
 - Keep canvas WARM — `{colors.canvas}` `#fffefb` cream, not pure white. The temperature is the brand voice.
 - Set hero headlines in `{typography.display-xl}` Degular Display weight 500. Sentence-case, no uppercase.
@@ -530,6 +541,7 @@ The brand uses illustrative SVGs of zaps / workflows + product screenshots insid
 - Pair orange CTA with ink-dark text on cream backgrounds — the three-token rhythm is the brand's whole conversion story.
 
 ### Don't
+
 - Don't replace cream canvas with pure white. The warmth is the brand.
 - Don't use pure black ink. The coffee-warmth in `#201515` carries through every text color.
 - Don't render CTAs as pills. The brand's button is 12 px rounded rectangle.

@@ -275,10 +275,12 @@ Body type is **Inter Variable**, with Framer leaning hard into Inter's character
 > Source pages: framer.com (home), /ai/, /startups/, /marketplace/templates/nudge/, /gallery/a16z-speedrun-×-tonik, /pricing.
 
 ### Brand & Accent
+
 - **Pure White** ({colors.primary}): The brand primary surface. Every primary CTA pill, every display headline, every body line on canvas.
 - **Sky Blue** ({colors.accent-blue}): The single chromatic accent. Hyperlinks, focused-input rings, and a few selection states. Never used for backgrounds or as a brand fill.
 
 ### Surface
+
 - **Canvas** ({colors.canvas}): Default page background — near-black with a faint warmth. Footer, pricing, hero, and FAQ all sit on it.
 - **Surface 1** ({colors.surface-1}): One step above canvas — pricing cards, secondary buttons, mockup tiles.
 - **Surface 2** ({colors.surface-2}): Two steps above — featured pricing card, hero pill backdrop, selected pricing tab.
@@ -287,13 +289,16 @@ Body type is **Inter Variable**, with Framer leaning hard into Inter's character
 - **Inverse Canvas** ({colors.inverse-canvas}): Pure white — used as the surface of light-on-dark pill CTAs and a small set of light-mode template thumbnails embedded in the showcase grid.
 
 ### Text
+
 - **Ink** ({colors.ink}): All headline and emphasized body type — pure white.
 - **Ink Muted** ({colors.ink-muted}): Secondary type — gray (#999999) used for meta info, footer columns, comparison-row labels, deselected pricing tabs. Hierarchy on the dark canvas is carried by ink → ink-muted contrast, not by weight changes.
 
 ### Semantic
+
 - **Success Green** ({colors.semantic-success}): Pricing comparison-table checkmarks. Glyph fill, not surface.
 
 ### Brand Gradient (signature)
+
 - **Gradient Magenta** ({colors.gradient-magenta}): Spotlight card variant.
 - **Gradient Violet** ({colors.gradient-violet}): Spotlight card variant — most common.
 - **Gradient Orange** ({colors.gradient-orange}): Spotlight card variant — sunset wash.

@@ -9,7 +9,7 @@ type: architecture
 
 **What**: Built complete live telemetry pipeline from agent activity to dashboard/presentation in real-time
 **Why**: Dashboard metrics were static (git/PR/post-hoc data) and didn't reflect live agent activity during sessions
-**Where**: 
+**Where**:
 - scripts/metrics/telemetry-writer.ps1 — instrumentation agent writes activity.json + events.ndjson
 - scripts/metrics/telemetry.ps1 — helper wrapping POST /api/ingest with direct fallback
 - scripts/metrics/collector.ps1 — Collect-TelemetryMetrics() reads activity + events
@@ -17,7 +17,7 @@ type: architecture
 - scripts/metrics/metrics-server.ps1 — /api/ingest POST endpoint, /api/live enriched with events
 - scripts/metrics/dashboard-render.ps1 — "Live Activity" section with 6 metric cards + event stream table + polling JS
 - gentle-vanguard-presentation.html — slide 26 "Live Activity & Telemetría del Agente" with live metrics
-**Learned**: 
+**Learned**:
 - Live-feed must init telemetry on startup (activity.json may not exist)
 - Collector needs to read events.ndjson separately, activity.json events field stays empty
 - POST /api/ingest is the fast path; telemetry-writer.ps1 is the fallback

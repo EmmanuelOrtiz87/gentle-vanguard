@@ -10,7 +10,7 @@ type: pattern
 **What**: Converted 5 files in scripts/validation/ from child_process sync calls (execSync/spawnSync) to the centralized runSyncShell wrapper from '../../src/core/run-command.js'.
 **Why**: Part of the stack-wide migration to centralized command execution (windowsHide, consistent timeouts/stdio).
 **Where**: scripts/validation/test-optimizations.ts, test-simple.ts, test-token-capture.ts, validate-complete-system.ts, validate-token-system.ts
-**Learned**: 
+**Learned**:
 - Import path must be '../../src/core/run-command.js' (relative from scripts/validation/).
 - For execSync call sites that consumed a string (`.trim()`), append `.stdout` to the runSyncShell call — otherwise you get a RunSyncResult object.
 - For spawnSync call sites that checked `result.status`/`result.stderr`, keep the full result object (RunSyncResult has status/stderr/stdout fields).

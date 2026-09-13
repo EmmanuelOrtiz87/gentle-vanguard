@@ -11,7 +11,7 @@ type: architecture
 
 **Why**: Needed to provide live visibility into agent behavior - token consumption per turn, profile/mechanism changes with reasons, and historical session review with filtering.
 
-**Where**: 
+**Where**:
 - reports/dashboard-v2/server.js - 7 API endpoints reading real data from .session/context-log/
 - reports/dashboard-v2/app.js - trace section with turns table, mechanism timeline, history filters, charts
 - reports/dashboard-v2/index.html - traceability UI container
@@ -20,7 +20,7 @@ type: architecture
 - .opencode/skills/live-traceability/SKILL.md - skill definition for future sessions
 - .session/context-log/ - real session data (4 sessions, 21 turns total)
 
-**Learned**: 
+**Learned**:
 - The mechanism detection needs config/model-routing.json agents to map model types to profiles
 - context-log entries from turn-001.md contain full input/output summaries while .state.json has numeric metrics only
 - Start-Job in PowerShell doesn't reliably persist for long-running servers; Start-Process -WindowStyle Hidden works

@@ -456,6 +456,7 @@ Roobert PRO — Miro's custom display face — anchors every typographic surface
 > Source pages: miro.com/ (homepage), /pricing/ (4-tier comparison), /products/ai-workflows/ (AI product), /agile/ (vertical landing), /customers/ (story directory). Token coverage was identical across all five pages.
 
 ### Brand & Accent
+
 - **Miro Yellow** ({colors.brand-yellow}): The brand's recognizable canary yellow — wordmark color, top promo banner, "yellow tag" pills
 - **Yellow Deep** ({colors.brand-yellow-deep}): Darker variant for hover states and emphasis
 - **Yellow Light** ({colors.yellow-light}): Pale yellow background tint for tag chips
@@ -473,6 +474,7 @@ Roobert PRO — Miro's custom display face — anchors every typographic surface
 - **Brand Orange Light** ({colors.brand-orange-light}): Soft orange for feature card backgrounds
 
 ### Surface
+
 - **Canvas White** ({colors.canvas}): Page background and primary card surface
 - **Surface** ({colors.surface}): Subtle section backgrounds, search-pill rest
 - **Surface Soft** ({colors.surface-soft}): Quieter section divisions
@@ -483,6 +485,7 @@ Roobert PRO — Miro's custom display face — anchors every typographic surface
 - **Hairline Strong** ({colors.hairline-strong}): Stronger 1px border for inputs
 
 ### Text
+
 - **Ink Deep** ({colors.ink-deep}): Headlines on lighter feature cards
 - **Ink** ({colors.ink}): Primary headlines and body text
 - **Charcoal** ({colors.charcoal}): Body emphasis text
@@ -494,6 +497,7 @@ Roobert PRO — Miro's custom display face — anchors every typographic surface
 - **On Dark Muted** ({colors.on-dark-muted}): Reduced-opacity white on dark
 
 ### Semantic
+
 - **Success Accent** ({colors.success-accent}): Confirmation/success indicator green
 - **Brand Red** ({colors.brand-red}): Soft red for error backgrounds
 - **Brand Red Dark** ({colors.brand-red-dark}): Stronger red for error borders
@@ -501,6 +505,7 @@ Roobert PRO — Miro's custom display face — anchors every typographic surface
 ## Typography
 
 ### Font Family
+
 **Roobert PRO** (primary): Miro's custom geometric sans-serif typeface. Used across every UI surface from oversized 80px hero displays to 11px micro labels. The face has a slightly rounded, friendly character that matches the brand's playful product positioning. Fallbacks: Noto Sans, -apple-system, BlinkMacSystemFont, sans-serif.
 
 ### Hierarchy
@@ -527,6 +532,7 @@ Roobert PRO — Miro's custom display face — anchors every typographic surface
 | `{typography.stat-display}` | 64px | 500 | 1.10 | -1.5px | "100M+ users" stat callouts |
 
 ### Principles
+
 - **Tight hero leading** (1.05) creates magazine-grade display headlines on the 80px hero
 - **Negative letter-spacing progression** — display sizes use -2px to -1.5px; smaller headings relax to 0
 - **Stat-display token** (64px / 500) for marketing stat callouts
@@ -535,18 +541,21 @@ Roobert PRO — Miro's custom display face — anchors every typographic surface
 ## Layout
 
 ### Spacing System
+
 - **Base unit**: 4px (8px primary increment)
 - **Tokens**: `{spacing.xxs}` (4px) · `{spacing.xs}` (8px) · `{spacing.sm}` (12px) · `{spacing.md}` (16px) · `{spacing.lg}` (20px) · `{spacing.xl}` (24px) · `{spacing.xxl}` (32px) · `{spacing.xxxl}` (40px) · `{spacing.section-sm}` (48px) · `{spacing.section}` (64px) · `{spacing.section-lg}` (96px) · `{spacing.hero}` (120px)
 - **Section rhythm**: Marketing pages use `{spacing.section-lg}` (96px); pricing comparison tightens to `{spacing.section}` (64px); customer story stack uses `{spacing.xxl}` (32px)
 - **Card internal padding**: `{spacing.xl}` (24px) for compact cards; `{spacing.xxl}` (32px) for feature panels
 
 ### Grid & Container
+
 - Marketing pages use 1280px max-width with 32px gutters
 - Pricing page renders 4-tier card row at desktop (Free / Starter / Business / Enterprise)
 - Customer stories page uses 2-column grid with filter dropdowns
 - AI Workflows page uses 2-column hero, then 3-up feature grid
 
 ### Whitespace Philosophy
+
 Marketing surfaces give content generous breathing room — `{spacing.hero}` (120px) hero padding gives the small wordmark room to breathe. Pricing surfaces tighten dramatically.
 
 ## Elevation & Depth
@@ -562,6 +571,7 @@ The system runs predominantly flat with strategic depth on hero mockups.
 | 4 (modal) | `rgba(5, 0, 56, 0.12) 0px 16px 48px -8px` | Modals, dropdowns |
 
 ### Decorative Depth
+
 - The atmospheric depth on Miro's hero comes from the live-product-board mockup illustrations — sticky notes layered at z-offsets, color-block tints behind whiteboard frames
 - Pastel feature cards carry their own visual weight via saturated background color
 - Customer-story cards layer dark photographic content with overlay scrims
@@ -583,6 +593,7 @@ The system runs predominantly flat with strategic depth on hero mockups.
 | `{rounded.full}` | 9999px | All buttons, pill tabs, badges |
 
 ### Photography Geometry
+
 - Real Miro board mockups render with `{rounded.xl}` (16px) corners and a subtle drop shadow
 - Customer story cards use `{rounded.xxxl}` (28px) corners with full-bleed photography
 - Template card thumbnails use `{rounded.xl}` (16px) with photographic content
@@ -759,6 +770,7 @@ The system runs predominantly flat with strategic depth on hero mockups.
 ## Do's and Don'ts
 
 ### Do
+
 - Reserve `{colors.brand-yellow}` for the wordmark, top promo banner, and "yellow tag" chips
 - Use `{colors.primary}` (black) as the dominant CTA on all surfaces
 - Pair pastel feature cards (yellow, rose, coral, teal) with white feature cards in the same viewport
@@ -768,6 +780,7 @@ The system runs predominantly flat with strategic depth on hero mockups.
 - Maintain Roobert PRO across every UI surface
 
 ### Don't
+
 - Don't use `{colors.brand-yellow}` on standard CTAs or large background surfaces
 - Don't introduce additional accent colors beyond yellow + brand pastels
 - Don't soften corners on buttons; the pill is a brand signature
@@ -778,6 +791,7 @@ The system runs predominantly flat with strategic depth on hero mockups.
 ## Responsive Behavior
 
 ### Breakpoints
+
 | Name | Width | Key Changes |
 |---|---|---|
 | Mobile (small) | < 480px | Single column. Hero scales to 36px. Pill nav collapses to hamburger. Pricing tiers stack 1-up. |
@@ -787,12 +801,14 @@ The system runs predominantly flat with strategic depth on hero mockups.
 | Wide Desktop | ≥ 1280px | Full hero presentation, 80px hero display. |
 
 ### Touch Targets
+
 - Pill buttons render at 40–44px effective height — at WCAG AAA floor
 - Circular icon buttons: 36×36px desktop → 44×44px mobile
 - Form inputs render at 44px height
 - Filter dropdowns render at ~36px tall — bumps to 44px on mobile
 
 ### Collapsing Strategy
+
 - **Promo banner** stays full-width; truncates at < 480px
 - **Top nav** below 1024px collapses to hamburger
 - **Hero band**: 2-column hero collapses to stacked at < 1024px
@@ -802,6 +818,7 @@ The system runs predominantly flat with strategic depth on hero mockups.
 - **Footer**: 6-column desktop → 3-column tablet → 2-column mobile → accordion at small mobile
 
 ### Image Behavior
+
 - Whiteboard mockups maintain aspect ratio; lazy-loaded below the fold
 - Customer story photography uses 16:9 ratio with full-bleed scaling
 - Logo wall presents wordmarks at consistent 100px height

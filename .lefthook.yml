@@ -8,14 +8,17 @@ post-commit:
   commands:
     codegraph-sync:
       run:
-        node --import tsx src/integrations/codegraph-post-modification-sync.ts --Trigger post-commit --Force
+        node --import tsx src/integrations/codegraph-post-modification-sync.ts --Trigger post-commit
+        --Force
     hashline-snapshot:
       run: node --import tsx src/infrastructure/hashline-snapshot-hook.ts
 
 post-merge:
   commands:
     codegraph-sync:
-      run: node --import tsx src/integrations/codegraph-post-modification-sync.ts --Trigger post-merge --Force
+      run:
+        node --import tsx src/integrations/codegraph-post-modification-sync.ts --Trigger post-merge
+        --Force
     post-merge-install:
       glob: 'package.json'
       run: pnpm install --ignore-scripts

@@ -13,7 +13,7 @@ type: bugfix
 
 **Where**: `scripts/editing/hashline.ps1` — líneas 257-263 (status action) y línea 292 (prune action).
 
-**Learned**: 
+**Learned**:
 - `$hashtable.PSObject.Properties` incluye propiedades intrínsecas del tipo `OrderedHashtable` (Count, Keys, Values, etc.). No es equivalente a `$hashtable.GetEnumerator()` que solo da las key-value pairs reales.
 - PowerShell hace "member access enumeration": acceder a una propiedad en una colección devuelve un array de esa propiedad de todos los elementos.
 - La solución definitiva es usar `.GetEnumerator()` en vez de `.PSObject.Properties` para iterar hashtables.

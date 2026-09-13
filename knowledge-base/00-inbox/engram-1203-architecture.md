@@ -11,7 +11,7 @@ type: architecture
 
 **Why**: Las tools ignoran silenciosamente props no estándar, dando falsa sensación de que la config funciona. Esto es deuda técnica.
 
-**Where**: 
+**Where**:
 - `.windsurf/config.json` — reducido a solo `name`, `version`, `description`, `rules`. Custom props movidas a `config/windsurf-project-settings.json`
 - `.continue/config.json` — reducido a solo `name`, `version`, `description`, `mcpServers`, `experimental`. Custom props movidas a `config/continue-project-settings.json`
 - `.clinerules` — eliminada sección `system_prompt` (Cline la ignora), reemplazada con nota referenciando `config/system-prompt-optimization.json`

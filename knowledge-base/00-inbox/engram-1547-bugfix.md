@@ -9,7 +9,7 @@ type: bugfix
 
 **What**: Fixed 11 broken PS1 references to migrated TS scripts and created missing adaptive-common.ps1 module
 **Why**: Session-autostart was failing because PS1 scripts referenced deleted TS-migrated files (engram-integrity-check.ps1, session-cleanup-start.ps1, adaptive-common.ps1)
-**Where**: 
+**Where**:
 - Created scripts/utilities/profile/PROFILE-ADAPTIVE/adaptive-common.ps1 (shared helpers)
 - Fixed scripts/utilities/memory/ENGRAM/engram-auto-sync.ps1 (engram-integrity-check ref)
 - Fixed scripts/utilities/ops/BACKUP-RESTORE/backup-engram.ps1 (engram-integrity-check ref)

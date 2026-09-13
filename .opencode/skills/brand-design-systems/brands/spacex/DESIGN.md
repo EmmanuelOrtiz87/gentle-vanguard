@@ -170,9 +170,11 @@ Typography splits between **D-DIN-Bold** for display tiers (uppercase, tight tra
 > **Source pages:** home (`/`), `/shop`, `/vehicles/starship`, `/humanspaceflight/overview`, `/mission`.
 
 ### Brand & Accent
+
 The brand has no accent colors. Black and white do all the chromatic work; photography supplies every other hue.
 
 ### Surface
+
 - **Canvas Night** (`{colors.canvas-night}` — `#000000`): Default marketing canvas. Pure black, no tint.
 - **Canvas Night Soft** (`{colors.canvas-night-soft}` — `#0a0a0a`): Barely-lifted near-black for content sections that need a subtle separation from the pure-black hero.
 - **Canvas Light** (`{colors.canvas-light}` — `#ffffff`): The shop site's product surface.
@@ -181,12 +183,14 @@ The brand has no accent colors. Black and white do all the chromatic work; photo
 - **Hairline on Light** (`{colors.hairline-on-light}` — `#e0e0e8`): Borders on shop-site cards.
 
 ### Text
+
 - **On Primary** (`{colors.on-primary}` — `#ffffff`): Default text on dark canvas; the dominant text color across the marketing site.
 - **On Primary Mute** (`{colors.on-primary-mute}` — `#f0f0fa`): Slightly cooled-white used for secondary text on dark surfaces — barely distinguishable from `{colors.on-primary}` but enough to suggest a hierarchy.
 - **Ink** (`{colors.ink}` — `#000000`): Default text on light surfaces (shop site).
 - **Ink Mute** (`{colors.ink-mute}` — `#5a5a5f`): Secondary text on light surfaces.
 
 ### Link
+
 - **Link on Dark** (`{colors.link-on-dark}` — `#ffffff`): Underlined inline link on dark canvas.
 - **Link Blue Fallback** (`{colors.link-blue-fallback}` — `#0000ee`): The browser default that appears in unstyled fallback contexts — documented for completeness, not used as a brand color.
 
@@ -214,27 +218,32 @@ D-DIN is freely available from the **DIN Type Foundry** (and a free version unde
 | `{typography.caption}` | 13.008px | 400 | 1.5 | 0 | Helper / footer text |
 
 ### Principles
+
 - **Uppercase across display.** Every display tier renders in uppercase. The brand never uses sentence-case display headlines.
 - **Tight vertical leading on display.** 0.95 at 80px and 1.2 at 60px — the type stacks engineer-tight.
 - **Wide horizontal tracking.** Positive 0.96–1.6px tracking on display sizes; positive 0.96–1.17px on caps eyebrows. The wide tracking is the brand's signature optical air.
 - **No mono.** Code blocks are not part of the brand's typographic system.
 
 ### Note on Font Substitutes
+
 **D-DIN** is freely available (the original DIN-style face under that name is widely distributed). When unavailable, use **Inter** at 700 weight with `letter-spacing: 1.6px`, `text-transform: uppercase`, and `line-height: 0.95` for display sizes — this matches the rhythm. Avoid Helvetica or Arial at default weights — the brand needs the condensed industrial cut. Avoid serif fallbacks entirely.
 
 ## Layout
 
 ### Spacing System
+
 - **Base unit**: 8px (with denser sub-units 4 / 12 / 16 / 18 / 24).
 - **Tokens**: `{spacing.xxs}` 4px · `{spacing.xs}` 8px · `{spacing.sm}` 12px · `{spacing.md}` 16px · `{spacing.lg}` 18px · `{spacing.xl}` 24px · `{spacing.xxl}` 32px · `{spacing.huge}` 48px.
 - **Section padding**: full-viewport bands on marketing — no internal padding above/below; the photograph IS the section. On the shop site, sections use 48–64px vertical padding.
 
 ### Grid & Container
+
 - Marketing pages have no container — every band is full-viewport-width, full-viewport-height (or close to it) with photography filling the entire frame.
 - Shop product grid: 4-up at desktop, 2-up at tablet, 1-up at mobile.
 - Type sits inside an inner ~1200px reading column centered horizontally over the full-bleed photograph.
 
 ### Whitespace Philosophy
+
 The marketing pages have minimal traditional whitespace — the photograph occupies all space. "Whitespace" here means the dark sky in a rocket photograph or the empty stretch of Martian terrain. Negative space is photographic, not a UI choice. On the shop site whitespace returns to standard 32px grid gutters.
 
 ## Elevation & Depth
@@ -247,6 +256,7 @@ The marketing pages have minimal traditional whitespace — the photograph occup
 The brand does not use drop shadows, blurs, glows, or gradient overlays. Depth is photographic: a rocket launching at twilight has natural atmospheric depth that no CSS shadow could simulate. When type needs separation from imagery, the image is graded darker rather than scrimmed.
 
 ### Decorative Depth
+
 Photography and autoplaying rocket-launch video are the only decorative depth. There are no illustrations, no icons beyond a few minimal SVG arrow chevrons in nav and CTA hover states.
 
 ## Shapes
@@ -262,6 +272,7 @@ Photography and autoplaying rocket-launch video are the only decorative depth. T
 | `{rounded.full}` | 9999px | Circular play-button overlays on video frames |
 
 ### Photography Geometry
+
 Every photograph is full-viewport-bleed, edge-to-edge, never inset in a card on the marketing site. On the shop site, product photography sits inside `{rounded.sm}` 8px containers with no shadow. Aspect ratios on marketing photography vary with the source image — there is no enforced ratio; the photograph leads.
 
 ## Components
@@ -313,6 +324,7 @@ Every photograph is full-viewport-bleed, edge-to-edge, never inset in a card on 
 ## Do's and Don'ts
 
 ### Do
+
 - Use full-bleed photography or autoplaying video as the dominant decorative element on every marketing band.
 - Render display tiers in uppercase D-DIN-Bold with positive 0.96–1.6px letter-spacing — the wide tracking is the signature.
 - Use a single `{button-ghost-on-dark}` per band — the brand does NOT show two CTAs side by side on marketing surfaces.
@@ -320,6 +332,7 @@ Every photograph is full-viewport-bleed, edge-to-edge, never inset in a card on 
 - Keep nav overlay-style (transparent, white-on-image) on marketing pages.
 
 ### Don't
+
 - Don't introduce brand accent colors — black, white, and photography are the entire palette.
 - Don't use drop shadows or gradient overlays on dark canvas — they fight the photography.
 - Don't render display tiers in sentence-case or title-case — uppercase is the brand.
@@ -340,16 +353,19 @@ Every photograph is full-viewport-bleed, edge-to-edge, never inset in a card on 
 | Small Mobile | < 600px | Display drops to 40px; nav becomes hamburger |
 
 ### Touch Targets
+
 - Ghost pill buttons hit ≥ 50×50px due to the 18px vertical padding × 13px line-height. WCAG AAA compliant.
 - Form fields stay at the 44px minimum height.
 
 ### Collapsing Strategy
+
 - Display sizes stair-step 80 → 60 → 48 → 40px through the breakpoints.
 - Photography re-crops to focal subject on smaller widths (rocket centered, Mars landscape centered).
 - Top nav collapses to hamburger below 768px; menu retains the dark overlay treatment.
 - Shop product grid stair-steps 4-up → 2-up → 1-up.
 
 ### Image Behavior
+
 Marketing photography uses `srcset` for desktop / tablet / mobile with art-direction crops at major breakpoints. Mobile crops favor the central focal subject; wide crops favor environmental context (full launch pad, full Martian horizon).
 
 ## Iteration Guide

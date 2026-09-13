@@ -13,7 +13,7 @@ type: bugfix
 
 **Where**: scripts/maintenance/maintenance-watchtower.ps1
 
-**Learned**: 
+**Learned**:
 1. Always use nested Join-Path: `Join-Path (Join-Path $a $b) $c` or string interpolation `"$a\$b\$c"`
 2. For cross-function variable sharing, define at script scope (before any `function` keyword) not inside functions
 3. Unicode box-drawing chars (━━) cause PowerShell parse errors — use ASCII (====) instead

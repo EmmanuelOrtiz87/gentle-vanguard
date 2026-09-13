@@ -11,7 +11,7 @@ type: bugfix
 
 **Why**: KiloCode sending unsupported parameters to Bedrock via LiteLLM
 
-**Where**: 
+**Where**:
 - ~/.config/litellm/config.yaml (global LiteLLM config)
 - %APPDATA%/Code/User/globalStorage/kilocode.kilo-code/config.json (KiloCode specific)
 - gentle-vanguard/scripts/fix-kilocode-bedrock.ps1 (automated setup)

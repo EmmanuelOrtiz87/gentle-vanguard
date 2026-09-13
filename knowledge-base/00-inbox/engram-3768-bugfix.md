@@ -13,7 +13,7 @@ type: bugfix
 
 **Where**: PATH de usuario (fix persistente vía `[Environment]::SetEnvironmentVariable("Path", "C:\Program Files\Git\bin;<userPath>", "User")`). Scripts afectados: apps/{command-center,web-dashboard,gv-analytics,content-cms,academy-web,prompt-studio,archify,design-hub}/start.sh|stop.sh.
 
-**Learned**: 
+**Learned**:
 - Verificación: `Get-Command bash` debe resolver a `C:\Program Files\Git\bin\bash.exe`, no a WindowsApps.
 - El fix requiere terminal NUEVA para tomar efecto (PATH se lee al arrancar el proceso).
 - Los scripts funcionan con Git Bash: probados start+stop de academy-web (puerto 4173) y start de command-center/dashboard (idempotentes).

@@ -13,7 +13,7 @@ type: bugfix
 
 **Where**: scripts/utilities/workflow/WORKFLOW-ORCHESTRATION/commands/git.ps1
 
-**Learned**: 
+**Learned**:
 - The corruption pattern: `catch { Write-Debug "Exception caught: function Get-GitInfo {` followed by full Get-GitInfo function body (12 lines, ending with `@{ Branch = ... }`)
 - Best fix method: extract the first copy of each unique function (L1-L70 fix, + L234-L633), removing duplicate blocks (L71-L233), then fix the 2 corrupted catches within the first copy
 - Use `[System.Management.Automation.Language.Parser]::ParseFile()` to verify parse errors

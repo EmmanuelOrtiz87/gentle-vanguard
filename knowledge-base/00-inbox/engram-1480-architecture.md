@@ -11,7 +11,7 @@ type: architecture
 
 **Why**: v4.0 was reactive-only. v4.1 adds intelligence: real-time alert broadcast, automatic memory pruning, failure prediction, and efficient incremental embedding updates.
 
-**Where**: 
+**Where**:
 - `apps/web-dashboard/src/components/AlertPanel.tsx` — NEW: Dedicated alert component
 - `apps/web-dashboard/src/hooks/useAlerts.ts` — Modified: WebSocket instead of HTTP polling
 - `apps/web-dashboard/server/websocket-server.ts` — Modified: Alert broadcast + state tracking + transitions
@@ -21,7 +21,7 @@ type: architecture
 - `scripts/utilities/agents/AUTO-DELEGATION/skill-embedder-incremental.ps1` — NEW: Change detection, metadata tracking
 - `config/session-autostart.config.json` — Modified: Added engram-auto-compact + ml-embeddings-incremental steps
 
-**Learned**: 
+**Learned**:
 - Dashboard alerts now broadcast via WebSocket every 5s with transition detection (fired/resolved)
 - Engram auto-compact skips if <100 observations or last compact <24h, never deletes >30% of total
 - Watchtower trends stores history in .telemetry/watchtower-history.jsonl for time-series analysis

@@ -13,7 +13,7 @@ type: bugfix
 
 **Where**: scripts/utilities/workflow/WORKFLOW-ORCHESTRATION/gv.ps1
 
-**Learned**: 
+**Learned**:
 - Repair approach: extracted git HEAD header (lines 1-43 param/init/dot-sourcing) + last copy (lines 4181-7747 functions/switch/exit 0), then truncated at first exit 0 to remove nested duplicate content
 - The corrupted catch pattern was: `catch { Write-Debug "Exception caught: # gv.ps1 - Workflow CLI ... [full file content as string] }`
 - Fixed 3 corrupted catches by replacing with `catch { }`

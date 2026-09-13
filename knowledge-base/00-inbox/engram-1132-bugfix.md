@@ -13,7 +13,7 @@ type: bugfix
 
 **Where**: 40 archivos en `scripts/utilities/`, `scripts/adaptive/`, `scripts/security/` — reemplazo exacto de string con `.Replace()` para las variantes: `$root`, `$repoRoot`, `$WorkspaceRoot` + comillas simples/dobles.
 
-**Learned**: 
+**Learned**:
 - `Test-Path (Join-Path $root 'config')` es demasiado permisivo — cualquier subdirectorio llamado "config" o "CONFIG" lo detiene.
 - El patrón correcto es `Test-Path (Join-Path $root 'config\orchestrator.json')` que verifica un archivo específico.
 - Tras este fix, las notificaciones de tokens funcionan al 100%: ambos paneles "This Turn" y "Session Accumulated" se renderizan correctamente con input/output/context/cost.

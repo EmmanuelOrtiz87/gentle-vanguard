@@ -13,7 +13,7 @@ type: bugfix
 
 **Where**: apps/academy-web/scripts/build-courses-registry.mjs (nuevo generador), apps/academy-web/data/courses.js (regenerado con 5 manifests embebidos), apps/academy-web/app.js getManifest() (~línea 321), apps/academy-web/scripts/validate-multi-course.mjs (check de consistencia), apps/academy-web/scripts/smoke-academy.mjs (nuevo smoke test HTTP+file://, 10/10 PASS).
 
-**Learned**: 
+**Learned**:
 1. XHR (síncrono o no) a file:// está bloqueado por CORS en Chromium moderno — no es viable como fallback. Script tags y manifests embebidos SÍ funcionan en file://.
 2. Patrón reutilizable: fuente única (course.json) → artefacto generado commiteado (courses.js con manifests) → check de consistencia en el validador → smoke test en ambos modos (http + file).
 3. El PASS del diagrama en smoke tests previos era falso positivo (SVGs del layout renderizan igual en view not-found). Verificar SIEMPRE el contenido real (cards, stats, texto), no solo presencia de elementos genéricos.

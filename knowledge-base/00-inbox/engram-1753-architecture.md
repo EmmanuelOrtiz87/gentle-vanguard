@@ -11,7 +11,7 @@ type: architecture
 
 **Why**: Dotar al stack de capacidades de auto-reflexión, síntesis de conocimiento, ruteo adaptativo, gobierno predictivo, correlación de causa-raíz, evolución de skills, y monitoreo de convergencia.
 
-**Where**: 
+**Where**:
 - src/self-reflection-loop.ts (etapa #1)
 - src/knowledge-synthesizer.ts (etapa #2)
 - src/adaptive-router.ts (etapa #3)
@@ -22,7 +22,7 @@ type: architecture
 - config/ — 7 archivos de configuración
 - config/session-autostart.config.json — 35 steps pipeline
 
-**Learned**: 
+**Learned**:
 - Convergence monitor baseline: score 55/100 → "stable" con plateau signal (pocos datos aún, se estabilizará con ~14 días de corridas)
 - Cada etapa sigue el mismo patrón: .ts + .json + pipeline step (phase 99, lazy)
 - Todas las etapas leen de .session/ y producen datos que la siguiente consume

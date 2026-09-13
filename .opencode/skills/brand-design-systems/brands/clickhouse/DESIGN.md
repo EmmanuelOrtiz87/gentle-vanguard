@@ -308,11 +308,13 @@ Type voice runs **Inter** at confident weights — 700 for display headlines (wi
 ## Colors
 
 ### Brand & Accent
+
 - **Primary (Electric Yellow)** (`{colors.primary}` — #faff69): The signature brand color. All primary CTA backgrounds, large stat-callout numbers, full-bleed yellow CTA cards. The yellow is the brand.
 - **Primary Active** (`{colors.primary-active}` — #e6eb52): Press / hover-darker variant.
 - **Primary Disabled** (`{colors.primary-disabled}` — #3a3a1f): Desaturated dark-yellow on dark canvas.
 
 ### Surface
+
 - **Canvas** (`{colors.canvas}` — #0a0a0a): The default page floor. Near-pure black.
 - **Surface Soft** (`{colors.surface-soft}` — #121212): Section dividers, very-soft band tints.
 - **Surface Card** (`{colors.surface-card}` — #1a1a1a): Feature cards, code windows, product mockups, pricing tier cards.
@@ -322,6 +324,7 @@ Type voice runs **Inter** at confident weights — 700 for display headlines (wi
 - **Hairline Strong** (`{colors.hairline-strong}` — #3a3a3a): Heavier divider on input underlines and emphasis.
 
 ### Text
+
 - **Ink / On Dark** (`{colors.on-dark}` — #ffffff): All headline and primary text.
 - **Body** (`{colors.body}` — #cccccc): Default running-text color.
 - **Body Strong** (`{colors.body-strong}` — #e6e6e6): Emphasized paragraphs.
@@ -330,6 +333,7 @@ Type voice runs **Inter** at confident weights — 700 for display headlines (wi
 - **On Primary / On Yellow** (`{colors.on-primary}` / `{colors.on-yellow}` — #0a0a0a): Black text on yellow CTAs and yellow CTA bands. The high-contrast yellow + black combo is the brand action signal.
 
 ### Semantic / Accent
+
 - **Accent Emerald** (`{colors.accent-emerald}` — #22c55e): Success states, "active" status indicators in product UI.
 - **Accent Rose** (`{colors.accent-rose}` — #ef4444): Error states, "down" indicators.
 - **Accent Blue** (`{colors.accent-blue}` — #3b82f6): Info states, code-syntax highlighting.
@@ -337,6 +341,7 @@ Type voice runs **Inter** at confident weights — 700 for display headlines (wi
 ## Typography
 
 ### Font Family
+
 The system runs **Inter** for everything — display, body, navigation, buttons, captions. **JetBrains Mono** handles code blocks. The fallback stack walks `-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif`.
 
 The single-family approach is deliberate: Inter at weight 700 + 600 + 400 covers the entire hierarchy without needing a serif or display counter-voice. The geometric humanist character of Inter at confident bold weight gives ClickHouse a precise, engineered feel that matches the database's performance-first positioning.
@@ -362,28 +367,33 @@ The single-family approach is deliberate: Inter at weight 700 + 600 + 400 covers
 | `{typography.nav-link}` | 14px | 500 | 1.4 | 0 | Top-nav menu items |
 
 ### Principles
+
 Display weights stay at 700 across all sizes. Negative letter-spacing (-1 to -2.5px) is essential — Inter at weight 700 without negative tracking reads as too wide / Apple-marketing. The tightened tracking gives ClickHouse the precise, engineered feel.
 
 Body and labels stay at weights 400 / 500 / 600. The hierarchy is built on size + weight, not on family contrast.
 
 ### Note on Font Substitutes
+
 Inter is open-source and the documented choice. **Söhne** is a close commercial alternative if licensed. **Geist** is another modern alternative.
 
 ## Layout
 
 ### Spacing System
+
 - **Base unit:** 4px.
 - **Tokens:** `{spacing.xxs}` 4px · `{spacing.xs}` 8px · `{spacing.sm}` 12px · `{spacing.md}` 16px · `{spacing.lg}` 24px · `{spacing.xl}` 32px · `{spacing.xxl}` 48px · `{spacing.section}` 96px.
 - **Section padding:** `{spacing.section}` (96px) between major bands.
 - **Card internal padding:** `{spacing.xl}` (32px) for feature cards, pricing tiers; `{spacing.lg}` (24px) for code-window cards and event cards.
 
 ### Grid & Container
+
 - **Max content width:** ~1280px centered.
 - **Editorial body:** Single 12-column grid; hero often uses 7/5 split (h1 left, code mockup right).
 - **Feature card grids:** 3-up at desktop, 2-up at tablet, 1-up at mobile.
 - **Pricing grid:** 3-4 up at desktop, 1-up at mobile.
 
 ### Whitespace Philosophy
+
 ClickHouse uses dense, slightly-compressed whitespace appropriate for a developer-tooling brand — generous enough to read editorially, tight enough to feel "engineering-grade" rather than "marketing-soft." Section rhythm at 96px is standard; card internal padding stays at 32px for feature cards.
 
 ## Elevation & Depth
@@ -398,6 +408,7 @@ ClickHouse uses dense, slightly-compressed whitespace appropriate for a develope
 The system uses no drop shadows. Depth comes from the contrast between black canvas and `{colors.surface-card}` (a barely-lighter-than-canvas tone) — the contrast is subtle, more like an "engineering-grade dim panel" than an "elevated card."
 
 ### Decorative Depth
+
 - Code-window cards carry their own internal product chrome — line numbers, syntax highlighting, status bars at the bottom — adding visual density without external shadows.
 - The yellow-on-black contrast does most of the elevation work for CTAs.
 
@@ -481,6 +492,7 @@ The system uses no drop shadows. Depth comes from the contrast between black can
 ## Do's and Don'ts
 
 ### Do
+
 - Anchor every page on the black canvas. The yellow + black pairing is the brand voltage.
 - Reserve `{colors.primary}` (yellow) for primary CTAs, stat-callout numbers, and full-bleed yellow CTA bands. The yellow's scarcity at the element level + abundance at the band level is what makes it powerful.
 - Use Inter at weight 700 for every display headline, with -1 to -2.5px letter-spacing.
@@ -489,6 +501,7 @@ The system uses no drop shadows. Depth comes from the contrast between black can
 - Anchor every band with `{spacing.section}` (96px) vertical rhythm.
 
 ### Don't
+
 - Don't introduce a second brand color. ClickHouse is monochromatic + yellow.
 - Don't bold display weight beyond 700 or use weight 500 for headlines. The hierarchy depends on size, not on weight gradation.
 - Don't use yellow for body text or large surface fills outside of intentional yellow cards.
@@ -509,11 +522,13 @@ The system uses no drop shadows. Depth comes from the contrast between black can
 | Wide | > 1440px | Same as desktop with more breathing room; max content 1280px |
 
 ### Touch Targets
+
 - `{component.button-primary}` at minimum 40 × 40px.
 - `{component.button-icon-circular}` at exactly 36 × 36 — slightly under WCAG 44, visually centered.
 - `{component.text-input}` height is 40px.
 
 ### Collapsing Strategy
+
 - Top nav collapses to hamburger at < 768px.
 - Hero 7-5 grid → single-column on mobile.
 - Feature card grids reduce columns rather than scaling.
@@ -521,6 +536,7 @@ The system uses no drop shadows. Depth comes from the contrast between black can
 - Pricing tier cards collapse 4 → 2 → 1; featured tier yellow stays distinct.
 
 ### Image Behavior
+
 - Code blocks inside dark mockups stay at fixed font-size; horizontal scroll on mobile rather than wrapping.
 - Customer logos in monochrome strip retain native widths; row wraps on mobile.
 

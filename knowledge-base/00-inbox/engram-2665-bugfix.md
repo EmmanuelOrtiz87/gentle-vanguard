@@ -13,7 +13,7 @@ type: bugfix
 1. "provider: Extra inputs are not permitted" (claude-haiku-4-5)
 2. "bedrock does not support parameters: ['reasoning_effort']" (kimi-2.5)
 
-**Where**: 
+**Where**:
 - `opencode.json` - Added litellm_settings.drop_params to 15 agents (ops-agent through sia-agent)
 - `.runtime/metrics.json` - Reset token counters to 0
 - `config/token-budget-guard.json` - Verified config correct

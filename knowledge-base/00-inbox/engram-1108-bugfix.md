@@ -11,7 +11,7 @@ type: bugfix
 
 **Why**: El índice de CodeGraph se quedaba obsoleto (>30min), generando warnings en cada inicio de sesión. Solo se sincronizaba al iniciar sesión, no después de cambios.
 
-**Where**: 
+**Where**:
 - .lefthook.yml (post-commit + post-merge)
 - config/lefthook.yml (post-commit + post-merge)
 - skills/codegraph-skill/SKILL.md (nueva sección Auto-Sync via Git Hooks)

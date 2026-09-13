@@ -11,7 +11,7 @@ type: bugfix
 
 **Why**: The `.npmrc` file at the project root contained `overrides.@hono/node-server=">=2.0.5"` and `overrides.brace-expansion=">=5.0.8"` in a deprecated format that npm v11 no longer supports. These overrides were also duplicated in `pnpm-workspace.yaml` (the correct location for pnpm v11).
 
-**Where**: 
+**Where**:
 - `.npmrc` — removed the 2 override lines, replaced with comment explaining they moved to pnpm-workspace.yaml
 - `pnpm-workspace.yaml` — overrides already configured correctly (from previous fix)
 

@@ -13,7 +13,7 @@ type: architecture
 
 **Where**: apps/web-dashboard/server/websocket-server.ts — consolidateMetrics() (reemplazó refreshTokenMetrics()), intervalo 30000ms
 
-**Learned**: El contador _consolidationCount (+1 cada ciclo) y el timestamp _consolidatedAt dan visibilidad inmediata de que la consolidación está activa. OS metrics (CPU, RAM, uptime) cambian en cada ciclo porque process.cpuUsage() y process.memoryUsage() son valores vivos del proceso Node.js.
+**Learned**: El contador _consolidationCount (+1 cada ciclo) y el timestamp_consolidatedAt dan visibilidad inmediata de que la consolidación está activa. OS metrics (CPU, RAM, uptime) cambian en cada ciclo porque process.cpuUsage() y process.memoryUsage() son valores vivos del proceso Node.js.
 
 ---
 *Imported from Engram on 2026-09-06*

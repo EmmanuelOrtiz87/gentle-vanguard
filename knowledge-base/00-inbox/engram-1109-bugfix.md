@@ -11,7 +11,7 @@ type: bugfix
 
 **Why**: El índice de CodeGraph se quedaba obsoleto (~3.3 días) generando warnings en cada inicio de sesión. Causa raíz: freshness check solo miraba codegraph.db pero SQLite WAL mode escribe en .db-wal.
 
-**Where**: 
+**Where**:
 - .lefthook.yml — hooks post-commit + post-merge
 - config/lefthook.yml — hooks espejados  
 - scripts/utilities/codegraph-sync-autostart.ps1 — freshness check con max(WAL, SHM, DB)

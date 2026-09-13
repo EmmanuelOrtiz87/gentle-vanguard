@@ -11,7 +11,7 @@ type: architecture
 
 **Why**: Completar la visión del roadmap local-first extensible, cerrando v6.5 formalmente y entregando v6.6, v6.7 y v7.0.
 
-**Where**: 
+**Where**:
 - scripts/utilities/MCP/mcp-manager.ps1 — create action multi-lenguaje (ts, js, py, go, rs) + -Build/-Register/-Start
 - scripts/utilities/knowledge/knowledge-query.ps1 — query engine unificado (events, traces, feedback, checkpoints)
 - scripts/utilities/MCP/mcp-mesh-scan.ps1 — 3 acciones: discover, status, sync multi-repo

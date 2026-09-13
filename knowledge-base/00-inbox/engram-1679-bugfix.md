@@ -13,7 +13,7 @@ type: bugfix
 
 **Where**: src/engram-auto-sync.ts:115-119 (added existsSync guard), scripts/utilities/config/validate-opencode-config.ps1:14 (added 'references' to allowlist), .codex/config.toml, .engram/checksums.sha256, .windsurf/config.json, .runtime/telemetry/ (deletions)
 
-**Learned**: 
+**Learned**:
 - syncChecksums() must guard against missing DB same as checkSynchronization() does
 - OpenCode's 'references' (plural) is a legitimate config property, not a typo of 'reference'
 - .runtime/ is gitignored but files can still be accidentally committed with git add -f

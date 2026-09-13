@@ -11,7 +11,7 @@ type: architecture
 
 **Why**: El stack actual opera en modo "sugestivo" — todos los sistemas de auto-mejora generan sugerencias pero ninguna se ejecuta sin aprobación humana. Para autonomía total necesitamos: auto-apply, testing robusto, performance, governance, debt cleanup, self-learning, y observabilidad.
 
-**Where**: 
+**Where**:
 - src/apply-safe-threshold.ts (nuevo)
 - src/predictive-governor.ts (modificar)
 - src/skill-evolution-engine.ts (modificar)

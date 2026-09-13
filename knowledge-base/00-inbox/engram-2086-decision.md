@@ -11,7 +11,7 @@ type: decision
 
 **Why**: Único WARN era Engram reindex freshness (72.6 horas). Ejecutado reindex manual y ahora está actualizado.
 
-**Where**: 
+**Where**:
 - Health Check: 82/82 PASS (100%)
 - Engram reindex: Actualizado
 - Log: .atl/rag-reindex.log

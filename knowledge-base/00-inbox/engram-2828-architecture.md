@@ -10,7 +10,7 @@ type: architecture
 **What**: Auditoría completa del estado del stack Gentle-Vanguard (2026-08-14): documentación, aprendizaje, integración, funcionalidad, automatización y realidad de los datos
 **Why**: El usuario preguntó qué fases/optimizaciones/mejoras quedan y si todo está documentado/aprendido/integrado/funcional/automatizado/real
 **Where**: docs/backlog/items.json, docs/guides/STACK-OPTIMIZATION-ROADMAP.md, config/session-autostart.config.json, .github/workflows/, knowledge-base/
-**Learned**: 
+**Learned**:
 - Pipeline: 111 steps (104 enabled, 77 lazy) — automatización completa
 - Backlog: 14 items (12 done, 1 deferred FF-016 token efficiency, 1 backlog FF-019 CopilotKit patterns sobre MCP)
 - Roadmap de optimización: la mayoría implementada (lockfile-lint hook, npm ci en ci.yml, secret-scanner, npm-audit pre-push, SBOM generate/validate, coverage). Pendiente: perf baselines, load testing multi-repo, E2E release tests, annual security audit
