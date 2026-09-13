@@ -12,7 +12,7 @@
  * Exit codes: 0 — ciclo completado · 1 — error inesperado.
  */
 
-import { existsSync, readFileSync, appendFileSync } from 'fs';
+import { readFileSync, appendFileSync } from 'fs';
 import { spawn } from 'node:child_process';
 import { join, resolve } from 'path';
 import { fileURLToPath } from 'url';
