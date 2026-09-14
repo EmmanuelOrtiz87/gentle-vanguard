@@ -9,7 +9,7 @@ LinkedIn y WhatsApp. Estrategia y reglas: `GV-SPEECH-PLAYBOOK-2026-09.md`. Este 
 
 | Dato             | Valor                                                            |
 | ---------------- | ---------------------------------------------------------------- |
-| Landing          | `https://emmanuelortiz87.github.io/gentle-vanguard/`              |
+| Landing          | `https://gentlevanguard.github.io/`              |
 | WhatsApp         | `542645452221` (link 1-click por producto desde la landing)       |
 | Email            | `gentlevanguard@gmail.com`                                        |
 | QR               | `docs/marketing/assets/landing-qr.png`                            |
@@ -187,20 +187,20 @@ status con recorte o texto. Una sola acción por video, igual en todas las redes
 > publicaciones, calcular precios y organizar tu semana. Copiás, pegás, adaptás.
 > USD 20 · un solo pago por MercadoPago · entrega inmediata.
 > Pago: https://mpago.la/219F2HK
-> Catálogo completo: https://emmanuelortiz87.github.io/gentle-vanguard/
+> Catálogo completo: https://gentlevanguard.github.io/
 
 **`/curso`**
 > La Academy tiene **20 cursos de IA de cero a avanzado**: ChatGPT, Gemini, Claude, agentes,
 > marketing, programación. Desde la primera clase estás usando IA en algo real.
 > Curso completo USD 50 · Curso + 5 sesiones de acompañamiento USD 100.
-> Catálogo: https://emmanuelortiz87.github.io/gentle-vanguard/
+> Catálogo: https://gentlevanguard.github.io/
 > Decime tu objetivo y te recomiendo el indicado.
 
 **`/kit`**
 > El **Toolkit IA para Emprendedores** reúne: curso + ebook + 50 prompts + plantillas + emails +
 > automatizaciones + casos reales. Un solo pago.
 > USD 80 · Pago: https://mpago.la/16Zk1U1
-> Catálogo: https://emmanuelortiz87.github.io/gentle-vanguard/
+> Catálogo: https://gentlevanguard.github.io/
 
 **`/mentoria`**
 > **Mentoría 1 a 1**: una hora, tu caso concreto (IA, software, productividad, negocio), y salís
@@ -301,7 +301,7 @@ status con recorte o texto. Una sola acción por video, igual en todas las redes
 - **FB:** `El problema de aprender IA hoy es el humo: cursos eternos de teoría, promesas de
   millones. Gentle-Vanguard es lo contrario: contenido real todos los días y un catálogo con
   precio claro (micro-ebooks, cursos, toolkits, mentoría). Miralo sin registro:
-  https://emmanuelortiz87.github.io/gentle-vanguard/`
+  https://gentlevanguard.github.io/`
 - **WhatsApp status:** `Qué te doy gratis (y qué no) — hoy en el status, sin vueltas.`
 
 ### V7 (Dom)
@@ -406,7 +406,7 @@ Escribí la palabra: PROMPTS · CURSO · KIT · MENTORIA · CHARLA
 Te paso el detalle y el link de pago (MercadoPago). Entrega inmediata del material.
 
 CATÁLOGO COMPLETO
-https://emmanuelortiz87.github.io/gentle-vanguard/
+https://gentlevanguard.github.io/
 ```
 
 ### 8.4 Facebook (página)
@@ -417,7 +417,7 @@ https://emmanuelortiz87.github.io/gentle-vanguard/
 | Usuario                | `@gentlevanguard` (o el más cercano libre)                                                                        |
 | Categoría              | Educación                                                                                                          |
 | **Bio** (94/101)       | `IA para emprendedores y PYMEs. Prompts, cursos y software a medida. Escribinos por WhatsApp 👇`                    |
-| **Introducción** (231/255) | `Formación y herramientas de IA para emprendedores y PYMEs: micro-ebooks, cursos, toolkits, mentoría y software a medida. Un solo pago por MercadoPago y entrega inmediata. Catálogo: https://emmanuelortiz87.github.io/gentle-vanguard/` |
+| **Introducción** (231/255) | `Formación y herramientas de IA para emprendedores y PYMEs: micro-ebooks, cursos, toolkits, mentoría y software a medida. Un solo pago por MercadoPago y entrega inmediata. Catálogo: https://gentlevanguard.github.io/` |
 | Botón CTA de la página | "Enviar mensaje de WhatsApp" → `542645452221`                                                                      |
 | Sitio web / email      | Landing / `gentlevanguard@gmail.com`                                                                               |
 

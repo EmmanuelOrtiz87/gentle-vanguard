@@ -18,10 +18,10 @@ igual), o `.com.ar` gratis vía nic.ar (si el público es Argentina).
 
 ## 2. Conectarlo a GitHub Pages (10 minutos)
 
-1. En este repo: **Settings → Pages → Custom domain** → escribir el dominio (ej.
-   `academy.gentlevanguard.com`) → Save.
+1. En el repo de publicación (`gentlevanguard/gentlevanguard.github.io`): **Settings → Pages →
+   Custom domain** → escribir el dominio (ej. `academy.gentlevanguard.com`) → Save.
 2. En el registrar, agregar el registro DNS que GitHub indique:
-   - **Subdominio** (`academy.tudominio.com`): un `CNAME` → `emmanuelortiz87.github.io`
+   - **Subdominio** (`academy.tudominio.com`): un `CNAME` → `gentlevanguard.github.io`
    - **Dominio raíz** (`tudominio.com`): 4 registros `A` → `185.199.108.153`, `185.199.109.153`,
      `185.199.110.153`, `185.199.111.153`
 3. Esperar la propagación de DNS (5 min a 24 h, normalmente <1 h).

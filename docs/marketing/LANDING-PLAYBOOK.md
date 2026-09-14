@@ -1,6 +1,6 @@
 # Playbook comercial — Landing de Academy con clientes
 
-> Cómo usar `https://emmanuelortiz87.github.io/gentle-vanguard/` para captar, registrar y hacer
+> Cómo usar `https://gentlevanguard.github.io/` para captar, registrar y hacer
 > seguimiento de clientes. QR listo para imprimir: `docs/marketing/assets/landing-qr.png` (apunta a
 > la landing).
 
@@ -68,10 +68,16 @@ con el stack encendido.
 | Acción                    | Cómo                                                                                                                                                                                                                                             |
 | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | Agregar/cambiar productos | Editar manifests en `apps/academy-web/data/` → `node scripts/build-landing.mjs` (desde academy-web)                                                                                                                                              |
-| Publicar                  | Commit + push a `main` → GitHub Pages deploya solo (~1 min)                                                                                                                                                                                      |
-| Ver estado del deploy     | GitHub → Actions → "Deploy Academy Landing"                                                                                                                                                                                                      |
+| Publicar                  | Copiar `apps/academy-landing/*` al repo de publicación **`gentlevanguard/gentlevanguard.github.io`** (clon local: `C:\Workspace_local\gentlevanguard-pages`) → commit + push a su `main` → Pages deploya por branch (~1 min)                       |
+| Ver estado del deploy     | Repo de publicación → **Settings → Pages** (builds por branch: refrescar la URL tras ~1 min)                                                                                                                                                     |
 | Cambiar contacto          | `CONTACT` en `build-landing.mjs` (landing) y `data/store/pricing.json` (academy-web)                                                                                                                                                             |
 | Cambiar precios           | FUENTE ÚNICA: los precios del CRM (Configuración) son la referencia. Reflejarlos en `resolveTierLabel` (build-landing.mjs) y `data/store/pricing.json`. Los links de MercadoPago se crean a mano con el mismo precio (en ARS al cambio del día). |
+
+> **Migración 2026-09-14:** la landing canónica vive ahora en `https://gentlevanguard.github.io/`
+> (repo público `gentlevanguard/gentlevanguard.github.io`, cuenta de marca — sin "emmanuelortiz87"
+> en la URL). El deploy es por branch (sin Actions). La URL vieja
+> (`emmanuelortiz87.github.io/gentle-vanguard/`) queda de espejo mientras se difunde la nueva;
+> el QR de `docs/marketing/assets/landing-qr.png` ya apunta a la nueva.
 
 ## 6. Flujo de pago y entrega (post-venta)
 
