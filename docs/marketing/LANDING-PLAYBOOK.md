@@ -73,7 +73,16 @@ con el stack encendido.
 | Cambiar contacto          | `CONTACT` en `build-landing.mjs` (landing) y `data/store/pricing.json` (academy-web)                                                                                                                                                             |
 | Cambiar precios           | FUENTE ÚNICA: los precios del CRM (Configuración) son la referencia. Reflejarlos en `resolveTierLabel` (build-landing.mjs) y `data/store/pricing.json`. Los links de MercadoPago se crean a mano con el mismo precio (en ARS al cambio del día). |
 
-## 6. Métricas — las 3 capas
+## 6. Flujo de pago y entrega (post-venta)
+
+1. **Aviso de pago**: MercadoPago te avisa por mail/app cuando acreditan un pago. El link de pago
+   identifica el producto (ej. "Toolkit").
+2. **Registrar en el CRM**: abrir el deal del cliente → transición a **paid** (sella la fecha).
+3. **Entrega**: la tarjeta del deal en "Cobrados" muestra el **📦 checklist de entrega** con los
+   pasos por tipo de producto (exportar PDFs desde Academy → enviar por WhatsApp/email).
+4. **Cerrar**: transición a **delivered** cuando el cliente confirma recepción.
+
+## 7. Métricas — las 3 capas
 
 **Capa 1 — Interés (gratis, ya instrumentado, falta activar el receptor)**
 
@@ -102,7 +111,7 @@ propuestas, ventas e ingresos.
 Visitas, origen y dispositivo: Cloudflare Web Analytics (gratis, un `<script>`) o GoatCounter. Se
 agrega el snippet al generador cuando se active.
 
-## 7. Próximas mejoras sugeridas (no bloqueantes)
+## 8. Próximas mejoras sugeridas (no bloqueantes)
 
 - **Dominio propio** (ej. `academy.tudominio.com`): más profesional y estable ante cambios de
   usuario de GitHub. Guía completa: `docs/marketing/DOMINIO-PROPIO-GUIA.md`.
