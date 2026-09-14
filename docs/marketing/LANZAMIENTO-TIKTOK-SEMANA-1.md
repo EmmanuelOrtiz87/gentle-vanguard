@@ -336,7 +336,25 @@ estrategia en la semana 1: el algoritmo necesita ~2 semanas de consistencia para
 > Regla de consistencia: **mismo nombre de perfil, misma foto (logo GV) y mismo link (la landing)
 > en las 4 redes**. El usuario tiene que reconocerte y llegar al mismo lugar desde cualquier red.
 
-### 8.1 Instagram (ya verificado en §1, detalle aquí)
+### 8.1 TikTok (canal primario)
+
+> OJO: la bio de TikTok admite solo **80 caracteres** (la versión larga no entra).
+
+| Campo    | Valor                                                       | Límite |
+| -------- | ----------------------------------------------------------- | ------ |
+| Nick     | `Gentle Vanguard`                                           | 30     |
+| Usuario  | `@gentlevanguard` (o el más cercano libre)                  | 24     |
+| **Bio**  | `IA para emprendedores y PYMEs 🚀 Prompts · cursos · software a medida 👇` | 72/80 |
+| Link     | Landing — requiere **cuenta Business** (paso clave, abajo)  | 1      |
+
+**Paso clave — cambiar a cuenta Business** (gratis, sin esperar los 1.000 seguidores): Perfil →
+☰ Configuración y privacidad → Cuenta → Cambiar a cuenta Business. Eso habilita el campo de
+sitio web (la landing) + estadísticas nativas. Nota: Business usa la biblioteca de música
+comercial — no afecta contenido hablado a cámara.
+
+Alternativa de bio con tono "aprender": `Aprendé IA para tu negocio 💼 Prompts · cursos · software a medida 👇` (69/80).
+
+### 8.2 Instagram (ya verificado en §1, detalle aquí)
 
 | Campo            | Valor                                   | Límite |
 | ---------------- | --------------------------------------- | ------ |
@@ -347,7 +365,7 @@ estrategia en la semana 1: el algoritmo necesita ~2 semanas de consistencia para
 | Categoría        | Educación                               | —      |
 | Contacto         | Botón WhatsApp + email                  | —      |
 
-### 8.2 WhatsApp Business (complementa §5)
+### 8.3 WhatsApp Business (complementa §5)
 
 | Campo                  | Valor                                                                                              |
 | ---------------------- | -------------------------------------------------------------------------------------------------- |
@@ -381,7 +399,7 @@ CATÁLOGO COMPLETO
 https://emmanuelortiz87.github.io/gentle-vanguard/
 ```
 
-### 8.3 Facebook (página)
+### 8.4 Facebook (página)
 
 | Campo                  | Valor                                                                                                             |
 | ---------------------- | ----------------------------------------------------------------------------------------------------------------- |
@@ -393,7 +411,7 @@ https://emmanuelortiz87.github.io/gentle-vanguard/
 | Botón CTA de la página | "Enviar mensaje de WhatsApp" → `542645452221`                                                                      |
 | Sitio web / email      | Landing / `gentlevanguard@gmail.com`                                                                               |
 
-### 8.4 Por qué difieren (lógica detrás de cada una)
+### 8.5 Por qué difieren (lógica detrás de cada una)
 
 - **TikTok/IG** (descubrimiento): cortas — el algoritmo y el video venden; el link hace el resto.
 - **WhatsApp** (canal de venta): la descripción larga funciona como mini-catálogo 24/7 — el lead
