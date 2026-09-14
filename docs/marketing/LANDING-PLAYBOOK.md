@@ -51,8 +51,8 @@ cliente elige. El botón de cada producto abre WhatsApp directo; el email es la 
 
 **Leads del formulario web sin WhatsApp/email**: quedan en el dispositivo del visitante (privacidad
 del navegador) — no llegan solos al CRM. Por eso el mensaje de cierre de la landing empuja al
-contacto directo. Los leads que sí llegan solos al CRM son los de `academy-web` local y los syncs
-con el stack encendido.
+contacto directo. Academy ya no captura leads: desde 2026-09-14 es solo material de estudio (sin
+precios, sin WhatsApp, sin formularios comerciales).
 
 ## 4. Seguimiento (pipeline del CRM)
 
