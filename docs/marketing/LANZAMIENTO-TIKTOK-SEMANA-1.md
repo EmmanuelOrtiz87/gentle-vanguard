@@ -24,9 +24,8 @@ LinkedIn y WhatsApp. Estrategia y reglas: `GV-SPEECH-PLAYBOOK-2026-09.md`. Este 
       o el más cercano disponible. Reservar el mismo en IG y FB si están libres.
 - [ ] Foto de perfil: logo GV (`assets/logo.svg` exportado a PNG cuadrado), idéntica en TikTok, IG
       y FB.
-- [ ] **Bio TikTok/IG:** `IA para emprendedores y PYMEs. Prompts, cursos y software a medida. 👇
-      Catálogo y material` + link a la landing.
-- [ ] **Facebook:** página con botón de WhatsApp configurado.
+- [ ] **Perfiles completos** en las 4 redes con los textos de §8 (descripciones listas, límites
+      verificados).
 - [ ] **WhatsApp Business:** perfil completo, catálogo cargado, mensaje de bienvenida, respuestas
       rápidas y etiquetas (textos listos en §5 de este kit).
 - [ ] **Landing verificada:** abre, precios v2 visibles, botón "Me interesa" por producto abre
@@ -331,6 +330,78 @@ rotar los speeches de producto restantes (Toolkit, Mentoría, Academy) en los ju
 **Metas de la semana 1** (del playbook §7.4): 7+ videos publicados · 20+ comentarios con palabra
 clave · 10+ leads en CRM · 15+ conversaciones WhatsApp · 3+ ventas. Si no se llega, NO cambiar la
 estrategia en la semana 1: el algoritmo necesita ~2 semanas de consistencia para calibrar.
+
+## 8. Descripciones de perfiles (copiar/pegar — límites verificados)
+
+> Regla de consistencia: **mismo nombre de perfil, misma foto (logo GV) y mismo link (la landing)
+> en las 4 redes**. El usuario tiene que reconocerte y llegar al mismo lugar desde cualquier red.
+
+### 8.1 Instagram (ya verificado en §1, detalle aquí)
+
+| Campo            | Valor                                   | Límite |
+| ---------------- | --------------------------------------- | ------ |
+| Nombre (buscable)| `Gentle Vanguard \| IA para Negocios`    | 64     |
+| Usuario          | `@gentlevanguard` (o el más cercano libre)| —     |
+| Bio              | 3 líneas de §1                          | 150    |
+| Link             | Landing (único link clicable — por eso el CTA "link en bio") | 1 |
+| Categoría        | Educación                               | —      |
+| Contacto         | Botón WhatsApp + email                  | —      |
+
+### 8.2 WhatsApp Business (complementa §5)
+
+| Campo                  | Valor                                                                                              |
+| ---------------------- | -------------------------------------------------------------------------------------------------- |
+| Nombre del perfil      | `Gentle Vanguard`                                                                                   |
+| Categoría              | Educación                                                                                           |
+| **About** (139)        | `IA para emprendedores y PYMEs · Prompts, cursos, mentoría y software a medida · Respuesta en minutos` |
+| **Descripción comercio** | Texto de abajo (906/2048)                                                                         |
+| Email                  | `gentlevanguard@gmail.com`                                                                          |
+| Sitio web              | Landing                                                                                             |
+| Horario                | Todos los días, 9:00–22:00 (Argentina)                                                              |
+
+**Descripción del comercio (pegar completa):**
+
+```text
+Formación y herramientas de IA para emprendedores y PYMEs, de Gentle-Vanguard Academy.
+
+QUÉ OFRECEMOS
+• Micro eBooks (USD 20): prompts y guías prácticas listas para usar
+• eBooks Premium (USD 40): manuales completos con plantillas y casos
+• Cursos (USD 50): 20 cursos de IA de cero a avanzado — ChatGPT, Gemini, Claude, agentes, marketing, programación
+• Curso + Acompañamiento (USD 100): curso completo + 5 sesiones 1 a 1
+• Toolkits (USD 80): curso + ebook + 50 prompts + plantillas + automatizaciones
+• Mentoría 1 a 1 (USD 20/sesión): tu caso concreto, plan de acción claro
+• Software a medida y consultoría para PYMEs: automatizaciones, atención con IA, sistemas de gestión
+
+CÓMO COMPRAR
+Escribí la palabra: PROMPTS · CURSO · KIT · MENTORIA · CHARLA
+Te paso el detalle y el link de pago (MercadoPago). Entrega inmediata del material.
+
+CATÁLOGO COMPLETO
+https://emmanuelortiz87.github.io/gentle-vanguard/
+```
+
+### 8.3 Facebook (página)
+
+| Campo                  | Valor                                                                                                             |
+| ---------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| Nombre de la página    | `Gentle Vanguard`                                                                                                 |
+| Usuario                | `@gentlevanguard` (o el más cercano libre)                                                                        |
+| Categoría              | Educación                                                                                                          |
+| **Bio** (94/101)       | `IA para emprendedores y PYMEs. Prompts, cursos y software a medida. Escribinos por WhatsApp 👇`                    |
+| **Introducción** (231/255) | `Formación y herramientas de IA para emprendedores y PYMEs: micro-ebooks, cursos, toolkits, mentoría y software a medida. Un solo pago por MercadoPago y entrega inmediata. Catálogo: https://emmanuelortiz87.github.io/gentle-vanguard/` |
+| Botón CTA de la página | "Enviar mensaje de WhatsApp" → `542645452221`                                                                      |
+| Sitio web / email      | Landing / `gentlevanguard@gmail.com`                                                                               |
+
+### 8.4 Por qué difieren (lógica detrás de cada una)
+
+- **TikTok/IG** (descubrimiento): cortas — el algoritmo y el video venden; el link hace el resto.
+- **WhatsApp** (canal de venta): la descripción larga funciona como mini-catálogo 24/7 — el lead
+  ve precios y palabras clave antes de que respondas.
+- **Facebook** (público +30 y PYME): la introducción explica el negocio completo porque llega por
+  búsquedas y compartidos, no por el algoritmo.
+- Voseo y tono GV en todas ("Escribinos"/"Escribí"), precios solo en WhatsApp y FB (donde se
+  decide), 👇 siempre apuntando al paso siguiente.
 
 ---
 
