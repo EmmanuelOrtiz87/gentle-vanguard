@@ -617,8 +617,10 @@ Dos reglas que se componen:
 ### 10.3 El flujo completo de un lead
 
 1. El video pide UNA palabra clave ("comentá PROMPTS").
-2. Respondés el comentario: "te escribí por WhatsApp, link en bio" (y el lead entra al WhatsApp o
-   a la landing, que tiene WhatsApp de 1 click por producto).
+2. Respondés el comentario apuntando al puente: "te pasé todo por Instagram: @gentlevanguard"
+   — su bio tiene el link a la landing, que abre WhatsApp de 1 click. Nota: mientras la cuenta de
+   TikTok sea normal (sin sitio web en bio), los DM solo funcionan con seguidores mutuos — el
+   comentario público + Instagram es el camino fiable.
 3. La auto-bienvenida recibe al lead mientras llegás.
 4. Respondés con la respuesta rápida correspondiente (link de pago incluido).
 5. Etiquetás en WhatsApp + registrás contacto y deal en el CRM.

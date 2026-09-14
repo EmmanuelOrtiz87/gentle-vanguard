@@ -130,7 +130,8 @@ LinkedIn y WhatsApp. Estrategia y reglas: `GV-SPEECH-PLAYBOOK-2026-09.md`. Este 
   que podés copiar, demos del sistema, errores incluidos. Y el material completo está en la
   landing: micro-ebooks, cursos, toolkits — con precio claro, un solo pago, sin suscripciones
   trampa."
-- **CTA (30-45s):** "Entrá al link de la bio y mirá el catálogo. Sin registro."
+- **CTA (30-45s):** "Buscá @gentlevanguard en Instagram: el catálogo completo está en su bio. Sin
+  registro."
 - **CIERRE:** "El conocimiento gratis que comparto hoy es la confianza que construyo para mañana."
 
 ### V7 — Domingo 20 · Alcance · Recordatorio del live del jueves (o republicar lo mejor)
@@ -295,8 +296,8 @@ status con recorte o texto. Una sola acción por video, igual en todas las redes
 ### V6 (Sáb)
 
 - **TikTok/IG:** `Todos te venden IA. Yo te muestro qué te doy gratis: contenido real todos los
-  días, prompts copiables, demos del sistema. Catálogo en el link de la bio — precio claro, un
-  solo pago, sin suscripciones trampa. #GentleVanguard #IA #emprendedores`
+  días, prompts copiables, demos del sistema. Catálogo completo en Instagram: @gentlevanguard —
+  precio claro, un solo pago, sin suscripciones trampa. #GentleVanguard #IA #emprendedores`
 - **FB:** `El problema de aprender IA hoy es el humo: cursos eternos de teoría, promesas de
   millones. Gentle-Vanguard es lo contrario: contenido real todos los días y un catálogo con
   precio claro (micro-ebooks, cursos, toolkits, mentoría). Miralo sin registro:
@@ -336,23 +337,32 @@ estrategia en la semana 1: el algoritmo necesita ~2 semanas de consistencia para
 > Regla de consistencia: **mismo nombre de perfil, misma foto (logo GV) y mismo link (la landing)
 > en las 4 redes**. El usuario tiene que reconocerte y llegar al mismo lugar desde cualquier red.
 
-### 8.1 TikTok (canal primario)
+### 8.1 TikTok (cuenta NORMAL — sin link en bio, puente por Instagram)
 
-> OJO: la bio de TikTok admite solo **80 caracteres** (la versión larga no entra).
+> OJO: la bio de TikTok admite solo **80 caracteres** (la versión larga no entra). Y la cuenta
+> personal **no tiene campo de sitio web** (se habilita con cuenta Business o al llegar a 1.000
+> seguidores). **El puente de tráfico es Instagram: @gentlevanguard**, que sí tiene el link de la
+> landing desde el día 1. Ventaja de la cuenta normal: biblioteca completa de sonidos y alcance
+> orgánico histórico mejor que el de las cuentas Business.
 
 | Campo    | Valor                                                       | Límite |
 | -------- | ----------------------------------------------------------- | ------ |
 | Nick     | `Gentle Vanguard`                                           | 30     |
 | Usuario  | `@gentlevanguard` (o el más cercano libre)                  | 24     |
-| **Bio**  | `IA para emprendedores y PYMEs 🚀 Prompts · cursos · software a medida 👇` | 72/80 |
-| Link     | Landing — requiere **cuenta Business** (paso clave, abajo)  | 1      |
+| **Bio**  | `IA para emprendedores y PYMEs 🚀 Todo el material en IG: @gentlevanguard` | 72/80 |
+| Link     | ❌ no disponible en cuenta normal → puente por Instagram    | —      |
 
-**Paso clave — cambiar a cuenta Business** (gratis, sin esperar los 1.000 seguidores): Perfil →
-☰ Configuración y privacidad → Cuenta → Cambiar a cuenta Business. Eso habilita el campo de
-sitio web (la landing) + estadísticas nativas. Nota: Business usa la biblioteca de música
-comercial — no afecta contenido hablado a cámara.
+Alternativa: `IA para emprendedores y PYMEs. Prompts · cursos · software. IG: @gentlevanguard`
+(79/80).
 
-Alternativa de bio con tono "aprender": `Aprendé IA para tu negocio 💼 Prompts · cursos · software a medida 👇` (69/80).
+**Regla de CTA para TikTok (cuenta normal):**
+
+- Los CTAs de palabra clave ("comentá PROMPTS") funcionan igual — la conversación sigue por
+  WhatsApp o Instagram.
+- Nunca digas "link en bio" EN TikTok (todavía no existe). En IG y Facebook sí vale.
+- Cuando un video pida mirar el catálogo: "está en Instagram @gentlevanguard, link en su bio".
+- Cuando la cuenta llegue a 1.000 seguidores (o se pueda cambiar a Business): agregar la landing
+  como sitio web, volver la bio a la versión corta de producto y actualizar esta sección.
 
 ### 8.2 Instagram (ya verificado en §1, detalle aquí)
 
