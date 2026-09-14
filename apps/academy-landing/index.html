@@ -100,7 +100,7 @@ section { padding: 60px 20px; }
 .badge-premium { background: linear-gradient(135deg, #a78bfa, #f0abfc); color: #0a0c10; }
 .badge-micro { border: 1px solid rgba(34,211,238,0.35); color: var(--cyan); background: rgba(34,211,238,0.08); }
 .badge-toolkit { border: 1px solid rgba(167,139,250,0.35); color: var(--purple); background: rgba(167,139,250,0.08); }
-.pricing { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; max-width: 900px; margin: 0 auto; }
+.pricing { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; max-width: 720px; margin: 0 auto; }
 .price-card {
   background: var(--glass); border: 1px solid var(--border); border-radius: var(--radius);
   padding: 28px 24px; text-align: center; position: relative;
@@ -416,7 +416,7 @@ footer a { color: var(--cyan); }
 
 <section class="product-section" id="sec-cursos">
   <h2 class="section-title">Cursos con acompañamiento</h2>
-  <p class="section-sub">Elegí el curso y la modalidad: solo el curso (USD 40) o curso + acompañamiento personalizado (USD 70)</p>
+  <p class="section-sub">Elegí el curso y la modalidad: solo el curso (USD 50) o curso + acompañamiento personalizado (USD 100)</p>
   <div class="grid"><div class="card">
     <img src="covers/course-agentes-ia.svg" alt="Agentes de IA en tu día a día" loading="lazy" onerror="this.src='covers/_default.svg'">
     <div class="badge-row"><span class="badge badge-micro">CURSO</span></div>
@@ -955,39 +955,48 @@ footer a { color: var(--cyan); }
 </section>
 
 <section>
-  <h2 class="section-title">Paquetes por audiencia</h2>
-  <p class="section-sub">Curso + ebook + toolkit en un solo plan, listo para entregar</p>
+  <h2 class="section-title">Planes</h2>
+  <p class="section-sub">Elegí cómo aprender: material, acompañamiento 1 a 1, mentoría o un programa a medida para tu equipo</p>
   <div class="pricing">
     <div class="price-card">
-      <div class="tier">Individual</div>
-      <div class="price">$29<small> USD</small></div>
+      <div class="tier">Curso</div>
+      <div class="price">$50<small> USD</small></div>
       <ul>
-        <li>1 micro-ebook a elección</li>
-        <li>Export PDF con portada de marca</li>
-        <li>Actualizaciones por 1 año</li>
+        <li>Acceso completo a un curso: todos los tracks y lecciones</li>
+        <li>20 cursos disponibles, de cero a avanzado</li>
+        <li>Material exportable a PDF con marca</li>
       </ul>
-      <a class="btn btn-ghost btn-interest" data-interest="Plan Individual ($29 USD)" href="#lead">Solicitar</a>
-    </div>
-    <div class="price-card">
-      <div class="tier">Toolkit</div>
-      <div class="price">$49<small> USD</small></div>
-      <ul>
-        <li>Toolkit completo (prompts + plantillas + emails + automatizaciones + casos)</li>
-        <li>Ebook incluido</li>
-        <li>Export PDF listo para entregar</li>
-      </ul>
-      <a class="btn btn-ghost btn-interest" data-interest="Toolkit ($49 USD)" href="#lead">Solicitar</a>
+      <a class="btn btn-ghost btn-interest" data-interest="Curso ($50 USD)" href="#lead">Solicitar</a>
     </div>
     <div class="price-card pro">
-      <div class="tier">Plan Pro</div>
-      <div class="price">$99<small> USD</small></div>
+      <div class="tier">Curso + Acompañamiento</div>
+      <div class="price">$100<small> USD</small></div>
       <ul>
-        <li>Manual premium (80-150 páginas)</li>
-        <li>Toolkit Pro completo</li>
-        <li>Curso vinculado incluido</li>
-        <li>Actualizaciones por 2 años</li>
+        <li>Curso completo a elección</li>
+        <li>5 sesiones personalizadas de 1-2 horas</li>
+        <li>Tu caso concreto, resuelto con guía 1 a 1</li>
       </ul>
-      <a class="btn btn-primary btn-interest" data-interest="Plan Pro ($99 USD)" href="#lead">Solicitar</a>
+      <a class="btn btn-primary btn-interest" data-interest="Curso + Acompañamiento ($100 USD)" href="#lead">Solicitar</a>
+    </div>
+    <div class="price-card">
+      <div class="tier">Mentoría Individual</div>
+      <div class="price">$20<small> USD/sesión</small></div>
+      <ul>
+        <li>1 hora 1 a 1, agendada cuando quieras</li>
+        <li>Tu caso: IA, software, productividad o negocio</li>
+        <li>Salís con un plan de acción concreto</li>
+      </ul>
+      <a class="btn btn-ghost btn-interest" data-interest="Mentoría Individual ($20 USD/sesión)" href="#lead">Solicitar</a>
+    </div>
+    <div class="price-card pro">
+      <div class="tier">Programa Personalizado</div>
+      <div class="price">$250<small> USD · por equipo</small></div>
+      <ul>
+        <li>Para tu empresa o equipo (hasta 5 personas)</li>
+        <li>Diagnóstico + diseño a medida + material para cada integrante</li>
+        <li>4 sesiones en vivo + seguimiento por WhatsApp durante 30 días</li>
+      </ul>
+      <a class="btn btn-primary btn-interest" data-interest="Programa Personalizado ($250 USD)" href="#lead">Solicitar</a>
     </div>
   </div>
 </section>
