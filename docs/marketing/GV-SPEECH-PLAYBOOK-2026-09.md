@@ -1,6 +1,8 @@
 # GV Speech Playbook — Guía completa de venta por video, live y charlas
 
-**Versión:** 1.0 — 2026-09-13 **Zona horaria:** Argentina (GMT-3) **Redes de marca:** TikTok,
+**Versión:** 1.1 — 2026-09-13 (v1.0: estructura base · v1.1: nicho primario TikTok, matriz
+80/20×70/30, reutilización multi-red, automatización del embudo, precios v2 del CRM como fuente
+única) **Zona horaria:** Argentina (GMT-3) **Redes de marca:** TikTok,
 Instagram, Facebook, WhatsApp Business **Redes personales (guía separada):** LinkedIn, X, Reddit
 
 > Este documento es una **receta de cocina**: seguí los pasos, usá los guiones tal cual o adaptalos,
@@ -24,7 +26,7 @@ criterio, seguridad y resultados reales.
 
 | Audiencia              | Dolor                                         | Oferta de entrada                 | Siguiente paso                       |
 | ---------------------- | --------------------------------------------- | --------------------------------- | ------------------------------------ |
-| **Público general**    | "La IA me supera / no sé por dónde empezar"   | Ebook micro ($10) o charla gratis | Curso IA de 0 a 100 ($40)            |
+| **Público general**    | "La IA me supera / no sé por dónde empezar"   | Ebook micro ($20) o charla gratis | Curso IA de 0 a 100 ($50)            |
 | **Estudiantes**        | "Quiero estudiar más rápido y mejor"          | Ebook IA para Estudiantes         | Toolkit estudiantes Pro              |
 | **Docentes**           | "No sé cómo usar IA en el aula"               | Ebook ChatGPT para Docentes       | Toolkit docentes Pro                 |
 | **Emprendedores/PYME** | "Pierdo tiempo y plata en tareas repetitivas" | Ebook 50 Prompts Emprendedores    | Toolkit emprendedores Pro + mentoría |
@@ -35,8 +37,8 @@ criterio, seguridad y resultados reales.
 ### 1.3 El embudo (funnel) — cómo se convierte
 
 ```
-CONTENIDO GRATIS (TikTok/IG/FB) → CHARLA GRATIS o EBOOK ($10) → CURSO ($40) → MENTORÍA ($70+) → SERVICIOS ($2K+)
-       (awareness)                    (lead)              (primera venta)     (upsell)        (contrato)
+CONTENIDO GRATIS (TikTok/IG/FB) → CHARLA GRATIS o MICRO EBOOK ($20) → CURSO ($50) → CURSO + ACOMPAÑAMIENTO ($100) → SERVICIOS ($2K+)
+       (awareness)                    (lead)                    (primera venta)  (upsell)                  (contrato)
 ```
 
 **Regla de oro:** cada video termina con UNA sola acción. Nunca dos. "Comentá 'IA' y te mando el
@@ -62,6 +64,29 @@ Tu estructura propuesta era buena. La versión profesional de alto rendimiento e
 - Hablá **a UNA persona**, no a una audiencia. "Vos que sos docente..." no "los docentes".
 - El CTA debe ser **de bajo esfuerzo**: comentar una palabra es más fácil que "entrá al link".
 - **Nunca prometas resultados mágicos.** Prometé método, criterio y acompañamiento.
+- **Aplicabilidad:** cada video educativo deja algo que el espectador aplica en menos de 5 minutos
+  (un prompt copiable, un checklist, un paso a paso). Eso es "trascender la pantalla": prueba,
+  obtiene un resultado y vuelve.
+- **Precios: solo los oficiales del CRM** (fuente única `pricing.json`): micro ebook $20 · curso
+  $50 · toolkit $80 · curso + acompañamiento $100 · mentoría $20/sesión. Nunca cifras de resultados
+  sin prueba.
+
+### 1.5 Nicho primario TikTok (definición 2026-09-13)
+
+**Nicho primario: emprendedores y PYMEs que quieren usar IA para vender más y ahorrar tiempo.**
+
+- Es el público masivo de TikTok AR con capacidad de compra y dolor urgente (tiempo, ventas,
+  desorden operativo).
+- Ya tiene productos alineados en la escalera: micro ebook de prompts ($20), toolkit ($80),
+  mentoría ($20), software a medida y consultoría.
+- Nichos secundarios (no abandonar, pero no liderar el contenido): profesionales (ebook premium
+  $40, curso), docentes/estudiantes (ebooks), empresas grandes (consultoría — ese lead entra por
+  LinkedIn, no por TikTok).
+
+**Regla de entrenamiento del algoritmo:** los primeros 20 videos llevan el nicho en el gancho y en
+los hashtags (emprendedores, PYME, negocio). El 70% de "alcance amplio" igual habla de IA aplicada
+al trabajo y al negocio — nunca contenido random de tendencias ajenas. Amplitud significa variedad
+de personas dentro del territorio GV (IA útil para no técnicos), no cualquier tema viral.
 
 ---
 
@@ -69,8 +94,12 @@ Tu estructura propuesta era buena. La versión profesional de alto rendimiento e
 
 > Formato: 30-60 segundos. Grabá en vertical, con buena luz, mirando a cámara. Cada speech tiene la
 > estructura completa. Adaptá el tono a tu estilo natural.
+>
+> **Cuándo usar cada speech:** los speeches de producto se publican **1 por semana** (jueves, ver
+> matriz de la PARTE 5.2). El resto de la semana es contenido educativo e inspiración — guiones
+> listos en `LANZAMIENTO-TIKTOK-SEMANA-1.md`.
 
-### SPEECH 1 — Ebook (micro, $10) — "50 Prompts para Emprendedores"
+### SPEECH 1 — Micro eBook ($20) — "50 Prompts para Emprendedores"
 
 **GANCHO (0-3s):** "¿Sabías que el 80% de los emprendedores usa la IA solo para 'hacer un texto'?"
 
@@ -81,8 +110,8 @@ no es la IA. El problema es que no sabés pedirle."
 en tu producto, en tu familia. Horas que no vuelven."
 
 **SOLUCIÓN (20-40s):** "Te armé un ebook con 50 prompts listos para usar: para responder clientes,
-armar publicaciones, calcular precios, organizar tu semana. Copiás, pegás, adaptás. Listo. Son 32
-páginas, directo al grano, sin humo."
+armar publicaciones, calcular precios, organizar tu semana. Copiás, pegás, adaptás. Listo. 20-40
+páginas para dominar el tema en una tarde, directo al grano, sin humo."
 
 **CTA (40-50s):** "Comentá la palabra 'PROMPTS' y te paso el link directo."
 
@@ -91,7 +120,7 @@ competencia."
 
 ---
 
-### SPEECH 2 — Curso "IA de 0 a 100" ($40)
+### SPEECH 2 — Academy: "IA de 0 a 100" ($50)
 
 **GANCHO:** "Te voy a mostrar cómo pasé de no entender nada de IA a construir sistemas que me
 ahorran 10 horas por semana."
@@ -102,9 +131,9 @@ abandonan a la semana."
 **AGITACIÓN:** "Mientras tanto, el mundo avanza. Tus colegas ya usan IA para trabajar en la mitad
 del tiempo. Y vos seguís sin saber ni por dónde empezar."
 
-**SOLUCIÓN:** "Mi curso 'IA de 0 a 100' es distinto: 10 tracks, 16 horas, y desde la primera clase
-ya estás usando IA en algo real. ChatGPT, Gemini, Claude, agentes, seguridad. Nada de humo, todo
-práctica. Y queda tuyo para siempre."
+**SOLUCIÓN:** "La Academy de Gentle-Vanguard es distinta: 20 cursos de cero a avanzado — ChatGPT,
+Gemini, Claude, agentes, marketing, programación — y desde la primera clase ya estás usando IA en
+algo real. Nada de humo, todo práctica. Acceso completo a todos los cursos."
 
 **CTA:** "Comentá 'CURSO' y te mando toda la info por WhatsApp."
 
@@ -112,7 +141,7 @@ práctica. Y queda tuyo para siempre."
 
 ---
 
-### SPEECH 3 — Toolkit Emprendedores Pro ($49)
+### SPEECH 3 — Toolkit Emprendedores Pro ($80)
 
 **GANCHO:** "¿Cuánto pagás por mes en herramientas que no usás ni a la mitad?"
 
@@ -121,9 +150,9 @@ que le funcione."
 
 **AGITACIÓN:** "Eso es plata que se va todos los meses. Plata que podrías invertir en crecer."
 
-**SOLUCIÓN:** "Te armé el Toolkit IA para Emprendedores: el curso completo, el manual de 120
-páginas, 50 prompts, plantillas, emails listos y automatizaciones. Todo en un solo lugar, a precio
-de una cena."
+**SOLUCIÓN:** "Te armé el Toolkit IA para Emprendedores: curso + ebook + 50 prompts + plantillas +
+emails listos + automatizaciones + casos reales. Todo en un solo lugar, con un solo pago. Un
+sistema completo para tu negocio, no diez herramientas sueltas."
 
 **CTA:** "Comentá 'KIT' y te paso el detalle."
 
@@ -342,22 +371,35 @@ esto, compartilo con alguien que lo necesite. Nos vemos."
 | **X (personal)**        | Lun-Vie                 | 8-10 AM, 12-1 PM, 6-8 PM | Hilos + respuestas a cuentas de IA             |
 | **Reddit (personal)**   | Según subreddit         | Horario del sub          | Solo aportar valor, sin spam                   |
 
-### 5.2 Calendario semanal tipo (semana 1)
+### 5.2 Matriz de contenido 80/20 × 70/30 (reemplaza la mezcla 60/20/15/5)
 
-| Día     | TikTok                          | Instagram        | Facebook       | WhatsApp               | Live/Charla                            |
-| ------- | ------------------------------- | ---------------- | -------------- | ---------------------- | -------------------------------------- |
-| **Lun** | Video: Ebook (Speech 1)         | Reel mismo video | Compartir reel | Status: CTA ebook      | —                                      |
-| **Mar** | Video: Curso (Speech 2)         | Reel + story     | Compartir      | Status: testimonio     | —                                      |
-| **Mié** | Video: Toolkit (Speech 3)       | Reel             | Compartir      | Status: CTA kit        | —                                      |
-| **Jue** | Video: Mentoría (Speech 4)      | Reel + story     | Compartir      | Status: CTA mentoría   | **LIVE 20:00** (IA para emprendedores) |
-| **Vie** | Video: Software PYME (Speech 5) | Reel             | Compartir      | Status: caso real      | —                                      |
-| **Sáb** | Video: Charla (Speech 7)        | Reel + story     | Compartir      | Status: CTA charla     | —                                      |
-| **Dom** | Video: Testimonio (Speech 8)    | Reel             | Compartir      | Status: resumen semana | —                                      |
+Dos reglas que se componen:
+
+- **80% educativo / 20% oferta + inspiración:** el contenido educa primero, vende después. Una
+  cuenta nueva que solo vende quema el alcance: el algoritmo no la distribuye.
+- **Dentro del educativo: 70% alcance amplio / 30% nicho** (emprendedores/PYME). El 20% de oferta
+  vive en el video de producto semanal + el soft sell del live.
+
+| Día     | TikTok (y multi-red)                    | Tipo                      | CTA principal                    |
+| ------- | --------------------------------------- | ------------------------- | -------------------------------- |
+| **Lun** | Educativo alcance amplio                | Educativo · alcance       | Guardar / comentar 1-2-3         |
+| **Mar** | Educativo alcance amplio (mito/demo)    | Educativo · alcance       | Guardar                          |
+| **Mié** | Educativo de NICHO (emprendedores)      | Educativo · nicho         | Palabra clave → WhatsApp         |
+| **Jue** | OFERTA: 1 speech de producto            | Oferta (20%)              | Palabra clave → WhatsApp         |
+| **Jue** | **LIVE 20:00** (valor 60% + soft sell)  | Conversión                | Palabra clave → WhatsApp         |
+| **Vie** | Educativo de NICHO (caso/error)         | Educativo · nicho         | Guardar / compartir              |
+| **Sáb** | Inspiración: historia real GV           | Inspirar                  | Link en bio (sin venta dura)     |
+| **Dom** | Recordatorio del live / republicar lo mejor | Alcance               | Campanita / guardado             |
+
+> Guiones completos día por día de la semana 1 (14-20/09/2026): `LANZAMIENTO-TIKTOK-SEMANA-1.md`.
+> Registro diario de resultados: tabla de métricas en ese mismo kit.
 
 ### 5.3 Reglas de producción
 
 - **1 video por día** como mínimo (TikTok + IG reel = mismo video, 2 publicaciones).
 - **Lote de grabación**: grabá 4-5 videos en una sesión (30-45 min) y publicá uno por día.
+- **Grabá limpio**: el archivo fuente (sin marca de agua) es EL asset multi-red. Nunca descargues
+  tu video desde TikTok para reusarlo — la marca de agua reduce el alcance en Reels (ver PARTE 9).
 - **Formato**: vertical 9:16, 30-60 segundos, subtítulos SIEMPRE (el 80% ve sin audio).
 - **Miniatura/portada**: texto grande con el gancho.
 - **Hashtags**: 3-5 relevantes (ej: #IA #inteligenciaArtificial #emprendedores #productividad
@@ -456,11 +498,11 @@ esto, compartilo con alguien que lo necesite. Nos vemos."
 
 | Objeción                   | Respuesta                                                                                          |
 | -------------------------- | -------------------------------------------------------------------------------------------------- |
-| "No tengo tiempo"          | "El ebook son 32 páginas, lo leés en un viaje. Y te ahorra horas desde el día 1."                  |
-| "Es caro"                  | "Son $10. Si te ahorra 1 hora, ya se pagó solo. Y tiene garantía."                                 |
+| "No tengo tiempo"          | "El ebook son 20-40 páginas, lo leés en una tarde. Y te ahorra horas desde el día 1."           |
+| "Es caro"                  | "Son $20. Si te ahorra una hora, ya se pagó solo."                                              |
 | "La IA no es para mí"      | "La IA ya está en tu WhatsApp, tu banco, tu trabajo. La pregunta es si la usás vos o te usa ella." |
 | "¿Y si no me funciona?"    | "Por eso arrancamos con algo chico. Y si necesitás, tenés la mentoría para tu caso."               |
-| "Lo puedo aprender gratis" | "Sí, hay info gratis. Lo que te ahorrás es meses de prueba y error. Eso vale más que $40."         |
+| "Lo puedo aprender gratis" | "Sí, hay info gratis. Lo que te ahorrás es meses de prueba y error. Eso vale más que $50."         |
 
 ### 7.4 Métricas semanales (revisar cada lunes)
 
@@ -480,7 +522,7 @@ esto, compartilo con alguien que lo necesite. Nos vemos."
 
 - [ ] **Día 1:** Configurar WhatsApp Business con catálogo (52 productos).
 - [ ] **Día 1:** Configurar CRM Studio (productos, pipeline).
-- [ ] **Día 1:** Grabar lote de 5 videos (Speeches 1-5).
+- [ ] **Día 1:** Grabar lote 1 (los 5 videos del kit `LANZAMIENTO-TIKTOK-SEMANA-1.md`).
 - [ ] **Día 2:** Publicar Speech 1 en TikTok + IG + FB.
 - [ ] **Día 3:** Publicar Speech 2 + responder todos los comentarios.
 - [ ] **Día 4:** Publicar Speech 3 + anunciar LIVE del jueves.
@@ -513,7 +555,85 @@ esto, compartilo con alguien que lo necesite. Nos vemos."
 
 ---
 
-## PARTE 9 — REGLAS DE ORO FINALES
+## PARTE 9 — REUTILIZACIÓN MULTI-RED (1 grabación → 5 canales)
+
+> Regla: el 80% del esfuerzo es la grabación. Adaptar a cada red toma ~10 minutos por día. El
+> mismo video trabaja en TikTok, Instagram, Facebook, LinkedIn y WhatsApp con ajustes de caption y
+> CTA.
+
+### 9.1 El flujo diario
+
+1. **Grabá limpio** (vertical 9:16, subtítulos incrustados): el archivo fuente es EL asset.
+2. **TikTok primero** (~19:30). Esperá 15-30 min y verificá que publicó bien con subtítulos.
+3. **El mismo archivo** → IG Reels y Facebook Reels. NUNCA lo descargues desde TikTok (la marca de
+   agua reduce el alcance en Reels): subí siempre el archivo fuente desde tu galería.
+4. **IG Stories**: sticker de link a la landing + encuesta rápida ("¿ya probaste esto?").
+5. **LinkedIn** (2-3 por semana, Mar/Jue): adaptación ESCRITA del tema con tono profesional, o el
+   video nativo. CTA de diagnóstico, nunca palabra clave.
+6. **WhatsApp Status**: recorte de 15-30 s del video o el tip en texto + "Escribí IA y te lo mando".
+
+### 9.2 Qué cambia por red
+
+| Red      | Qué subís                            | Caption                            | CTA                            |
+| -------- | ------------------------------------ | ---------------------------------- | ------------------------------ |
+| TikTok   | Video 30-60 s con subtítulos         | Corto + 3-5 hashtags               | Palabra clave o guardado       |
+| IG Reels | Mismo video                          | Igual que TikTok + hashtags IG     | Palabra clave / DM             |
+| Facebook | Mismo reel + texto más explicativo   | 3-5 líneas + link en comentario fijado | WhatsApp (botón de página) |
+| LinkedIn | Post escrito (o video nativo)        | Caso/aprendizaje profesional       | "Agendá un diagnóstico"        |
+| WhatsApp | Status: recorte o texto              | 1-2 líneas                         | "Respondé IA"                  |
+
+### 9.3 Reglas de unicidad de CTA por red
+
+- Un video = UNA acción (ya definida en la fórmula §1.4). La MISMA acción en TikTok, IG y FB.
+- LinkedIn lleva siempre CTA profesional (diagnóstico/llamada) — el público es B2B.
+- WhatsApp es el único canal donde se manda el link de pago. Todo lo demás empuja hacia ahí.
+
+## PARTE 10 — AUTOMATIZACIÓN DEL EMBUDO
+
+> Objetivo: que captura, cobro y entrega funcionen con mínima fricción — y que tu tiempo quede
+> para conversar con leads calificados. Automatizar la captura y el cobro; humanizar la
+> conversación (ahí está la ventaja contra cuentas grandes).
+
+### 10.1 Estado del embudo (2026-09-13)
+
+| Etapa                         | Estado        | Cómo                                                  |
+| ----------------------------- | ------------- | ----------------------------------------------------- |
+| Captura de interés (landing)  | ✅ Automática | `track()` → Apps Script → Google Sheet (en producción) |
+| Cobro                         | ✅ Semi-auto  | Link MercadoPago por producto (mapa MPAGO del generador) |
+| Primer contacto               | 🔧 Asistido   | WhatsApp Business: auto-bienvenida + respuestas rápidas |
+| Registro y pipeline           | 🔧 Asistido   | CRM Studio (`lead → contacted → quoted → sold → paid`)  |
+| Entrega                       | 🔧 Asistida   | Checklist por producto en la tarjeta del deal           |
+| Seguimiento día 1/3/7         | 🔧 Manual hoy | Recordatorios del CRM (los textos están en §4 del playbook de comunidad) |
+
+### 10.2 Configurar HOY en WhatsApp Business (~15 min)
+
+1. **Mensaje de bienvenida** (texto listo en `LANZAMIENTO-TIKTOK-SEMANA-1.md`).
+2. **Respuestas rápidas**: `/prompts`, `/curso`, `/kit`, `/mentoria`, `/charla`, `/ia` — textos
+   listos en el kit, con link de pago MercadoPago incluido en cada uno.
+3. **Etiquetas**: `lead-ebook`, `lead-curso`, `lead-kit`, `lead-mentoria`, `lead-servicio`,
+   `cliente`, `entregado`.
+4. **Mensaje de ausencia** para consultas fuera de horario.
+
+### 10.3 El flujo completo de un lead
+
+1. El video pide UNA palabra clave ("comentá PROMPTS").
+2. Respondés el comentario: "te escribí por WhatsApp, link en bio" (y el lead entra al WhatsApp o
+   a la landing, que tiene WhatsApp de 1 click por producto).
+3. La auto-bienvenida recibe al lead mientras llegás.
+4. Respondés con la respuesta rápida correspondiente (link de pago incluido).
+5. Etiquetás en WhatsApp + registrás contacto y deal en el CRM.
+6. Paga por MercadoPago → checklist de entrega del deal → seguimiento día 1/3/7 → upsell (ebook →
+   curso → acompañamiento → servicios).
+
+### 10.4 Qué NO automatizar (todavía)
+
+- DMs masivos o auto-DM en TikTok: riesgo real de shadowban.
+- Respuestas con IA sin supervisión en WhatsApp: la velocidad vende, pero la cara del negocio sos
+  vos. Respondé en minutos, con criterio.
+- Publicación automática sin revisar: el CMS tiene conector TikTok en modo adapter con aprobación
+  obligatoria (`apps/content-cms`) — usarlo para PREPARAR contenido, no para publicar a ciegas.
+
+## PARTE 11 — REGLAS DE ORO FINALES
 
 1. **Consistencia > perfección.** Un video promedio publicado hoy vale más que uno perfecto la
    próxima semana.
