@@ -20,8 +20,8 @@ LinkedIn y WhatsApp. Estrategia y reglas: `GV-SPEECH-PLAYBOOK-2026-09.md`. Este 
 
 ## 1. Checklist PRE-LANZAMIENTO (hoy, domingo 13)
 
-- [ ] Crear cuenta de **TikTok** (propietario, con su teléfono). Identificador: `@gentlevanguard`
-      o el más cercano disponible. Reservar el mismo en IG y FB si están libres.
+- [x] Cuentas creadas: **TikTok e Instagram `@gentlevanguard.sj`** ✅ (usar el mismo usuario al
+      crear la página de Facebook).
 - [ ] Foto de perfil: logo GV (`assets/logo.svg` exportado a PNG cuadrado), idéntica en TikTok, IG
       y FB.
 - [ ] **Perfiles completos** en las 4 redes con los textos de §8 (descripciones listas, límites
@@ -130,7 +130,7 @@ LinkedIn y WhatsApp. Estrategia y reglas: `GV-SPEECH-PLAYBOOK-2026-09.md`. Este 
   que podés copiar, demos del sistema, errores incluidos. Y el material completo está en la
   landing: micro-ebooks, cursos, toolkits — con precio claro, un solo pago, sin suscripciones
   trampa."
-- **CTA (30-45s):** "Buscá @gentlevanguard en Instagram: el catálogo completo está en su bio. Sin
+- **CTA (30-45s):** "Buscá @gentlevanguard.sj en Instagram: el catálogo completo está en su bio. Sin
   registro."
 - **CIERRE:** "El conocimiento gratis que comparto hoy es la confianza que construyo para mañana."
 
@@ -207,6 +207,15 @@ status con recorte o texto. Una sola acción por video, igual en todas las redes
 > con un plan de acción claro.
 > USD 20 por sesión · Coordinamos día y hora acá mismo.
 > Pago: https://mpago.la/2EE2AX2
+
+**`/programa`**
+> El **Programa Personalizado** es formación a medida para tu empresa o equipo (hasta 5 personas):
+> 1. Diagnóstico inicial (30-45 min): objetivos y nivel del equipo.
+> 2. Diseño a medida del programa sobre el catálogo (cursos + ebook + toolkit).
+> 3. Material completo para cada integrante.
+> 4. 4 sesiones en vivo de 1-2 horas con tu equipo.
+> 5. 30 días de seguimiento por WhatsApp.
+> USD 250 por equipo · Coordinamos todo por acá.
 
 **`/charla`**
 > La próxima **charla gratuita** "IA en tu día a día" es el [FECHA] a las 19:00 por Zoom.
@@ -296,7 +305,7 @@ status con recorte o texto. Una sola acción por video, igual en todas las redes
 ### V6 (Sáb)
 
 - **TikTok/IG:** `Todos te venden IA. Yo te muestro qué te doy gratis: contenido real todos los
-  días, prompts copiables, demos del sistema. Catálogo completo en Instagram: @gentlevanguard —
+  días, prompts copiables, demos del sistema. Catálogo completo en Instagram: @gentlevanguard.sj —
   precio claro, un solo pago, sin suscripciones trampa. #GentleVanguard #IA #emprendedores`
 - **FB:** `El problema de aprender IA hoy es el humo: cursos eternos de teoría, promesas de
   millones. Gentle-Vanguard es lo contrario: contenido real todos los días y un catálogo con
@@ -341,26 +350,25 @@ estrategia en la semana 1: el algoritmo necesita ~2 semanas de consistencia para
 
 > OJO: la bio de TikTok admite solo **80 caracteres** (la versión larga no entra). Y la cuenta
 > personal **no tiene campo de sitio web** (se habilita con cuenta Business o al llegar a 1.000
-> seguidores). **El puente de tráfico es Instagram: @gentlevanguard**, que sí tiene el link de la
+> seguidores). **El puente de tráfico es Instagram: @gentlevanguard.sj**, que sí tiene el link de la
 > landing desde el día 1. Ventaja de la cuenta normal: biblioteca completa de sonidos y alcance
 > orgánico histórico mejor que el de las cuentas Business.
 
 | Campo    | Valor                                                       | Límite |
 | -------- | ----------------------------------------------------------- | ------ |
 | Nick     | `Gentle Vanguard`                                           | 30     |
-| Usuario  | `@gentlevanguard` (o el más cercano libre)                  | 24     |
-| **Bio**  | `IA para emprendedores y PYMEs 🚀 Todo el material en IG: @gentlevanguard` | 72/80 |
+| Usuario  | `@gentlevanguard.sj` (cuenta ya creada ✅)                  | 19/24  |
+| **Bio**  | `IA para emprendedores y PYMEs 🚀 Todo el material en IG: @gentlevanguard.sj` | 75/80 |
 | Link     | ❌ no disponible en cuenta normal → puente por Instagram    | —      |
 
-Alternativa: `IA para emprendedores y PYMEs. Prompts · cursos · software. IG: @gentlevanguard`
-(79/80).
+Alternativa: `IA para emprendedores y PYMEs. Prompts · cursos. IG: @gentlevanguard.sj` (71/80).
 
 **Regla de CTA para TikTok (cuenta normal):**
 
 - Los CTAs de palabra clave ("comentá PROMPTS") funcionan igual — la conversación sigue por
   WhatsApp o Instagram.
 - Nunca digas "link en bio" EN TikTok (todavía no existe). En IG y Facebook sí vale.
-- Cuando un video pida mirar el catálogo: "está en Instagram @gentlevanguard, link en su bio".
+- Cuando un video pida mirar el catálogo: "está en Instagram @gentlevanguard.sj, link en su bio".
 - Cuando la cuenta llegue a 1.000 seguidores (o se pueda cambiar a Business): agregar la landing
   como sitio web, volver la bio a la versión corta de producto y actualizar esta sección.
 
@@ -369,7 +377,7 @@ Alternativa: `IA para emprendedores y PYMEs. Prompts · cursos · software. IG: 
 | Campo            | Valor                                   | Límite |
 | ---------------- | --------------------------------------- | ------ |
 | Nombre (buscable)| `Gentle Vanguard \| IA para Negocios`    | 64     |
-| Usuario          | `@gentlevanguard` (o el más cercano libre)| —     |
+| Usuario          | `@gentlevanguard.sj` (cuenta ya creada ✅)| —     |
 | Bio              | 3 líneas de §1                          | 150    |
 | Link             | Landing (único link clicable — por eso el CTA "link en bio") | 1 |
 | Categoría        | Educación                               | —      |
@@ -414,7 +422,7 @@ https://gentlevanguard.github.io/
 | Campo                  | Valor                                                                                                             |
 | ---------------------- | ----------------------------------------------------------------------------------------------------------------- |
 | Nombre de la página    | `Gentle Vanguard`                                                                                                 |
-| Usuario                | `@gentlevanguard` (o el más cercano libre)                                                                        |
+| Usuario                | `@gentlevanguard.sj` (usar el mismo usuario al crear la página)                                                    |
 | Categoría              | Educación                                                                                                          |
 | **Bio** (94/101)       | `IA para emprendedores y PYMEs. Prompts, cursos y software a medida. Escribinos por WhatsApp 👇`                    |
 | **Introducción** (231/255) | `Formación y herramientas de IA para emprendedores y PYMEs: micro-ebooks, cursos, toolkits, mentoría y software a medida. Un solo pago por MercadoPago y entrega inmediata. Catálogo: https://gentlevanguard.github.io/` |
