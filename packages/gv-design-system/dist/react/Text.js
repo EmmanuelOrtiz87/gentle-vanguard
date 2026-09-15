@@ -10,34 +10,23 @@ import './Text.css';
  *   <Text variant="metric" color="gradient">99.9%</Text>
  *   <Text variant="code">npm install gv-design-system</Text>
  */
-export function Text({
-  variant = 'body',
-  color = 'primary',
-  weight,
-  as: Tag = 'p',
-  truncate = false,
-  className = '',
-  children,
-  ...rest
-}) {
-  const classes = [
-    'gv-text',
-    `gv-text--${variant}`,
-    `gv-text--${color}`,
-    truncate ? 'gv-text--truncate' : '',
-    className,
-  ]
-    .filter(Boolean)
-    .join(' ');
-  const styleFromWeight = weight ? { ...rest.style, fontWeight: weight } : rest.style;
-  return createElement(
-    Tag,
-    {
-      className: classes,
-      ...rest,
-      style: styleFromWeight,
-    },
-    children,
-  );
+export function Text({ variant = 'body', color = 'primary', weight, as: Tag = 'p', truncate = false, className = '', children, ...rest }) {
+    const classes = [
+        'gv-text',
+        `gv-text--${variant}`,
+        `gv-text--${color}`,
+        truncate ? 'gv-text--truncate' : '',
+        className,
+    ]
+        .filter(Boolean)
+        .join(' ');
+    const styleFromWeight = weight
+        ? { ...rest.style, fontWeight: weight }
+        : rest.style;
+    return createElement(Tag, {
+        className: classes,
+        ...rest,
+        style: styleFromWeight,
+    }, children);
 }
 //# sourceMappingURL=Text.js.map

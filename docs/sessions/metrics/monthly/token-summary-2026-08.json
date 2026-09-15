@@ -1,43 +1,19 @@
 {
-  "generated_at": "2026-09-12T22:48:17.693Z",
+  "generated_at": "2026-09-15T21:03:06.353Z",
   "period": "2026-08",
   "days": 28,
   "totals": {
-    "input": 325039504,
-    "output": 13303444,
-    "total": 338342948,
+    "input": 322078654,
+    "output": 12890663,
+    "total": 334969317,
     "cost": 22.862396505
   },
   "daily_avg": {
-    "input": 11608554,
-    "output": 475123,
-    "total": 12083677
+    "input": 11502809,
+    "output": 460381,
+    "total": 11963190
   },
   "by_day": [
-    {
-      "day": "2026-08-14",
-      "input": 13509149,
-      "output": 440878,
-      "total": 13950027,
-      "cost": 0,
-      "sessions": 13
-    },
-    {
-      "day": "2026-08-15",
-      "input": 1151271,
-      "output": 174114,
-      "total": 1325385,
-      "cost": 0,
-      "sessions": 6
-    },
-    {
-      "day": "2026-08-16",
-      "input": 3220049,
-      "output": 238672,
-      "total": 3458721,
-      "cost": 0,
-      "sessions": 3
-    },
     {
       "day": "2026-08-18",
       "input": 6087260,
@@ -232,19 +208,43 @@
     },
     {
       "day": "2026-09-12",
-      "input": 1325586,
-      "output": 24494,
-      "total": 1350080,
+      "input": 829183,
+      "output": 26755,
+      "total": 855938,
       "cost": 0,
       "sessions": 8
+    },
+    {
+      "day": "2026-09-13",
+      "input": 10292783,
+      "output": 218623,
+      "total": 10511406,
+      "cost": 0,
+      "sessions": 4
+    },
+    {
+      "day": "2026-09-14",
+      "input": 298434,
+      "output": 539,
+      "total": 298973,
+      "cost": 0,
+      "sessions": 1
+    },
+    {
+      "day": "2026-09-15",
+      "input": 4824805,
+      "output": 219460,
+      "total": 5044265,
+      "cost": 0,
+      "sessions": 3
     }
   ],
   "by_model": [
     {
       "model": "big-pickle",
-      "input": 116678353,
-      "output": 5395880,
-      "total": 122074233,
+      "input": 125467090,
+      "output": 5827739,
+      "total": 131294829,
       "cost": 5.066973399999999
     },
     {
@@ -269,13 +269,6 @@
       "cost": 0
     },
     {
-      "model": "deepseek-v4-flash-free",
-      "input": 27240097,
-      "output": 1793881,
-      "total": 29033978,
-      "cost": 0
-    },
-    {
       "model": "kimi-2-5",
       "input": 21121626,
       "output": 321544,
@@ -291,9 +284,16 @@
     },
     {
       "model": "GLM-5.3-Flash",
-      "input": 6472687,
-      "output": 33865,
-      "total": 6506552,
+      "input": 12603569,
+      "output": 42889,
+      "total": 12646458,
+      "cost": 0
+    },
+    {
+      "model": "deepseek-v4-flash-free",
+      "input": 9359628,
+      "output": 940217,
+      "total": 10299845,
       "cost": 0
     },
     {
@@ -392,11 +392,6 @@
       "cost": 0
     },
     {
-      "session_id": "ses_006561082ffeMm33umuprY4AHi",
-      "total": 8751936,
-      "cost": 0
-    },
-    {
       "session_id": "sess_0d991eaa-13ba-4cbd-a00d-4e073494709b",
       "total": 8159650,
       "cost": 0
@@ -409,6 +404,11 @@
     {
       "session_id": "ses_fa4db6a2bffeY9FugrK4j0R0rj",
       "total": 6639277,
+      "cost": 0
+    },
+    {
+      "session_id": "ses_f9fddc73cffez0fj0vAaK5z1XY",
+      "total": 6419771,
       "cost": 0
     }
   ]

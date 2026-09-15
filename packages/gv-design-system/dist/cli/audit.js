@@ -22,46 +22,45 @@ const DS_ROOT = join(__dirname, '..', '..');
 const REPO_ROOT = resolve(DS_ROOT, '..', '..');
 const args = argv.slice(2);
 if (args.length === 0) {
-  console.error(
-    'Usage: npx tsx src/cli/audit.ts <path> [--json] [--scope <type|layout|color|motion>]',
-  );
-  process.exit(1);
+    console.error('Usage: npx tsx src/cli/audit.ts <path> [--json] [--scope <type|layout|color|motion>]');
+    process.exit(1);
 }
 const target = args[0];
 if (typeof target !== 'string' || target.length === 0) {
-  console.error('Audit target is required.');
-  process.exit(1);
+    console.error('Audit target is required.');
+    process.exit(1);
 }
 const json = args.includes('--json');
 const scopeFlag = args.indexOf('--scope');
 const scope = scopeFlag >= 0 ? args[scopeFlag + 1] : null;
-const targetPath =
-  target.startsWith('/') || target.match(/^[a-z]:\\/i) ? target : resolve(REPO_ROOT, target);
+const targetPath = target.startsWith('/') || target.match(/^[a-z]:\\/i) ? target : resolve(REPO_ROOT, target);
 const cmd = ['npx', 'impeccable', 'detect', targetPath, json ? '--json' : '--quiet'];
-if (scope) cmd.push('--scope', scope);
+if (scope)
+    cmd.push('--scope', scope);
 console.log(`🔍 Auditing: ${targetPath}`);
 console.log(`   Mode: ${json ? 'JSON' : 'human'}${scope ? ` (scope: ${scope})` : ''}`);
 console.log('');
 try {
-  const output = execSync(cmd.join(' '), {
-    cwd: REPO_ROOT,
-    encoding: 'utf-8',
-    maxBuffer: 10 * 1024 * 1024,
-    stdio: ['ignore', 'pipe', 'pipe'],
-  });
-  console.log(output || '✅ Clean — no issues found.');
-  process.exit(0);
-} catch (err) {
-  const e = err;
-  const text = e.stdout || e.stderr || String(err);
-  console.log(text);
-  // Exit 2 = issues found, that's expected
-  // Exit 0 = clean
-  // Exit > 2 = real error
-  if ((e.status ?? 0) > 2) {
-    console.error('❌ Audit failed.');
-    process.exit(1);
-  }
-  process.exit(2);
+    const output = execSync(cmd.join(' '), {
+        cwd: REPO_ROOT,
+        encoding: 'utf-8',
+        maxBuffer: 10 * 1024 * 1024,
+        stdio: ['ignore', 'pipe', 'pipe'],
+    });
+    console.log(output || '✅ Clean — no issues found.');
+    process.exit(0);
+}
+catch (err) {
+    const e = err;
+    const text = e.stdout || e.stderr || String(err);
+    console.log(text);
+    // Exit 2 = issues found, that's expected
+    // Exit 0 = clean
+    // Exit > 2 = real error
+    if ((e.status ?? 0) > 2) {
+        console.error('❌ Audit failed.');
+        process.exit(1);
+    }
+    process.exit(2);
 }
 //# sourceMappingURL=audit.js.map

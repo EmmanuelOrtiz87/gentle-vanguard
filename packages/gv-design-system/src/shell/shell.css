@@ -81,7 +81,9 @@
   background: color-mix(in srgb, var(--gv-bg, #0f1115) 88%, transparent);
   border-bottom: 1px solid var(--gv-glass-border, var(--gv-border, rgba(167, 139, 250, 0.24)));
   backdrop-filter: blur(14px) saturate(140%);
-  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  /* NOTA: solo propiedad estándar. lightningcss (vite 8) mergea la dupla
+     estándar+-webkit- y emite SOLO el prefijo, que Chromium moderno rechaza
+     (computed=none). Declarar solo la estándar sobrevive a todos los builds. */
 }
 
 .gv-topbar-inner,
@@ -122,11 +124,40 @@
   letter-spacing: 0;
   white-space: nowrap;
 }
+/* Wordmark homologado (NORM-APP-001, fix 2026-09-15):
+   "Gentle" SIEMPRE blanco/neutral; SOLO "Vanguard" lleva el gradiente.
+   Regla con especificidad alta para vencer overrides de apps (archify/archify-v2
+   pintaban el span completo con gradiente). */
+.gv-brand-wordmark,
+.gv-shell .gv-brand-wordmark,
+.gv-brand-wordmark a,
+.gv-shell .gv-brand-wordmark a {
+  color: var(--gv-text, #e9eef4) !important;
+  background: none !important;
+  -webkit-background-clip: initial;
+  background-clip: initial;
+  -webkit-text-fill-color: initial;
+  color: var(--gv-text, #eef2f7) !important;
+}
 .gv-brand-wordmark span,
-.gv-wordmark span {
-  background: var(--gv-gradient, linear-gradient(135deg, #a78bfa, #22d3ee));
+.gv-shell .gv-brand-wordmark span,
+.gv-brand-wordmark a span,
+.gv-shell .gv-brand-wordmark a span {
+  background: var(--gv-gradient, linear-gradient(135deg, #a78bfa, #22d3ee)) !important;
+  -webkit-background-clip: text;
   background-clip: text;
-  color: transparent;
+  color: transparent !important;
+  -webkit-text-fill-color: transparent;
+}
+/* Botón de idioma: fuente homologada (13px) para que el icono no sobresalga
+   ni se vea distinto entre apps (fix 2026-09-15). */
+.gv-lang-dropdown-toggle,
+.gv-shell .gv-lang-dropdown .gv-icon-btn,
+.gv-shell .gv-lang-dropdown-toggle,
+.gv-lang-dropdown .gv-icon-btn {
+  font-size: 13px !important;
+  line-height: 1 !important;
+  padding: 0 !important;
 }
 .gv-shell-context {
   display: flex;
@@ -312,4 +343,108 @@
   .gv-btn {
     transition: none;
   }
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   Light theme (homologado 2026-09-15) — shared key gv-cc-theme
+   ════════════════════════════════════════════════════════════════════ */
+
+:root[data-theme='light'] {
+  color-scheme: light;
+  --gv-bg: #f5f7fb;
+  --gv-surface: #ffffff;
+  --gv-surface-icon: #f1f5f9;
+  --gv-text: #0f172a;
+  --gv-muted: #475569;
+  --gv-border: #cbd5e1;
+  --gv-glass: rgba(255, 255, 255, 0.7);
+  --gv-glass-border: rgba(15, 23, 42, 0.1);
+  --gv-purple: #7c3aed;
+  --gv-cyan: #0891b2;
+  --gv-purple-soft: #6d28d9;
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   Shell controls: icon button, language dropdown, theme toggle
+   ════════════════════════════════════════════════════════════════════ */
+
+.gv-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 8px;
+  border: 1px solid color-mix(in srgb, var(--gv-purple, #a78bfa) 35%, transparent);
+  border-radius: 9px;
+  color: var(--gv-muted, #8b95a8);
+  background: transparent;
+  cursor: pointer;
+  transition: background 180ms ease-out, color 180ms ease-out, border-color 180ms ease-out;
+}
+.gv-icon-btn:hover:not(:disabled) {
+  color: var(--gv-text, #e8eef4);
+  background: color-mix(in srgb, var(--gv-purple, #a78bfa) 14%, transparent);
+}
+.gv-icon-btn:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--gv-cyan, #22d3ee) 60%, transparent);
+  outline-offset: 2px;
+}
+
+.gv-lang-dropdown {
+  position: relative;
+}
+.gv-lang-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 60;
+  min-width: 168px;
+  padding: 4px;
+  border: 1px solid var(--gv-glass-border, rgba(167, 139, 250, 0.24));
+  border-radius: 10px;
+  background: var(--gv-surface, #1a1f2a);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
+}
+.gv-lang-dropdown-menu button {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 8px;
+  padding: 9px 10px;
+  border: 0;
+  border-radius: 7px;
+  color: var(--gv-text, #e8eef4);
+  background: transparent;
+  font: 600 13px/1 var(--gv-font-body, Inter, sans-serif);
+  text-align: left;
+  cursor: pointer;
+}
+.gv-lang-dropdown-menu button:hover,
+.gv-lang-dropdown-menu button[aria-current='true'] {
+  background: color-mix(in srgb, var(--gv-cyan, #22d3ee) 12%, transparent);
+}
+.gv-lang-dropdown-menu button .gv-lang-check {
+  margin-left: auto;
+  color: var(--gv-cyan, #22d3ee);
+}
+
+.gv-theme-toggle {
+  flex-shrink: 0;
+}
+
+.gv-shell-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 8px;
+  flex: 0 0 auto;
+}
+
+.gv-shell-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+  flex: 0 0 auto;
 }

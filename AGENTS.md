@@ -328,6 +328,11 @@ npm run delegate:run -- --task "audit gdpr compliance"
 
 ## Reglas rápidas
 
+- **Nueva app → preguntar diseño** (NORM-APP-001): al crear o rediseñar una app en `apps/`,
+  preguntar al usuario si quiere el **diseño GV homologado** (mismo shell, topbar, footer, tokens,
+  idioma es/en/pt, tema claro/oscuro, claves `gv-cc-lang`/`gv-cc-theme`, estructura de carpetas)
+  o un **diseño custom**. Si elige GV homologado, copiar `shell.js` + `shell.css` + `main.css` del
+  template y adaptar tokens. Si elige custom, documentar la excepción en el README de la app.
 - **Scripts = TS o bash, nada más** (NORM-TS-001): lógica del stack en TypeScript vía
   `run-command.ts`; ciclo de vida de apps con sus `apps/<app>/start.sh|stop.sh` nativos (operables
   sin command-center). PS1/CMD solo en excepciones sancionadas por la norma (installer Pester, shims

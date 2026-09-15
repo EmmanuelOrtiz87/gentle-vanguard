@@ -6,14 +6,6 @@
  *   import '@gentle-vanguard/design-system/tokens.css';
  */
 export { tokens, BRAND_WAIVERS } from './tokens/tokens.js';
-export type {
-  Tokens,
-  ColorTokens,
-  TypographyTokens,
-  SpacingTokens,
-  RadiusTokens,
-  ElevationTokens,
-  MotionTokens,
-} from './tokens/tokens.js';
+export type { Tokens, ColorTokens, TypographyTokens, SpacingTokens, RadiusTokens, ElevationTokens, MotionTokens, } from './tokens/tokens.js';
 export * from './react/index.js';
 //# sourceMappingURL=index.d.ts.map

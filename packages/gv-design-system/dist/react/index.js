@@ -8,4 +8,5 @@ export { Stack } from './Stack.js';
 export { Text } from './Text.js';
 export { Tag } from './Tag.js';
 export { IconButton } from './IconButton.js';
+export { Shell, useShellI18n } from './Shell.js';
 //# sourceMappingURL=index.js.map

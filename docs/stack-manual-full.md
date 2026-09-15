@@ -1064,3 +1064,80 @@ real). `model-router.json` alineado.
   individuales.
 - **Ahorros**: `token_savings` — cache reads (1.061M tokens) + compresión del stack
   (prompt/output/structural).
+
+## Homologación de Apps (NORM-APP-001 + shell estándar)
+
+### NORM-APP-001 — siempre preguntar diseño
+
+Al **crear o rediseñar** una app en `apps/`, el orquestador DEBE preguntar al usuario si quiere:
+
+1. **Diseño GV homologado** — mismo shell, topbar, footer, tokens, idioma es/en/pt, tema
+   claro/oscuro, claves `gv-cc-lang`/`gv-cc-theme`, estructura de carpetas. Copiar
+   `shell.js` + `shell.css` + `main.css` del template y adaptar tokens.
+2. **Diseño custom** — documentar la excepción en el README de la app.
+
+### Shell homologado (referencia: Design Hub)
+
+El shell estándar inyecta (vanilla JS, zero-dep, funciona a cualquier profundidad de ruta):
+
+- **Topbar**: logo oficial (monograma v1 + gradiente v2, 32px) + wordmark "Gentle**Vanguard**" +
+  breadcrumb de contexto + tabs de navegación + **selector de idioma** (dropdown `文A` con
+  banderas 🇪🇸🇬🇧🇧🇷) + **toggle de tema** (☀/🌙) + hamburger móvil.
+- **Footer**: wordmark + tag + "local-first" + puerto + links rápidos.
+- **Claves compartidas**: `localStorage['gv-cc-lang']` (`es`/`en`/`pt`) y
+  `localStorage['gv-cc-theme']` (`light`/`dark`). Todas las apps DEBEN usar estas claves
+  (nunca claves propias tipo `gv-<app>-theme`).
+- **Tema light**: `:root[data-theme='light']` re-mapea los tokens `--gv-*` (bg `#f5f7fb`,
+  text `#0f172a`, surfaces, borders). Los colores hardcodeados de cada app necesitan overrides
+  `:root[data-theme='light'] .selector { ... }`.
+
+### Patrón i18n de contenido (Design Hub)
+
+El shell traduce el chrome (nav, aria, footer). El contenido de cada página usa:
+
+- **`src/scripts/i18n-content.js`** — diccionario es/en/pt con namespaces por página
+  (`overview.*`, `proposals.*`, `tokens.*`, `components.*`, `assets.*`, `brandEditor.*`,
+  `docs.*`). Expone `window.GV_I18N` y `window.GV_TRANSLATE(locale)`.
+- **Atributos HTML**: `data-i18n` (texto), `data-i18n-html` (innerHTML), `data-i18n-suffix`
+  (sufijo tipo "— v2 Premium"), `data-i18n-placeholder` (inputs), `data-i18n-aria`
+  (aria-labels).
+- **Evento `gv:locale-changed`**: shell.js lo dispara al cambiar idioma; páginas con contenido
+  dinámico (JS) lo escuchan y re-renderizan (ej. `components/index.html`).
+- **Fallback**: clave faltante → es → texto original (nunca rompe).
+- **Páginas con JS dinámico**: usar helper `t(key, fallback)` que lee `window.GV_I18N` +
+  `document.documentElement.lang`.
+
+### Normativa Labs (Design Hub)
+
+Los Labs son **experimentos de referencia** — NO forman parte del sistema oficial:
+
+- **Read-only**: los cambios son locales (sliders/pickers) y no se aplican al sistema oficial.
+- **Banner**: cada página de lab tiene `.lab-readonly-banner` (amarillo `#fbbf24`) aclarando
+  el alcance.
+- **Navegación**: shell.js inyecta "← Volver a Labs" (`.gv-shell-back`) en páginas de labs.
+- **Export**: cada lab permite exportar sus cambios/decisiones:
+  - `visual-comparison` → reporte `.md` (botón "Descargar .md" en el modal).
+  - `compare-v1-v2-v3` → decisiones `.json` (botón "Exportar decisiones (.json)").
+  - `v3-showcase` → archivado, solo lectura.
+- **Persistencia**: `compare-v1-v2-v3` guarda decisiones/picks en localStorage
+  (`gv-design-hub-compare-v1-v2-v3`); el resto no persiste.
+
+### Shell React compartido (paquete gv-design-system)
+
+Para apps React (archify, content-cms, academy-crm, ...) el paquete
+`packages/gv-design-system` expone un **componente Shell homologado**:
+
+- **`Shell`** (`@gentle-vanguard/design-system/react/shell`): topbar (brand + nav + selector de
+  idioma + toggle de tema + hamburger) + footer + atmosphere. Props:
+  - `appName` (string), `navItems` (`{id, label, href?|onClick?}`), `currentPage` (id activo),
+    `logoHref`, `translations` (i18n de contenido por página), `actions` (ReactNode con botones
+    custom de la app), `children`, `footer`.
+  - Hook `useShellI18n()` → `{ locale, setLocale, t }` (lee/escribe `gv-cc-lang`, dispara
+    `gv:locale-changed`).
+  - Gestiona `gv-cc-theme` (light/dark) y aplica `data-theme` en `<html>`.
+- **Import**: usar SIEMPRE `@gentle-vanguard/design-system/react/shell` (NO `./react` que
+  re-exporta componentes con imports CSS que rompen el build de vite).
+- **Dependencia**: agregar `"@gentle-vanguard/design-system": "file:../../packages/gv-design-system"`
+  al package.json de la app.
+- **Apps con topbar propio**: si la app ya tiene lang/theme UI (content-cms, academy-crm), basta
+  con migrar las claves a `gv-cc-lang`/`gv-cc-theme` (con mapeo legacy de las claves viejas).

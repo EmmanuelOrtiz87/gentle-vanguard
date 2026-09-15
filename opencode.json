@@ -352,7 +352,11 @@
     "gv-analytics-atlassian": {
       "type": "stdio",
       "command": "node",
-      "args": ["--import", "tsx", "apps/gv-analytics/server/mcp.ts"],
+      "args": [
+        "--import",
+        "tsx",
+        "apps/gv-analytics/server/mcp.ts"
+      ],
       "enabled": true
     }
   },

@@ -256,19 +256,38 @@
     "fontFamilies": {
       "display": {
         "$type": "fontFamilies",
-        "$value": ["Space Grotesk", "Orbitron", "sans-serif"]
+        "$value": [
+          "Space Grotesk",
+          "Orbitron",
+          "sans-serif"
+        ]
       },
       "body": {
         "$type": "fontFamilies",
-        "$value": ["Inter", "Inter Variable", "system-ui", "-apple-system", "sans-serif"]
+        "$value": [
+          "Inter",
+          "Inter Variable",
+          "system-ui",
+          "-apple-system",
+          "sans-serif"
+        ]
       },
       "mono": {
         "$type": "fontFamilies",
-        "$value": ["JetBrains Mono NL", "JetBrains Mono", "Cascadia Code", "Consolas", "monospace"]
+        "$value": [
+          "JetBrains Mono NL",
+          "JetBrains Mono",
+          "Cascadia Code",
+          "Consolas",
+          "monospace"
+        ]
       },
       "monoAccent": {
         "$type": "fontFamilies",
-        "$value": ["Space Mono", "monospace"]
+        "$value": [
+          "Space Mono",
+          "monospace"
+        ]
       }
     },
     "fontWeights": {

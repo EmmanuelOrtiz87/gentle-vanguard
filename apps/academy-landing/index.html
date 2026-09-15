@@ -39,6 +39,52 @@
   --glass: rgba(255,255,255,0.04); --border: rgba(139,149,168,0.18);
   --radius: 16px; --radius-sm: 10px;
 }
+/* Light theme (homologado 2026-09-15) — shared key gv-cc-theme */
+:root[data-theme='light'] {
+  color-scheme: light;
+  --bg: #f5f7fb; --bg-deep: #eef1f6; --text: #0f172a; --text-2: #475569;
+  --purple: #7c3aed; --cyan: #0891b2;
+  --glass: rgba(255,255,255,0.7); --border: rgba(15,23,42,0.12);
+}
+/* Homologated topbar (language + theme) */
+.gv-topbar {
+  position: sticky; top: 0; z-index: 100;
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 24px;
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter: blur(14px) saturate(140%);
+  border-bottom: 1px solid var(--border);
+}
+.gv-topbar .gv-brand { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; color: var(--text); font-weight: 800; font-size: 15px; }
+.gv-topbar .gv-brand img { width: 32px; height: 32px; }
+.gv-topbar .gv-brand-wordmark span { background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.gv-topbar .gv-spacer { flex: 1; }
+.gv-icon-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 36px; height: 36px; padding: 8px;
+  border: 1px solid color-mix(in srgb, var(--purple) 35%, transparent);
+  border-radius: 9px; color: var(--text-2); background: transparent; cursor: pointer;
+  transition: background .18s, color .18s, border-color .18s;
+}
+.gv-icon-btn:hover { color: var(--text); background: color-mix(in srgb, var(--purple) 14%, transparent); }
+.gv-lang-dropdown { position: relative; }
+.gv-lang-dropdown-menu {
+  position: absolute; top: calc(100% + 8px); right: 0; z-index: 120;
+  min-width: 168px; padding: 4px;
+  border: 1px solid var(--border); border-radius: 10px;
+  background: var(--bg-deep); box-shadow: 0 12px 30px rgba(0,0,0,.45);
+}
+.gv-lang-dropdown-menu button {
+  display: flex; align-items: center; width: 100%; gap: 8px;
+  padding: 9px 10px; border: 0; border-radius: 7px;
+  color: var(--text); background: transparent;
+  font: 600 13px/1 'Space Grotesk', sans-serif; text-align: left; cursor: pointer;
+}
+.gv-lang-dropdown-menu button:hover, .gv-lang-dropdown-menu button[aria-current='true'] {
+  background: color-mix(in srgb, var(--cyan) 12%, transparent);
+}
+.gv-lang-dropdown-menu button .gv-lang-check { margin-left: auto; color: var(--cyan); }
+.gv-shell-controls { display: flex; align-items: center; gap: 8px; margin-left: auto; }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body {
   background: var(--bg); color: var(--text);
@@ -163,34 +209,54 @@ footer a { color: var(--cyan); }
 </head>
 <body>
 
+<!-- Homologated topbar: brand + language selector + theme toggle (gv-cc-lang/gv-cc-theme) -->
+<header class="gv-topbar" role="banner">
+  <a class="gv-brand" href="/" aria-label="Gentle-Vanguard Academy">
+    <img src="logo.svg" alt="Gentle-Vanguard" width="32" height="32" onerror="this.style.display='none'">
+    <span class="gv-brand-wordmark">Gentle<span>Vanguard</span></span>
+  </a>
+  <div class="gv-spacer"></div>
+  <div class="gv-shell-controls">
+    <div class="gv-lang-dropdown">
+      <button type="button" class="gv-icon-btn" id="lang-toggle" aria-label="Idioma" aria-haspopup="true" aria-expanded="false"><span>文A</span></button>
+      <div class="gv-lang-dropdown-menu" id="lang-menu" hidden>
+        <button type="button" data-locale="es"><span>🇪🇸</span><span>Español</span><span class="gv-lang-check"></span></button>
+        <button type="button" data-locale="en"><span>🇬🇧</span><span>English</span><span class="gv-lang-check"></span></button>
+        <button type="button" data-locale="pt"><span>🇧🇷</span><span>Português</span><span class="gv-lang-check"></span></button>
+      </div>
+    </div>
+    <button type="button" class="gv-icon-btn gv-theme-toggle" id="theme-toggle" aria-label="Cambiar tema">☀</button>
+  </div>
+</header>
+
 <section class="hero">
-  <span class="hero-badge">GENTLE-VANGUARD ACADEMY</span>
-  <h1>Aprendé IA y tecnología<br>con <span class="g">material listo para entregar</span></h1>
-  <p class="tagline">Cursos prácticos, ebooks, toolkits y paquetes por audiencia — todo exportable a PDF.</p>
-  <p class="desc">Para personas que quieren dominar la IA en su trabajo, estudiantes que quieren estudiar más inteligente, y empresas que necesitan capacitación lista para entregar.</p>
+  <span class="hero-badge" data-i18n="hero.badge">GENTLE-VANGUARD ACADEMY</span>
+  <h1><span data-i18n="hero.h1a">Aprendé IA y tecnología</span><br><span data-i18n="hero.con">con </span><span class="g" data-i18n="hero.h1b">material listo para entregar</span></h1>
+  <p class="tagline" data-i18n="hero.tagline">Cursos prácticos, ebooks, toolkits y paquetes por audiencia — todo exportable a PDF.</p>
+  <p class="desc" data-i18n="hero.desc">Para personas que quieren dominar la IA en su trabajo, estudiantes que quieren estudiar más inteligente, y empresas que necesitan capacitación lista para entregar.</p>
   <div class="cta-row">
-    <a class="btn btn-primary" href="#lead">Solicitar material</a>
-    <button type="button" class="btn btn-ghost" id="hero-whatsapp">💬 Contactar por WhatsApp</button>
+    <a class="btn btn-primary" href="#lead" data-i18n="hero.cta">Solicitar material</a>
+    <button type="button" class="btn btn-ghost" id="hero-whatsapp" data-i18n="hero.whatsapp">💬 Contactar por WhatsApp</button>
   </div>
   <div class="stats">
-    <div class="stat"><div class="n">20</div><div class="l">Cursos</div></div>
-    <div class="stat"><div class="n">20</div><div class="l">eBooks</div></div>
-    <div class="stat"><div class="n">12</div><div class="l">Toolkits</div></div>
-    <div class="stat"><div class="n">52</div><div class="l">Productos</div></div>
+    <div class="stat"><div class="n">20</div><div class="l" data-i18n="stat.cursos">Cursos</div></div>
+    <div class="stat"><div class="n">20</div><div class="l" data-i18n="stat.ebooks">eBooks</div></div>
+    <div class="stat"><div class="n">12</div><div class="l" data-i18n="stat.toolkits">Toolkits</div></div>
+    <div class="stat"><div class="n">52</div><div class="l" data-i18n="stat.productos">Productos</div></div>
   </div>
 </section>
 
 <nav class="tabbar" id="tabbar" aria-label="Categorías de productos">
-  <button type="button" class="tab active" data-sec="sec-destacados">Destacados</button>
-  <button type="button" class="tab" data-sec="sec-cursos">Cursos</button>
-  <button type="button" class="tab" data-sec="sec-manuales">Manuales Premium</button>
-  <button type="button" class="tab" data-sec="sec-micro">Micro-Ebooks</button>
-  <button type="button" class="tab" data-sec="sec-toolkits">Toolkits</button>
+  <button type="button" class="tab active" data-sec="sec-destacados" data-i18n="tab.destacados">Destacados</button>
+  <button type="button" class="tab" data-sec="sec-cursos" data-i18n="tab.cursos">Cursos</button>
+  <button type="button" class="tab" data-sec="sec-manuales" data-i18n="tab.manuales">Manuales Premium</button>
+  <button type="button" class="tab" data-sec="sec-micro" data-i18n="tab.micro">Micro-Ebooks</button>
+  <button type="button" class="tab" data-sec="sec-toolkits" data-i18n="tab.toolkits">Toolkits</button>
 </nav>
 
 <section class="product-section active" id="sec-destacados">
-  <h2 class="section-title">Destacados</h2>
-  <p class="section-sub">Selección curada de nuestros productos más solicitados</p>
+  <h2 class="section-title" data-i18n="sec.destacados">Destacados</h2>
+  <p class="section-sub" data-i18n="sec.destacadosSub">Selección curada de nuestros productos más solicitados</p>
   <div class="grid"><div class="card">
     <img src="covers/50-prompts-emprendedores.svg" alt="50 Prompts para Emprendedores" loading="lazy" onerror="this.style.display='none'">
     <div class="price-tag">USD 20</div>
@@ -424,8 +490,8 @@ footer a { color: var(--cyan); }
 </section>
 
 <section class="product-section" id="sec-cursos">
-  <h2 class="section-title">Cursos con acompañamiento</h2>
-  <p class="section-sub">Elegí el curso y la modalidad: solo el curso (USD 50) o curso + acompañamiento personalizado (USD 100)</p>
+  <h2 class="section-title" data-i18n="sec.cursos">Cursos con acompañamiento</h2>
+  <p class="section-sub" data-i18n="sec.cursosSub">Elegí el curso y la modalidad: solo el curso (USD 50) o curso + acompañamiento personalizado (USD 100)</p>
   <div class="grid"><div class="card">
     <img src="covers/course-agentes-ia.svg" alt="Agentes de IA en tu día a día" loading="lazy" onerror="this.src='covers/_default.svg'">
     <div class="badge-row"><span class="badge badge-micro">CURSO</span></div>
@@ -629,8 +695,8 @@ footer a { color: var(--cyan); }
 </section>
 
 <section class="product-section" id="sec-manuales">
-  <h2 class="section-title">Manuales premium</h2>
-  <p class="section-sub">80-150 páginas: conceptos, herramientas, prompts, casos, ejercicios, plantillas y workflows</p>
+  <h2 class="section-title" data-i18n="sec.manuales">Manuales premium</h2>
+  <p class="section-sub" data-i18n="sec.manualesSub">80-150 páginas: conceptos, herramientas, prompts, casos, ejercicios, plantillas y workflows</p>
   <div class="grid"><div class="card">
     <img src="covers/manual-ia-administracion.svg" alt="Manual Práctico de IA para Administración" loading="lazy" onerror="this.style.display='none'">
     <div class="price-tag">USD 40</div>
@@ -734,8 +800,8 @@ footer a { color: var(--cyan); }
 </section>
 
 <section class="product-section" id="sec-micro">
-  <h2 class="section-title">Micro-ebooks</h2>
-  <p class="section-sub">20-40 páginas para dominar un tema en una tarde</p>
+  <h2 class="section-title" data-i18n="sec.micro">Micro-ebooks</h2>
+  <p class="section-sub" data-i18n="sec.microSub">20-40 páginas para dominar un tema en una tarde</p>
   <div class="grid"><div class="card">
     <img src="covers/50-prompts-emprendedores.svg" alt="50 Prompts para Emprendedores" loading="lazy" onerror="this.style.display='none'">
     <div class="price-tag">USD 20</div>
@@ -839,8 +905,8 @@ footer a { color: var(--cyan); }
 </section>
 
 <section class="product-section" id="sec-toolkits">
-  <h2 class="section-title">Toolkits</h2>
-  <p class="section-sub">Prompts + plantillas + emails + automatizaciones + casos, listos para aplicar</p>
+  <h2 class="section-title" data-i18n="sec.toolkits">Toolkits</h2>
+  <p class="section-sub" data-i18n="sec.toolkitsSub">Prompts + plantillas + emails + automatizaciones + casos, listos para aplicar</p>
   <div class="grid"><div class="card">
     <img src="covers/ia-administracion-pro.svg" alt="IA para Administración Pro" loading="lazy" onerror="this.style.display='none'">
     <div class="price-tag">USD 80</div>
@@ -1056,7 +1122,7 @@ footer a { color: var(--cyan); }
 </section>
 
 <footer>
-  <p>Gentle-Vanguard Academy — Material de IA listo para entregar · <button type="button" class="link-btn" id="footer-whatsapp">💬 WhatsApp</button> · <a class="link-btn" href="https://www.tiktok.com/@gentlevanguard.sj" target="_blank" rel="noopener">TikTok</a> · <a class="link-btn" href="https://www.instagram.com/gentlevanguard.sj" target="_blank" rel="noopener">Instagram</a></p>
+  <p><span data-i18n="footer.rights">Gentle-Vanguard Academy — Material de IA listo para entregar</span> · <button type="button" class="link-btn" id="footer-whatsapp">💬 WhatsApp</button> · <a class="link-btn" href="https://www.tiktok.com/@gentlevanguard.sj" target="_blank" rel="noopener">TikTok</a> · <a class="link-btn" href="https://www.instagram.com/gentlevanguard.sj" target="_blank" rel="noopener">Instagram</a></p>
   <p style="margin-top:8px">Precios en USD. Los pagos se procesan en pesos argentinos al tipo de cambio del día.</p>
   <p style="margin-top:8px; opacity:.6">100% local-first · Sin dependencias · Datos en tu máquina</p>
 </footer>
@@ -1216,6 +1282,175 @@ document.getElementById('lead-form').addEventListener('submit', async function(e
   document.getElementById('lead-success').style.display = 'block';
   if (CONTACT.email) document.getElementById('send-email').style.display = 'inline-flex';
 });
+</script>
+
+<!-- Homologated i18n + theme (shared keys gv-cc-lang / gv-cc-theme) -->
+<script>
+(function () {
+  'use strict';
+  var I18N = {
+    es: {
+      'hero.badge': 'GENTLE-VANGUARD ACADEMY',
+      'hero.h1a': 'Aprendé IA y tecnología',
+      'hero.con': 'con ',
+      'hero.h1b': 'material listo para entregar',
+      'hero.tagline': 'Cursos prácticos, ebooks, toolkits y paquetes por audiencia — todo exportable a PDF.',
+      'hero.desc': 'Para personas que quieren dominar la IA en su trabajo, estudiantes que quieren estudiar más inteligente, y empresas que necesitan capacitación lista para entregar.',
+      'hero.cta': 'Solicitar material',
+      'hero.whatsapp': '💬 Contactar por WhatsApp',
+      'stat.cursos': 'Cursos', 'stat.ebooks': 'eBooks', 'stat.toolkits': 'Toolkits', 'stat.productos': 'Productos',
+      'tab.destacados': 'Destacados', 'tab.cursos': 'Cursos', 'tab.manuales': 'Manuales Premium', 'tab.micro': 'Micro-Ebooks', 'tab.toolkits': 'Toolkits',
+      'sec.destacados': 'Destacados', 'sec.destacadosSub': 'Selección curada de nuestros productos más solicitados',
+      'sec.cursos': 'Cursos con acompañamiento', 'sec.cursosSub': 'Elegí el curso y la modalidad: solo el curso (USD 50) o curso + acompañamiento personalizado (USD 100)',
+      'sec.manuales': 'Manuales Premium', 'sec.manualesSub': 'Guías completas de 120 páginas para dominar la IA en tu área',
+      'sec.micro': 'Micro-Ebooks', 'sec.microSub': 'Guías rápidas y accionables de 30-40 páginas',
+      'sec.toolkits': 'Toolkits', 'sec.toolkitsSub': 'Kits completos: curso + manual + prompts + plantillas + automatizaciones',
+      'btn.interesa': '💬 Me interesa', 'btn.comprar': '💳 Comprar',
+      'btn.consultar': '💬 Consultar', 'btn.comprarSolo': '💳 Comprar solo · USD 50', 'btn.comprarAcomp': '💳 Comprar + acompañamiento · USD 100',
+      'aria.tabs': 'Categorías de productos',
+      'footer.rights': 'Gentle-Vanguard Academy — Todos los derechos reservados.'
+    },
+    en: {
+      'hero.badge': 'GENTLE-VANGUARD ACADEMY',
+      'hero.h1a': 'Learn AI and technology',
+      'hero.con': 'with ',
+      'hero.h1b': 'ready-to-deliver material',
+      'hero.tagline': 'Practical courses, ebooks, toolkits and audience packs — all exportable to PDF.',
+      'hero.desc': 'For people who want to master AI at work, students who want to study smarter, and companies that need ready-to-deliver training.',
+      'hero.cta': 'Request material',
+      'hero.whatsapp': '💬 Contact via WhatsApp',
+      'stat.cursos': 'Courses', 'stat.ebooks': 'eBooks', 'stat.toolkits': 'Toolkits', 'stat.productos': 'Products',
+      'tab.destacados': 'Featured', 'tab.cursos': 'Courses', 'tab.manuales': 'Premium Manuals', 'tab.micro': 'Micro-Ebooks', 'tab.toolkits': 'Toolkits',
+      'sec.destacados': 'Featured', 'sec.destacadosSub': 'Curated selection of our most requested products',
+      'sec.cursos': 'Courses with support', 'sec.cursosSub': 'Choose the course and mode: course only (USD 50) or course + personalized support (USD 100)',
+      'sec.manuales': 'Premium Manuals', 'sec.manualesSub': 'Complete 120-page guides to master AI in your field',
+      'sec.micro': 'Micro-Ebooks', 'sec.microSub': 'Quick, actionable 30-40 page guides',
+      'sec.toolkits': 'Toolkits', 'sec.toolkitsSub': 'Complete kits: course + manual + prompts + templates + automations',
+      'btn.interesa': '💬 I want it', 'btn.comprar': '💳 Buy',
+      'btn.consultar': '💬 Ask', 'btn.comprarSolo': '💳 Buy only · USD 50', 'btn.comprarAcomp': '💳 Buy + support · USD 100',
+      'aria.tabs': 'Product categories',
+      'footer.rights': 'Gentle-Vanguard Academy — All rights reserved.'
+    },
+    pt: {
+      'hero.badge': 'GENTLE-VANGUARD ACADEMY',
+      'hero.h1a': 'Aprenda IA e tecnologia',
+      'hero.con': 'com ',
+      'hero.h1b': 'material pronto para entregar',
+      'hero.tagline': 'Cursos práticos, ebooks, toolkits e pacotes por público — tudo exportável para PDF.',
+      'hero.desc': 'Para pessoas que querem dominar a IA no trabalho, estudantes que querem estudar de forma mais inteligente e empresas que precisam de treinamento pronto para entregar.',
+      'hero.cta': 'Solicitar material',
+      'hero.whatsapp': '💬 Contatar via WhatsApp',
+      'stat.cursos': 'Cursos', 'stat.ebooks': 'eBooks', 'stat.toolkits': 'Toolkits', 'stat.productos': 'Produtos',
+      'tab.destacados': 'Destaques', 'tab.cursos': 'Cursos', 'tab.manuales': 'Manuais Premium', 'tab.micro': 'Micro-Ebooks', 'tab.toolkits': 'Toolkits',
+      'sec.destacados': 'Destaques', 'sec.destacadosSub': 'Seleção curada dos nossos produtos mais solicitados',
+      'sec.cursos': 'Cursos com acompanhamento', 'sec.cursosSub': 'Escolha o curso e a modalidade: só o curso (USD 50) ou curso + acompanhamento personalizado (USD 100)',
+      'sec.manuales': 'Manuais Premium', 'sec.manualesSub': 'Guias completos de 120 páginas para dominar a IA na sua área',
+      'sec.micro': 'Micro-Ebooks', 'sec.microSub': 'Guias rápidos e acionáveis de 30-40 páginas',
+      'sec.toolkits': 'Toolkits', 'sec.toolkitsSub': 'Kits completos: curso + manual + prompts + modelos + automações',
+      'btn.interesa': '💬 Quero', 'btn.comprar': '💳 Comprar',
+      'btn.consultar': '💬 Consultar', 'btn.comprarSolo': '💳 Comprar só · USD 50', 'btn.comprarAcomp': '💳 Comprar + acompanhamento · USD 100',
+      'aria.tabs': 'Categorias de produtos',
+      'footer.rights': 'Gentle-Vanguard Academy — Todos os direitos reservados.'
+    }
+  };
+
+  function readLocale() {
+    var s = localStorage.getItem('gv-cc-lang');
+    var n = s === 'pt-BR' ? 'pt' : s;
+    return n === 'en' || n === 'pt' || n === 'es' ? n : 'es';
+  }
+  function readTheme() {
+    return localStorage.getItem('gv-cc-theme') === 'light' ? 'light' : 'dark';
+  }
+
+  var locale = readLocale();
+  var theme = readTheme();
+  document.documentElement.dataset.theme = theme;
+  document.documentElement.lang = locale;
+
+  function t(key) {
+    var d = I18N[locale] || I18N.es;
+    return d[key] !== undefined ? d[key] : key;
+  }
+
+  function translate() {
+    var d = I18N[locale] || I18N.es;
+    document.querySelectorAll('[data-i18n]').forEach(function (el) {
+      var k = el.dataset.i18n;
+      if (d[k] !== undefined) el.textContent = d[k];
+    });
+    // Hero h1: two spans (a + b)
+    var h1a = document.querySelector('[data-i18n="hero.h1a"]');
+    if (h1a) h1a.textContent = d['hero.h1a'];
+    var h1b = document.querySelector('[data-i18n="hero.h1b"]');
+    if (h1b) h1b.textContent = d['hero.h1b'];
+    // Buttons with "Me interesa" / "Comprar" patterns
+    document.querySelectorAll('.btn-interest').forEach(function (b) {
+      b.textContent = d['btn.interesa'];
+    });
+    document.querySelectorAll('a[href*="mpago.la"]').forEach(function (b) {
+      if (b.textContent.indexOf('USD 50') !== -1) b.textContent = d['btn.comprarSolo'];
+      else if (b.textContent.indexOf('USD 100') !== -1) b.textContent = d['btn.comprarAcomp'];
+      else b.textContent = d['btn.comprar'];
+    });
+    document.querySelectorAll('a[href*="wa.me"]').forEach(function (b) {
+      if (b.textContent.indexOf('USD 50') !== -1 || b.textContent.indexOf('USD 100') !== -1) b.textContent = d['btn.consultar'];
+      else b.textContent = d['btn.interesa'];
+    });
+    // Lang toggle aria + theme toggle aria
+    langToggle.setAttribute('aria-label', locale === 'es' ? 'Idioma' : locale === 'en' ? 'Language' : 'Idioma');
+    themeToggle.setAttribute('aria-label', theme === 'light' ? (locale === 'es' ? 'Activar tema oscuro' : 'Enable dark theme') : (locale === 'es' ? 'Activar tema claro' : 'Enable light theme'));
+    // Footer
+    document.querySelectorAll('footer').forEach(function (f) {
+      var rights = f.querySelector('[data-i18n="footer.rights"]');
+      if (rights) rights.textContent = d['footer.rights'];
+    });
+  }
+
+  // Topbar controls
+  var langToggle = document.getElementById('lang-toggle');
+  var langMenu = document.getElementById('lang-menu');
+  var themeToggle = document.getElementById('theme-toggle');
+
+  langToggle.addEventListener('click', function () {
+    langMenu.hidden = !langMenu.hidden;
+    langToggle.setAttribute('aria-expanded', langMenu.hidden ? 'false' : 'true');
+  });
+  document.addEventListener('click', function (e) {
+    if (!e.target.closest('.gv-lang-dropdown')) {
+      langMenu.hidden = true;
+      langToggle.setAttribute('aria-expanded', 'false');
+    }
+  });
+  langMenu.querySelectorAll('[data-locale]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      locale = b.dataset.locale;
+      localStorage.setItem('gv-cc-lang', locale);
+      document.documentElement.lang = locale;
+      langMenu.hidden = true;
+      langToggle.setAttribute('aria-expanded', 'false');
+      langMenu.querySelectorAll('[data-locale]').forEach(function (lb) {
+        lb.querySelector('.gv-lang-check').textContent = lb.dataset.locale === locale ? '✓' : '';
+      });
+      translate();
+    });
+  });
+
+  themeToggle.addEventListener('click', function () {
+    theme = theme === 'light' ? 'dark' : 'light';
+    document.documentElement.dataset.theme = theme;
+    localStorage.setItem('gv-cc-theme', theme);
+    themeToggle.textContent = theme === 'light' ? '🌙' : '☀';
+    translate();
+  });
+
+  // Init
+  langMenu.querySelectorAll('[data-locale]').forEach(function (lb) {
+    lb.querySelector('.gv-lang-check').textContent = lb.dataset.locale === locale ? '✓' : '';
+  });
+  themeToggle.textContent = theme === 'light' ? '🌙' : '☀';
+  translate();
+})();
 </script>
 </body>
 </html>

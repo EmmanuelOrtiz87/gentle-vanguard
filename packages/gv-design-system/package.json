@@ -17,6 +17,10 @@
       "types": "./dist/react/index.d.ts",
       "import": "./dist/react/index.js"
     },
+    "./react/shell": {
+      "types": "./dist/react/shell-only.d.ts",
+      "import": "./dist/react/shell-only.js"
+    },
     "./mcp": "./dist/mcp/index.js"
   },
   "files": [
@@ -33,6 +37,7 @@
     "audit": "impeccable detect src/ --json",
     "audit:app": "tsx src/cli/audit.ts",
     "conformance": "tsx src/cli/conformance.ts",
+    "validate:shell": "node scripts/validate-shell.js",
     "sync": "tsx src/cli/sync.ts",
     "mcp:start": "tsx src/mcp/server.ts"
   },

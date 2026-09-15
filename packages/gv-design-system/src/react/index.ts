@@ -29,3 +29,12 @@ export type { TagProps, TagVariant, TagSize } from './Tag.js';
 
 export { IconButton } from './IconButton.js';
 export type { IconButtonProps, IconButtonVariant, IconButtonSize } from './IconButton.js';
+
+export { Shell, useShellI18n } from './Shell.js';
+export type {
+  ShellProps,
+  ShellNavItem,
+  ShellLocale,
+  ShellTheme,
+  ShellI18nCtx,
+} from './Shell.js';
