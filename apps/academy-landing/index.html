@@ -1079,7 +1079,9 @@ function track(event, data) {
       method: 'POST',
       mode: 'no-cors',
       headers: { 'Content-Type': 'text/plain' },
-      body: JSON.stringify(Object.assign({ event: event, ts: new Date().toISOString() }, data || {})),
+      // site: dominio que origina el evento (marca vs espejo) — el .gs lo
+      // registra en la columna "sitio" cuando se actualice el deployment.
+      body: JSON.stringify(Object.assign({ event: event, ts: new Date().toISOString(), site: location.host }, data || {})),
       keepalive: true,
     });
   } catch (e) { /* métricas best-effort, nunca bloquean */ }

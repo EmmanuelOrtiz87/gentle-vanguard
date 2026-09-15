@@ -24,18 +24,23 @@ function doPost(e) {
   try {
     const ss = SpreadsheetApp.getActiveSpreadsheet();
     let sheet = ss.getSheetByName('Leads') || ss.insertSheet('Leads');
+    const headers = [
+      'fecha',
+      'evento',
+      'nombre',
+      'email',
+      'audiencia',
+      'interes',
+      'producto',
+      'categoria',
+      'user_agent',
+      'sitio',
+    ];
     if (sheet.getLastRow() === 0) {
-      sheet.appendRow([
-        'fecha',
-        'evento',
-        'nombre',
-        'email',
-        'audiencia',
-        'interes',
-        'producto',
-        'categoria',
-        'user_agent',
-      ]);
+      sheet.appendRow(headers);
+    } else if (sheet.getLastColumn() < headers.length) {
+      // Migración de planillas existentes: agregar la columna "sitio" al final.
+      sheet.getRange(1, headers.length).setValue(headers[headers.length - 1]);
     }
     const d = JSON.parse((e.postData && e.postData.contents) || '{}');
     sheet.appendRow([
@@ -48,6 +53,7 @@ function doPost(e) {
       d.product || '',
       d.category || '',
       (e.postData && navigatorUA()) || '',
+      d.site || '',
     ]);
     return ContentService.createTextOutput(JSON.stringify({ ok: true })).setMimeType(
       ContentService.MimeType.JSON,
