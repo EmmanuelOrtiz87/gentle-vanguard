@@ -84,6 +84,33 @@ jobs:
       - name: Run unified delivery gate (pre-pr)
         run: pnpm delivery:gate:pr
 
+  design-identity:
+    name: Design Identity Gate (validate:shell)
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@f548e57e544e1ff5a4c46bf1e1b8685f8e4a348a
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7 # v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # Fails if dist/shell.css loses the homologated identity (wordmark
+      # "Gentle" white + only "Vanguard" gradient + 文A lang button 13px +
+      # shared gv-lang-* classes). dist/ is versioned, so no build needed.
+      - name: Validate shell identity
+        run: npm run validate:shell --prefix packages/gv-design-system
+
   mcp-servers:
     name: MCP Servers Self-Test
     runs-on: ubuntu-latest
