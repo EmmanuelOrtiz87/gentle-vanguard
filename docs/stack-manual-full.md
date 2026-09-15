@@ -700,6 +700,18 @@ Normativa completa: `rules/NORMATIVA-DESIGN-SYSTEM.md`. Resumen operativo:
 - `assets/gv-design-system.css` (clases `.gv-*`) CONGELADO en clases; solo `--gv-*` actualizables.
 - Ciclo de cambio de marca: editar `TOKENS-v2.json` → regenerar (build-tokens + gv:tokens) → espejo
   del hub (`apps/design-hub/public/tokens/`) → commits (root + apps repo).
+- **Gate de identidad `validate:shell`** (2026-09-15): `npm run validate:shell` (en
+  `packages/gv-design-system/`) falla si `dist/shell.css` pierde la identidad homologada (wordmark
+  "Gentle" blanco + solo "Vanguard" gradiente + botón idioma 文A 13px + clases compartidas
+  `gv-lang-*`). Con `-- --fix` regenera el dist. Ejecutar tras cualquier cambio en
+  `src/shell/shell.css`.
+- **Homologación de apps al shell compartido** (NORM-APP-001): las apps React importan
+  `packages/gv-design-system/src/shell/shell.css` directamente (single source) y usan el patrón
+  `.gv-brand-wordmark` (NO copias locales de shell.css ni el patrón viejo `.gv-brand .name`).
+  academy-crm fue la última migrada (2026-09-15).
+- **Gotcha lightningcss (vite 8)**: lightningcss mergea la dupla `backdrop-filter` +
+  `-webkit-backdrop-filter` y emite SOLO el prefijo (que Chromium moderno rechaza → computed
+  `none`), sin importar los `targets`. Regla: en CSS del stack declarar SOLO la propiedad estándar.
 
 ### Planning Templates (`src/planning/planning-templates.ts` + `src/planning/planning-templates.ts`)
 
