@@ -1153,3 +1153,12 @@ Para apps React (archify, content-cms, academy-crm, ...) el paquete
   al package.json de la app.
 - **Apps con topbar propio**: si la app ya tiene lang/theme UI (content-cms, academy-crm), basta
   con migrar las claves a `gv-cc-lang`/`gv-cc-theme` (con mapeo legacy de las claves viejas).
+- **CI**: el job `design-identity` en `.github/workflows/ci.yml` ejecuta `validate:shell` como gate
+  bloqueante en cada push/PR (dist/ versionado, no requiere build).
+- **archify es standalone (fuera del workspace pnpm raíz)**: `pnpm-workspace.yaml` del root NO
+  incluye `apps/archify` — sus deps se instalan con `pnpm install --ignore-workspace` desde
+  `apps/archify/` (tiene lockfile propio). Los builds nativos (better-sqlite3, esbuild) se aprueban
+  con `pnpm approve-builds esbuild` (pnpm 11, no interactivo) o `allowBuilds` en su
+  `pnpm-workspace.yaml` local. GOTCHA: `pnpm install` desde el root dice "Already up to date" y
+  IGNORA archify silenciosamente — si su node_modules se corrompe (symlink roto al store), hay que
+  reinstalar standalone.
