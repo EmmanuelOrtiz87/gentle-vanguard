@@ -190,6 +190,7 @@
     "design:tokens": "npx tsx src/design/design-system-cli.ts --tokens",
     "design:scale": "npx tsx src/design/design-system-cli.ts --scale",
     "design:check": "npx tsx src/design/design-system-cli.ts --check",
+    "shell:verify": "npx tsx src/design/shell-visual-verify.ts",
     "stack:verify": "npx tsx src/ops/stack-verify.ts",
     "stack:bootstrap": "npx tsx src/ops/stack-bootstrap.ts",
     "stack:bootstrap:auto": "npx tsx src/ops/stack-bootstrap.ts --auto",

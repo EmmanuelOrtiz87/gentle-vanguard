@@ -111,6 +111,11 @@ jobs:
       - name: Validate shell identity
         run: npm run validate:shell --prefix packages/gv-design-system
 
+      # Static conformance: source identity contract + byte-identical
+      # snapshots + per-app imports (incl. academy-crm).
+      - name: Shell conformance
+        run: npm run conformance --prefix packages/gv-design-system
+
   mcp-servers:
     name: MCP Servers Self-Test
     runs-on: ubuntu-latest

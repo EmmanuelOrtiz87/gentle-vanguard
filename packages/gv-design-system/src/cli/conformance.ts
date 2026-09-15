@@ -27,6 +27,21 @@ add(
   'shell has canonical primitives',
   ['.gv-topbar', '.gv-view-tabs', '.gv-panel', '.gv-footer'].every((name) => shell.includes(name)),
 );
+// Identity contract (homologación 2026-09-15): "Gentle" white, only "Vanguard"
+// gradient, 文A lang button pinned to 13px. Checked at SOURCE level so the
+// snapshots (byte-identical below) inherit the guarantee transitively.
+add(
+  'identity: wordmark "Gentle" white',
+  /\.gv-brand-wordmark[^{]*\{[^}]*color:\s*var\(--gv-text/.test(shell),
+);
+add(
+  'identity: only "Vanguard" span gradient',
+  /\.gv-brand-wordmark\s+span[^{]*\{[^}]*background-clip:\s*text/.test(shell),
+);
+add(
+  'identity: lang button 13px',
+  /\.gv-lang-dropdown\s+\.gv-icon-btn[^{]*\{[^}]*font-size:\s*13px/.test(shell),
+);
 
 for (const snapshot of ['assets/gv-shell.css', 'apps/design-hub/public/gv-shell.css']) {
   const value = file(snapshot);
@@ -43,6 +58,7 @@ for (const app of [
   'apps/prompt-studio/src/main.tsx',
   'apps/archify/src/main.tsx',
   'apps/web-dashboard/src/main.tsx',
+  'apps/academy-crm/src/main.tsx',
 ]) {
   add(`${app} imports shell`, file(app).includes('shell.css'));
 }
@@ -54,7 +70,13 @@ for (const app of [
   'apps/archify/src/App.tsx',
   'apps/web-dashboard/src/App.tsx',
 ]) {
-  add(`${app} declares gv-app-shell`, file(app).includes('gv-app-shell'));
+  // Apps either declare .gv-app-shell directly OR consume the shared <Shell>
+  // component (which renders it internally — see src/react/Shell.tsx).
+  const src = file(app);
+  add(
+    `${app} declares gv-app-shell (direct or via <Shell>)`,
+    src.includes('gv-app-shell') || /<Shell[\s/>]/.test(src),
+  );
 }
 
 add(

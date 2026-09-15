@@ -1153,8 +1153,16 @@ Para apps React (archify, content-cms, academy-crm, ...) el paquete
   al package.json de la app.
 - **Apps con topbar propio**: si la app ya tiene lang/theme UI (content-cms, academy-crm), basta
   con migrar las claves a `gv-cc-lang`/`gv-cc-theme` (con mapeo legacy de las claves viejas).
-- **CI**: el job `design-identity` en `.github/workflows/ci.yml` ejecuta `validate:shell` como gate
-  bloqueante en cada push/PR (dist/ versionado, no requiere build).
+- **CI**: el job `design-identity` en `.github/workflows/ci.yml` ejecuta DOS gates bloqueantes en
+  cada push/PR: `validate:shell` (identidad en dist) + `conformance` (contrato source + snapshots
+  byte-idénticos + imports por-app, 22 checks).
+- **Verificación visual en vivo** (`npm run shell:verify` → `src/design/shell-visual-verify.ts`):
+  recorre las 10 apps homologadas con chromium headless (librería playwright directa) y verifica el
+  contrato por app — full-contract (topbar + wordmark blanco + gradiente span + idioma 13px + icono)
+  en 8 apps; keys-only (carga + control idioma/tema compartido) en web-dashboard (theme-only) y
+  gv-analytics. Exit 1 si algún fallo. Requiere las apps corriendo.
+- **GOTCHA playwright-cli**: el comando `open` de playwright-cli MATA el shell padre (reproducible)
+  — para automatización Node usar la librería `playwright` directa (chromium headless), no el CLI.
 - **archify es standalone (fuera del workspace pnpm raíz)**: `pnpm-workspace.yaml` del root NO
   incluye `apps/archify` — sus deps se instalan con `pnpm install --ignore-workspace` desde
   `apps/archify/` (tiene lockfile propio). Los builds nativos (better-sqlite3, esbuild) se aprueban
