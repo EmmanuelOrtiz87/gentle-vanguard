@@ -66,6 +66,18 @@ pre-commit:
 
 pre-push:
   commands:
+    # Auto-routing (Fase 5 — ventanas fantasma plan, 2026-09-16): analiza los
+    # ultimos commits contra HEAD~1 y dice DONDE debe sincronizarse el cambio:
+    #   - STACK:           cambio interno del stack privado, no requiere sync.
+    #   - LANDING:         cambio en apps/academy-landing/** → sugiere
+    #                      npx tsx src/ops/sync-landing-gentlevanguard.ts
+    #   - PUBLIC-MIRROR:   cambio en docs/, LICENSE, etc → sync-public.yml se
+    #                      dispara automaticamente (si paths matchean).
+    #   - APPS-VIOLATION:  cambio en apps/<otro>/** → bloquea (ADR-0017).
+    # No falla el push — solo imprime la sugerencia. Para forzar la verificacion
+    # de un push especifico: npx tsx src/ops/route-change.ts --ref <sha>
+    route-change:
+      run: node --import tsx src/ops/route-change.ts
     # Composite parallel gate (Fase 6 N8) — replaces the 12 sequential checks.
     # Runs all checks concurrently (bounded pool) with a tree-hash cache: if
     # nothing changed since the last green run, the gate skips in <5s.
