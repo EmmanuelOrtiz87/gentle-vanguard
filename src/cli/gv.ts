@@ -42,7 +42,7 @@ import { run, runSync, runNpxTsxSync, runSyncShell } from '../../adapters/comman
 import { existsSync, readdirSync, readFileSync, writeFileSync, unlinkSync, mkdirSync } from 'fs';
 import { join, resolve, dirname } from 'path';
 import { pathToFileURL } from 'url';
-import { execFileSync } from 'node:child_process';
+
 import { printBanner } from './banner.js';
 
 const ROOT = resolve(process.cwd());
@@ -313,20 +313,16 @@ function cmdLanding(args: string[]): CommandResult {
   const sub = args[0] || 'help';
   const rest = args.slice(1);
   const forward = (script: string, label: string): CommandResult => {
-    // Process.execPath is the absolute path to the current node binary —
-    // avoids PATH lookup issues on Windows. Verify cwd is set correctly.
+    // Windows argv quirk: passing ['--import','tsx',script,flag] via spawnSync
+    // merges the script+flag into one module path. Workaround: build a properly
+    // quoted command line for cmd.exe so each arg is a discrete token.
     const scriptAbs = resolve(ROOT, script);
-    const cwd = ROOT;
-    try {
-      const result = execFileSync(process.execPath, ['--import', 'tsx', scriptAbs, ...rest], {
-        cwd,
-        stdio: 'inherit',
-        windowsHide: true,
-      });
-      return { success: true, message: `${label} OK`, data: result?.toString() };
-    } catch (e) {
-      return { success: false, message: `${label} FAIL: ${e instanceof Error ? e.message : String(e)}` };
-    }
+    const allArgs = ['--import', 'tsx', scriptAbs, ...rest];
+    const quoted = allArgs.map((a) => `"${a.replace(/"/g, '""')}"`).join(' ');
+    const cmd = process.platform === 'win32' ? `node ${quoted}` : `node ${allArgs.join(' ')}`;
+    const r = runSyncShell(cmd, { cwd: ROOT, timeout: 300_000 });
+    const status = r.status ?? 1;
+    return { success: status === 0, message: `${label} ${status === 0 ? 'OK' : `FAIL (${status})`}` };
   };
   switch (sub) {
     case 'setup':
