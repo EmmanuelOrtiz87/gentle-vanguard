@@ -37,7 +37,7 @@ const LOG_CLEANUP = createLogger('SESSION-CLEANUP');
  *
  * Creado: 2026-09-16 — fix ventanas fantasma (apps-keepalive race).
  */
-const CLOSING_MARKER = join(ROOT, SESSION_DIR, '.closing');
+const CLOSING_MARKER = resolve(SESSION_DIR, '.closing');
 
 // Session retention - run after cleanup to maintain limits
 function runSessionRetention(apply: boolean): { removed: number; kept: number } {
