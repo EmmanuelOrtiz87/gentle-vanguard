@@ -314,12 +314,13 @@ function cmdCleanup(_args: string[]): CommandResult {
 function cmdLanding(args: string[]): CommandResult {
   const sub = args[0] || 'help';
   const rest = args.slice(1);
-  const forward = (script: string, label: string): CommandResult => {
+  const forward = (script: string, label: string, extraArgs: string[] = []): CommandResult => {
     // Spawn child with explicit argv array — avoids Windows shell quote quirks
     // that merge arguments into single module paths. process.execPath is the
     // absolute path to the current node binary (works in PATH-lookup-less envs).
     const scriptAbs = resolve(ROOT, script);
-    const r = spawnSync(process.execPath, ['--import', 'tsx', scriptAbs, ...rest], {
+    const argv: string[] = ['--import', 'tsx', scriptAbs, ...extraArgs];
+    const r = spawnSync(process.execPath, argv, {
       cwd: ROOT,
       stdio: 'inherit',
       windowsHide: true,
@@ -332,9 +333,9 @@ function cmdLanding(args: string[]): CommandResult {
     case 'setup':
       return forward('src/ops/setup-landing-deploy-key.ts', 'Setup SSH deploy key');
     case 'verify':
-      return forward('src/ops/setup-landing-deploy-key.ts --verify', 'Verify SSH');
+      return forward('src/ops/setup-landing-deploy-key.ts', 'Verify SSH', ['--verify']);
     case 'show-pubkey':
-      return forward('src/ops/setup-landing-deploy-key.ts --show-pubkey', 'Show pubkey');
+      return forward('src/ops/setup-landing-deploy-key.ts', 'Show pubkey', ['--show-pubkey']);
     case 'sync':
       return forward('src/ops/sync-landing-gentlevanguard.ts', 'Landing sync → gentlevanguard');
     case 'cleanup-mirror':
