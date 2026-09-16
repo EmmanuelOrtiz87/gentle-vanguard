@@ -35,6 +35,7 @@
  *   web         Web research (search|scrape|crawl) via native crawler
  *   eval        Continuous evaluation over real Nexus traces (F3.1; --gate)
  *   skill       Skill plugins: list|install|enable|disable|deprecate|remove|verify
+ *   landing     Unified CLI for gentlevanguard.github.io (setup|sync|verify|route|cleanup-mirror|show-pubkey)
  *   help        Show this help
  */
 
