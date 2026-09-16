@@ -144,8 +144,8 @@
 .gv-brand-wordmark a span,
 .gv-shell .gv-brand-wordmark a span {
   background: var(--gv-gradient, linear-gradient(135deg, #a78bfa, #22d3ee)) !important;
-  -webkit-background-clip: text;
-  background-clip: text;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
   color: transparent !important;
   -webkit-text-fill-color: transparent;
 }
