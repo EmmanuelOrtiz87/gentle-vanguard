@@ -42,6 +42,7 @@ import { run, runSync, runNpxTsxSync, runSyncShell } from '../../adapters/comman
 import { existsSync, readdirSync, readFileSync, writeFileSync, unlinkSync, mkdirSync } from 'fs';
 import { join, resolve, dirname } from 'path';
 import { pathToFileURL } from 'url';
+import { spawnSync } from 'node:child_process';
 
 import { printBanner } from './banner.js';
 
@@ -313,14 +314,16 @@ function cmdLanding(args: string[]): CommandResult {
   const sub = args[0] || 'help';
   const rest = args.slice(1);
   const forward = (script: string, label: string): CommandResult => {
-    // Windows argv quirk: passing ['--import','tsx',script,flag] via spawnSync
-    // merges the script+flag into one module path. Workaround: build a properly
-    // quoted command line for cmd.exe so each arg is a discrete token.
+    // Spawn child with explicit argv array — avoids Windows shell quote quirks
+    // that merge arguments into single module paths. process.execPath is the
+    // absolute path to the current node binary (works in PATH-lookup-less envs).
     const scriptAbs = resolve(ROOT, script);
-    const allArgs = ['--import', 'tsx', scriptAbs, ...rest];
-    const quoted = allArgs.map((a) => `"${a.replace(/"/g, '""')}"`).join(' ');
-    const cmd = process.platform === 'win32' ? `node ${quoted}` : `node ${allArgs.join(' ')}`;
-    const r = runSyncShell(cmd, { cwd: ROOT, timeout: 300_000 });
+    const r = spawnSync(process.execPath, ['--import', 'tsx', scriptAbs, ...rest], {
+      cwd: ROOT,
+      stdio: 'inherit',
+      windowsHide: true,
+      encoding: 'utf8',
+    });
     const status = r.status ?? 1;
     return { success: status === 0, message: `${label} ${status === 0 ? 'OK' : `FAIL (${status})`}` };
   };
