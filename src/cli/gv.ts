@@ -319,7 +319,14 @@ function cmdLanding(args: string[]): CommandResult {
     // that merge arguments into single module paths. process.execPath is the
     // absolute path to the current node binary (works in PATH-lookup-less envs).
     const scriptAbs = resolve(ROOT, script);
-    const argv: string[] = ['--import', 'tsx', scriptAbs, ...extraArgs];
+    // Flags explícitos por caso; si no hay, passthrough de lo que venga tras
+    // el subcomando (gv landing sync --force → --force llega al script).
+    const argv: string[] = [
+      '--import',
+      'tsx',
+      scriptAbs,
+      ...(extraArgs.length > 0 ? extraArgs : rest),
+    ];
     const r = spawnSync(process.execPath, argv, {
       cwd: ROOT,
       stdio: 'inherit',
