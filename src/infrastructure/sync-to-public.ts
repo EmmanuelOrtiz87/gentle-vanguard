@@ -6,6 +6,11 @@
  * (original deleted in commit 8d6ed7dd without a TS replacement — this file
  * closes that migration gap).
  *
+ * Default target repo: `gentlevanguard/gentlevanguard.github.io` (URL de marca,
+ * GitHub Pages activo). Override via --public-repo-slug or PUBLIC_REPO_SLUG
+ * env var for one-off syncs to other targets (e.g. the legacy
+ * `EmmanuelOrtiz87/gentle-vanguard-public` mirror).
+ *
  * Copies ONLY public-safe files:
  *   - Bootstrap scripts (plain text - needed for onboarding)
  *   - Public documentation (README, LICENSE, docs/, demos/)
@@ -14,10 +19,12 @@
  *   - Pre-built encrypted artifacts (build/protected/)
  *   - Public skill stubs (build/public/)
  *   - Single installer executable: Gentle-Vanguard.exe
+ *   - apps/academy-landing/ — única app que cruza la frontera (ADR-0017.1)
  *
  * Does NOT copy:
  *   - Plain-text scripts, configs, or skills (should be encrypted in protected/)
  *   - Internal documentation
+ *   - Any other app under apps/ (ADR-0017: apps are local-first)
  *
  * Usage:
  *   npx tsx src/sync-to-public.ts [--private-repo <path>] [--public-repo <path>]
@@ -67,7 +74,10 @@ function parseArgs(): SyncOptions {
     publicRepoSlug:
       extract('--public-repo-slug') ||
       process.env.PUBLIC_REPO_SLUG ||
-      'EmmanuelOrtiz87/gentle-vanguard-public',
+      // Default target: landing oficial (URL de marca). El mirror emmanuel-public
+      // se mantiene solo como fallback histórico; puede seguir usándose explícitamente
+      // pasando --public-repo-slug=EmmanuelOrtiz87/gentle-vanguard-public.
+      'gentlevanguard/gentlevanguard.github.io',
     skipPush: args.includes('--skip-push'),
   };
 }

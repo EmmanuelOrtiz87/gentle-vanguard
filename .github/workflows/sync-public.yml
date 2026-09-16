@@ -1,4 +1,4 @@
-name: Sync Public Repository
+name: Sync Public Repository (landing oficial)
 
 permissions:
   contents: write
@@ -32,18 +32,19 @@ on:
     inputs:
       public_repo:
         description:
-          'Optional override owner/repo for public sync target (example:
-          EmmanuelOrtiz87/gentle-vanguard-public)'
+          'Optional override owner/repo for the sync target. Default:
+          gentlevanguard/gentlevanguard.github.io (URL de marca, GH Pages activo).
+          Legacy mirror: EmmanuelOrtiz87/gentle-vanguard-public'
         required: false
-        default: ''
+        default: 'gentlevanguard/gentlevanguard.github.io'
       public_repo_default_branch:
         description: 'Optional override for public repo default branch (example: main or master)'
         required: false
-        default: ''
+        default: 'main'
 
 jobs:
   sync:
-    name: Sync to gentle-vanguard-public
+    name: Sync to landing oficial (gentlevanguard/gentlevanguard.github.io)
     runs-on: windows-latest
     timeout-minutes: 15
     steps:
@@ -68,7 +69,10 @@ jobs:
           }
 
           $publicRepoSlug = if ([string]::IsNullOrWhiteSpace($env:PUBLIC_REPO)) {
-            'EmmanuelOrtiz87/gentle-vanguard-public'
+            # Default: landing oficial (URL de marca). Override con workflow_dispatch
+            # input PUBLIC_REPO si querés sincronizar contra otro repo (ej: legacy
+            # mirror EmmanuelOrtiz87/gentle-vanguard-public).
+            'gentlevanguard/gentlevanguard.github.io'
           } else {
             $env:PUBLIC_REPO
           }
