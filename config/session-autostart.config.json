@@ -1067,6 +1067,14 @@
         "args": "--no-browser",
         "required": false,
         "description": "Command Center standalone (puerto 8090): lifecycle on-demand de las apps construidas (dashboard/analytics/cms/academy). Idempotente — si ya esta vivo no re-ejecuta; --no-browser evita poppear tab en cada sesion"
+      },
+      {
+        "id": "auto-update-check",
+        "enabled": true,
+        "lazy": true,
+        "script": "src/ops/auto-update-check.ts",
+        "required": false,
+        "description": "Detecta actualizaciones en los 3 repos y notifica al inicio de sesion: (1) commits nuevos en origin/develop (repo privado emmanuel), (2) nuevo tag/release en public (emmanuel-public, .exe del stack), (3) commits nuevos en gentlevanguard/gentlevanguard.github.io (landing oficial URL de marca). State persistente en .runtime/auto-update-state.json — idempotente, no spamea. Best-effort: silencioso si esta offline."
       }
     ],
     "onStepFailure": "continue",
