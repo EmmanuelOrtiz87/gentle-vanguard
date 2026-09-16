@@ -18,8 +18,8 @@
  *   npx tsx src/ops/sync-landing-gentlevanguard.ts --force    # push aunque no haya diff
  */
 
-import { existsSync, readFileSync, rmSync, mkdirSync, cpSync, statSync } from 'node:fs';
-import { join, resolve, relative } from 'node:path';
+import { existsSync, rmSync, mkdirSync, cpSync } from 'node:fs';
+import { join, resolve } from 'node:path';
 import { spawnSync } from 'node:child_process';
 
 const ROOT = resolve(process.cwd());

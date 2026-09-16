@@ -42,6 +42,7 @@ import { run, runSync, runNpxTsxSync, runSyncShell } from '../../adapters/comman
 import { existsSync, readdirSync, readFileSync, writeFileSync, unlinkSync, mkdirSync } from 'fs';
 import { join, resolve, dirname } from 'path';
 import { pathToFileURL } from 'url';
+import { execFileSync } from 'node:child_process';
 import { printBanner } from './banner.js';
 
 const ROOT = resolve(process.cwd());
@@ -292,6 +293,73 @@ function cmdCleanup(_args: string[]): CommandResult {
     }
   }
   return { success: true, message: `Cleaned: ${killed} processes, ${cleaned} files` };
+}
+
+/**
+ * cmdLanding — CLI unificado para la landing oficial (gentlevanguard.github.io).
+ * Unifica los 3 scripts creados en Fases 4-6 en comandos simples:
+ *
+ *   gv landing setup            # SSH deploy key one-time setup
+ *   gv landing verify           # verifica conectividad SSH
+ *   gv landing show-pubkey      # muestra la publica para agregar al repo
+ *   gv landing sync             # sync apps/academy-landing/ → gentlevanguard
+ *   gv landing sync --dry-run   # diff sin pushear
+ *   gv landing cleanup-mirror   # borra apps/academy-landing/ del legacy mirror
+ *
+ * Detras de escena delega a src/ops/{setup-landing-deploy-key,sync-landing-
+ * gentlevanguard,cleanup-emmanuel-public}.ts
+ */
+function cmdLanding(args: string[]): CommandResult {
+  const sub = args[0] || 'help';
+  const rest = args.slice(1);
+  const forward = (script: string, label: string): CommandResult => {
+    // Process.execPath is the absolute path to the current node binary —
+    // avoids PATH lookup issues on Windows. Verify cwd is set correctly.
+    const scriptAbs = resolve(ROOT, script);
+    const cwd = ROOT;
+    try {
+      const result = execFileSync(process.execPath, ['--import', 'tsx', scriptAbs, ...rest], {
+        cwd,
+        stdio: 'inherit',
+        windowsHide: true,
+      });
+      return { success: true, message: `${label} OK`, data: result?.toString() };
+    } catch (e) {
+      return { success: false, message: `${label} FAIL: ${e instanceof Error ? e.message : String(e)}` };
+    }
+  };
+  switch (sub) {
+    case 'setup':
+      return forward('src/ops/setup-landing-deploy-key.ts', 'Setup SSH deploy key');
+    case 'verify':
+      return forward('src/ops/setup-landing-deploy-key.ts --verify', 'Verify SSH');
+    case 'show-pubkey':
+      return forward('src/ops/setup-landing-deploy-key.ts --show-pubkey', 'Show pubkey');
+    case 'sync':
+      return forward('src/ops/sync-landing-gentlevanguard.ts', 'Landing sync → gentlevanguard');
+    case 'cleanup-mirror':
+      return forward('src/ops/cleanup-emmanuel-public.ts', 'Cleanup legacy mirror');
+    case 'route':
+      return forward('src/ops/route-change.ts', 'Auto-route changes');
+    case 'help':
+    default:
+      console.log(`gv landing — unified CLI para gentlevanguard.github.io (URL de marca)
+
+Subcomandos:
+  setup              SSH deploy key one-time setup
+  verify             verifica conectividad SSH contra gentlevanguard
+  show-pubkey        imprime la clave publica (para agregar al repo)
+  sync               push de apps/academy-landing/ al ROOT del repo oficial
+  sync --dry-run     diff sin pushear
+  cleanup-mirror     borra apps/academy-landing/ del legacy mirror emmanuel-public
+  route [--staged|--ref <sha>]
+                     detecta el destino (stack/landing/public/violation) de un cambio
+
+Aliases: ninguno — el nombre "landing" es canonico porque la URL publica es la
+que el publico ve (gentlevanguard.github.io).
+`);
+      return { success: true, message: 'help shown' };
+  }
 }
 
 function cmdSession(args: string[]): CommandResult {
@@ -1015,6 +1083,13 @@ async function main(): Promise<void> {
     case 'cleanup': {
       const r = cmdCleanup(args.slice(1));
       console.log(r.message);
+      process.exit(r.success ? 0 : 1);
+      break;
+    }
+
+    case 'landing': {
+      const r = cmdLanding(args.slice(1));
+      if (r.message) console.log(r.message);
       process.exit(r.success ? 0 : 1);
       break;
     }

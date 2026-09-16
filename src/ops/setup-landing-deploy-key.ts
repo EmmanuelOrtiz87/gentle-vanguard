@@ -28,8 +28,8 @@
  */
 
 import { existsSync, readFileSync, writeFileSync, chmodSync } from 'node:fs';
-import { join, resolve } from 'node:path';
-import { spawn, spawnSync } from 'node:child_process';
+import { join } from 'node:path';
+import { spawnSync } from 'node:child_process';
 import { homedir } from 'node:os';
 
 const KEY_DIR = join(homedir(), '.ssh');
@@ -38,7 +38,7 @@ const KEY_PATH = join(KEY_DIR, KEY_NAME);
 const PUB_PATH = `${KEY_PATH}.pub`;
 const SSH_CONFIG = join(KEY_DIR, 'config');
 const HOST_ALIAS = 'github-gentlevanguard';
-const REMOTE_URL = 'git@github.com:gentlevanguard/gentlevanguard.github.io.git';
+
 
 const args = process.argv.slice(2);
 
