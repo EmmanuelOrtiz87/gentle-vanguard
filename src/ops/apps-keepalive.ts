@@ -12,7 +12,7 @@
  * Exit codes: 0 — ciclo completado · 1 — error inesperado.
  */
 
-import { readFileSync, appendFileSync } from 'fs';
+import { readFileSync, appendFileSync, existsSync } from 'fs';
 import { spawn } from 'node:child_process';
 import { join, resolve } from 'path';
 import { fileURLToPath } from 'url';
@@ -20,6 +20,16 @@ import { fileURLToPath } from 'url';
 const ROOT = resolve(fileURLToPath(new URL('..', import.meta.url)), '..');
 const LOG = join(ROOT, '.runtime', 'apps-keepalive.log');
 const PORTS_FILE = join(ROOT, '.runtime', 'command-center-ports.json');
+/**
+ * Session-close guard (added 2026-09-16 — ventanas fantasma fix).
+ *
+ * If the session-close orchestrator is running, it creates this marker BEFORE
+ * it kills any daemon. apps-keepalive bails out immediately when present,
+ * so it doesn't revive apps that the orchestrator is in the middle of stopping.
+ *
+ * Cleared by session-autostart when a new session starts.
+ */
+const CLOSING_MARKER = join(ROOT, '.session', '.closing');
 
 function log(msg: string): void {
   const ts = new Date().toISOString().slice(0, 19);
@@ -50,6 +60,13 @@ function startCcDetached(): void {
 }
 
 async function main(): Promise<number> {
+  // Guard de cierre: si la sesión está cerrando, no revivir nada. Evita
+  // race con session-close-orchestrator (que ya está matando los daemons).
+  if (existsSync(CLOSING_MARKER)) {
+    log('[GUARD] Sesión cerrando (.session/.closing presente) — saliendo sin tocar');
+    return 0;
+  }
+
   const port = ccPort();
 
   // CC vivo? Si no, revivirlo (daemon persistente) y salir — las apps se

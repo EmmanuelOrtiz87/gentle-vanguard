@@ -1,4 +1,4 @@
-import { existsSync, readFileSync, readdirSync, rmSync, unlinkSync } from 'fs';
+import { existsSync, readFileSync, readdirSync, rmSync, unlinkSync, writeFileSync, mkdirSync } from 'fs';
 import { join, resolve, relative } from 'path';
 import { runHygiene } from '../../core/process-hygiene.js';
 import { runNpxTsxSync } from '../../core/run-command.js';
@@ -29,6 +29,16 @@ import { getInventory } from '../session-validator.js';
 
 const LOG_CLEANUP = createLogger('SESSION-CLEANUP');
 
+/**
+ * Closing marker — apps-keepalive y otros daemons periódicos lo consultan al
+ * arrancar cada ciclo para evitar reviving apps mientras session-close está
+ * matando daemons. Se crea al inicio de phasePreClose (la fase más temprana
+ * del protocolo) y se borra al iniciar una nueva sesión (session-autostart).
+ *
+ * Creado: 2026-09-16 — fix ventanas fantasma (apps-keepalive race).
+ */
+const CLOSING_MARKER = join(ROOT, SESSION_DIR, '.closing');
+
 // Session retention - run after cleanup to maintain limits
 function runSessionRetention(apply: boolean): { removed: number; kept: number } {
   try {
@@ -54,6 +64,31 @@ const logger = createLogger('SESSION-SESSION-CLOSE-PHASES');
 export function phasePreClose(reason: string): PhaseResult[] {
   const results: PhaseResult[] = [];
   log('=== FASE 1: PRE-CLOSE ===');
+
+  // 1.0 Create closing marker FIRST — apps-keepalive checks this every cycle
+  // (cron-like, 15 min) and must see it BEFORE we start killing daemons, so it
+  // doesn't revive apps that the cleanup phase is about to stop.
+  try {
+    mkdirSync(SESSION_DIR, { recursive: true });
+    writeFileSync(
+      CLOSING_MARKER,
+      JSON.stringify({
+        createdAt: new Date().toISOString(),
+        reason,
+        pid: process.pid,
+      }),
+    );
+    results.push({
+      phase: 'closing-marker',
+      status: 'PASS',
+      detail: `Closing marker written to ${CLOSING_MARKER}`,
+    });
+    ok('Closing marker created (apps-keepalive will bail next cycle)');
+  } catch (e: unknown) {
+    const msg = e instanceof Error ? e.message : 'Unknown error';
+    results.push({ phase: 'closing-marker', status: 'FAIL', detail: msg });
+    warn(`Closing marker write failed: ${msg}`);
+  }
 
   // 1.1 Update session data with close timestamp
   try {

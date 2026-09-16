@@ -7,7 +7,22 @@ export interface KillTarget {
   required: boolean;
 }
 
+/**
+ * Stack process inventory (verified 2026-09-16 against 7 live node PIDs):
+ * - PID 3484  → src/ops/dashboard-ws-autostart.ts  (Dashboard WS watchdog)
+ * - PID 4824  → src/integrations/codegraph-mcp-server-start.ts
+ * - PID 12236 → apps/web-dashboard/server/websocket-server.ts
+ * - PID 15308 → @colbymchenry/codegraph dist/bin/codegraph.js serve --mcp
+ * - PID 18400 → AmazonQ LSP (NOT in scope — editor-owned, never kill)
+ * - PID 21172 → scripts/mcp/skill-server.ts
+ * - PID 21964 → apps/command-center/server.ts (manual start)
+ *
+ * Conservative scope: only node/tsx processes whose CommandLine references
+ * the gentle-vanguard workspace. NEVER touches VS Code, MiniMax Code,
+ * WhatsApp, AmazonQ LSP, Chrome (the user closes it themselves).
+ */
 export const KILL_TARGETS: KillTarget[] = [
+  // ─── Original daemons (unchanged) ────────────────────────────────────
   { name: 'CodeGraph MCP', matcher: 'codegraph.*mcp', required: true },
   // Dashboard WS persists between sessions; the standalone Command Center
   // (apps/command-center) owns app lifecycle — see DAEMON_CLASSES.
@@ -16,6 +31,80 @@ export const KILL_TARGETS: KillTarget[] = [
   // keeps appending to .runtime/token-ingest.log. Not required → SKIP if it was
   // never started; never FAILs (avoids false positives in the close report).
   { name: 'Token Ingest', matcher: 'token-ingest', required: false },
+
+  // ─── Stack daemons added 2026-09-16 (Fase 2 — ventanas fantasma) ─────
+  // Command Center (the user can start/stop it via gv.ts cc). Optional so a
+  // never-started CC doesn't fail the close report.
+  {
+    name: 'Command Center',
+    matcher: 'gentle-vanguard.apps.command-center.server',
+    required: false,
+  },
+  // Dashboard Vite + WebSocket server. Optional.
+  {
+    name: 'Dashboard WS Server',
+    matcher: 'gentle-vanguard.apps.web-dashboard.server.websocket-server',
+    required: false,
+  },
+  // Dashboard WS watchdog (detached, --watch mode). Optional.
+  {
+    name: 'Dashboard WS Watchdog',
+    matcher: 'gentle-vanguard.src.ops.dashboard-ws-autostart',
+    required: false,
+  },
+  // Vite HMR watchdog (separate from WS). Optional.
+  {
+    name: 'Dashboard Vite Watchdog',
+    matcher: 'gentle-vanguard.src.ops.dashboard-vite-watchdog',
+    required: false,
+  },
+  // CodeGraph MCP server (detached wrapper that boots the colbymchenry bin).
+  {
+    name: 'CodeGraph MCP Server',
+    matcher: 'gentle-vanguard.src.integrations.codegraph-mcp-server-start',
+    required: false,
+  },
+  // CodeGraph workspace sync autostart.
+  {
+    name: 'CodeGraph Sync Autostart',
+    matcher: 'gentle-vanguard.src.integrations.codegraph-sync-autostart',
+    required: false,
+  },
+  // Skill Server (MCP, scripts/mcp/skill-server.ts).
+  {
+    name: 'Skill Server',
+    matcher: 'gentle-vanguard.scripts.mcp.skill-server',
+    required: false,
+  },
+  // Watchtower autoheal autostart.
+  {
+    name: 'Watchtower Autoheal',
+    matcher: 'gentle-vanguard.src.ops.watchtower-autoheal',
+    required: false,
+  },
+  // Apps Keepalive (cron-like task that can revive apps via CC every 15 min).
+  // Killing it prevents it from spawning fresh nodes mid-close.
+  {
+    name: 'Apps Keepalive',
+    matcher: 'gentle-vanguard.src.ops.apps-keepalive',
+    required: false,
+  },
+  // ─── Generic app daemons (apps/<name>/server/* and Vite HMR) ────────
+  // Each app in apps/ (academy-crm, academy-web, archify, command-center,
+  // content-cms, design-hub, gv-analytics, prompt-studio, web-dashboard)
+  // spawns at least 2 processes: the server (tsx server/index.ts or
+  // server.ts) and a Vite dev server (apps/<name>/node_modules/vite/bin/vite.js).
+  // apps-keepalive can revive any of them, so we kill by generic path patterns.
+  {
+    name: 'Apps Server',
+    matcher: 'gentle-vanguard\\apps\\[^\\]+\\server\\',
+    required: false,
+  },
+  {
+    name: 'Apps Vite HMR',
+    matcher: 'gentle-vanguard\\apps\\[^\\]+\\node_modules\\vite\\bin\\vite',
+    required: false,
+  },
 ];
 
 /** True if at least one process (node/tsx) matches the command-line matcher. */
